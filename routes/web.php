@@ -18,6 +18,8 @@ use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Frontend\OrderController as FrontendOrderController;
 use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
+use App\Models\Product;
+use App\Models\Promo;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +29,12 @@ use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
 
 // Rute Halaman Utama (Landing Page)
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Rute baru untuk halaman promo
+Route::get('/promo', function () {$promos = Promo::all(); return view('promo', compact('promos')); })->name('promo');
+
+// Rute baru untuk halaman produk
+Route::get('/produk', function () { $products = Product::all(); return view('produk', compact('products')); })->name('produk');
 
 // Rute Halaman Tentang Kami
 Route::get('/tentang-kami', [HomeController::class, 'about'])->name('about');

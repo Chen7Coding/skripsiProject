@@ -1,37 +1,7 @@
 @extends('layouts.app')
-
-@section('title', 'Selamat Datang di Sidu Digital Print')
-
 @section('content')
-    <!-- Bagian Hero -->
-    <div class="w-full flex items-center justify-center" style="min-height: calc(100vh - 4rem);">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-wrap items-center">
-                <div class="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 md:pr-12">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
-                        SIDU DIGITAL PRINT
-                    </h1>
-                    <p class="mt-4 text-lg text-gray-600">
-                        Cetak digital jadi lebih mudah dan menyenangkan bersama kami.
-                    </p>
-                    <a href="#produk"
-                        class="mt-8 inline-block bg-gray-900 text-white font-bold py-3 px-8 rounded-lg hover:bg-amber-700 transition duration-300">
-                        Pesan Sekarang
-                    </a>
-                </div>
-                <div class="w-full md:w-1/2 lg:w-1/2 xl:w-1/2 mt-8 md:mt-0 md:pl-12">
-                    <img src="{{ asset('image/asset1.jpg') }}" alt="Contoh Cetakan Sidu Digital Print"
-                        class="w-full h-140 object-cover rounded-lg shadow-2xl mx-auto">
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    {{--  @include('components.promo_section') <!--promo section--> --}}
-
     <!-- Product List Section -->
-    {{--  <div id="produk" class="bg-white scroll-mt-16">
+    <div id="produk" class="bg-white scroll-mt-16">
         <div class="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
             <h2 class="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Produk Kami</h2>
             <p class="mt-4 text-center text-lg text-gray-600">Pilih produk berkualitas tinggi untuk semua kebutuhan cetak
@@ -68,5 +38,5 @@
                 @endforeach
             </div>
         </div>
-    </div> --}}
+    </div>
 @endsection

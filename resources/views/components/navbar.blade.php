@@ -9,9 +9,9 @@
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a href="{{ route('home') }}"
                             class="text-gray-700 hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                        <a href="/#promo"
+                        <a href="{{ route('promo') }}"
                             class="text-gray-700 hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium">Promo</a>
-                        <a href="/#produk"
+                        <a href="{{ route('produk') }}"
                             class="text-gray-700 hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium">Produk</a>
                         <a href="{{ route('about') }}"
                             class="text-gray-700 hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium">Tentang
