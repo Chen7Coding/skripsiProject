@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Menggunakan font Inter sebagai default */
+body {
+    font-family: "Inter", sans-serif;
+}
+/* Cetak Laporan (Print Report) */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #print-area,
+    #print-area * {
+        visibility: visible;
+    }
+
+    #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    .no-print {
+        display: none;
+    }
+}

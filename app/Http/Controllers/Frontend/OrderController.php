@@ -1,0 +1,134 @@
+<?php
+
+namespace App\Http\Controllers\Frontend;
+
+use App\Http\Controllers\Controller;
+use App\Models\Product;
+use App\Models\Order;
+use App\Models\OrderItem;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+class OrderController extends Controller
+{
+
+    public function store(Request $request)
+    {
+        // 1. Validasi data
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'design_option' => 'required|in:has_design,no_design',
+            'design_file' => 'required_if:design_option,has_design|file|mimes:jpg,png,pdf,cdr,psd|max:10240', // max 10MB
+            'notes' => 'required_if:design_option,no_design|string',
+            'material' => 'required|string',
+            'size' => 'required|string',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $product = Product::findOrFail($request->product_id);
+
+        // Gunakan DB Transaction untuk memastikan semua data tersimpan atau tidak sama sekali
+        DB::beginTransaction();
+        try {
+            // 2. Simpan file desain jika ada
+            $filePath = null;
+            if ($request->hasFile('design_file')) {
+                $filePath = $request->file('design_file')->store('public/designs');
+            }
+
+            // 3. Buat pesanan (Order)
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'order_number' => 'INV-' . time() . Str::random(5),
+                'total_price' => $product->price * $request->quantity, // Kalkulasi harga sederhana
+                'status' => 'pending',
+                'payment_status' => 'unpaid',
+            ]);
+
+            // 4. Buat item pesanan (OrderItem)
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+                'material' => $request->material,
+                'size' => $request->size,
+                'quantity' => $request->quantity,
+                'price' => $product->price,
+                'design_file_path' => $filePath,
+                'notes' => $request->notes,
+            ]);
+
+            DB::commit();
+
+            // 5. Arahkan ke halaman dashboard dengan pesan sukses
+            return redirect()->route('dashboard')->with('success', 'Pesanan Anda berhasil dibuat!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Arahkan kembali dengan pesan error
+            return back()->with('error', 'Terjadi kesalahan saat membuat pesanan. Silakan coba lagi.')->withInput();
+        }
+    }    
+
+     public function uploadPaymentProof(Request $request, Order $order)
+    {
+        // 1. Pastikan pesanan adalah milik user yang sedang login
+        if ($order->user_id !== Auth::id()) {
+            return back()->with('error', 'Anda tidak memiliki hak akses untuk pesanan ini.');
+        }
+
+        // 2. Pastikan status pembayaran masih 'unpaid'
+        if ($order->payment_status !== 'unpaid') {
+            return back()->with('error', 'Pembayaran sudah dikonfirmasi atau bukti sudah diunggah.');
+        }
+
+        // 3. Validasi file yang diunggah
+        $request->validate([
+            'payment_proof' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Contoh validasi
+        ]);
+
+        DB::beginTransaction();
+        try {
+            // 4. Simpan file bukti pembayaran ke storage
+            $filePath = $request->file('payment_proof')->store('public/payment_proofs');
+
+            // 5. Update data di tabel `orders`
+            $order->payment_status = 'paid';
+            $order->payment_proof_url = $filePath; // Simpan path file
+            $order->save();
+
+            DB::commit();
+
+            return back()->with('success', 'Bukti pembayaran berhasil diunggah. Kami akan segera memverifikasinya.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Hapus file yang sudah diupload jika terjadi error
+            if (isset($filePath)) {
+                Storage::delete($filePath);
+            }
+            return back()->with('error', 'Terjadi kesalahan saat mengunggah bukti pembayaran. Silakan coba lagi.');
+        }
+    }
+
+      public function confirmReceived(Order $order)
+    {
+        // Pastikan pesanan adalah milik user yang sedang login
+        if ($order->user_id !== Auth::id()) {
+            return back()->with('error', 'Anda tidak memiliki hak akses untuk pesanan ini.');
+        }
+        
+        // Hanya izinkan konfirmasi jika statusnya 'shipping'
+        if ($order->status !== 'shipping') {
+            return back()->with('error', 'Pesanan tidak dalam status pengiriman.');
+        }
+
+        $order->status = 'completed';
+        $order->save();
+
+        return back()->with('success', 'Pesanan berhasil dikonfirmasi telah diterima!');
+    }
+    
+}

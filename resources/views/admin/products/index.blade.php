@@ -1,0 +1,64 @@
+@extends('layouts.admin')
+
+@section('admin-content')
+    <div class="container mx-auto py-6">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-semibold">Data Produk</h1>
+            <a href="{{ route('products.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                + Tambah Produk
+            </a>
+        </div>
+
+        @if (session('success'))
+            <div class="mb-4 text-green-600">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <div class="overflow-x-auto bg-white shadow rounded-lg">
+            <table class="min-w-full text-sm text-gray-700">
+                <thead>
+                    <tr class="bg-gray-100 text-left">
+                        <th class="px-4 py-2 border">#</th>
+                        <th class="px-4 py-2 border">Nama Produk</th>
+                        <th class="px-4 py-2 border">Harga</th>
+                        <th class="px-4 py-2 border">Gambar</th>
+                        <th class="px-4 py-2 border">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($products as $product)
+                        <tr>
+                            <td class="px-4 py-2 border">{{ $loop->iteration }}</td>
+                            <td class="px-4 py-2 border">{{ $product->name }}</td>
+                            <td class="px-4 py-2 border">Rp{{ number_format($product->price, 0, ',', '.') }}</td>
+                            <td class="px-4 py-2 border">
+                                @if ($product->image)
+                                    <img src="{{ asset($product->image) }}" alt="gambar" class="w-16">
+                                @else
+                                    <span class="text-gray-400">Tidak Ada</span>
+                                @endif
+                            </td>
+                            <td class="px-4 py-2 border space-x-2">
+                                <a href="{{ route('products.edit', $product->id) }}"
+                                    class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">Edit</a>
+                                <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="inline"
+                                    onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+                                        Hapus
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-4 py-4 text-center text-gray-500">Belum ada produk.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+@endsection
