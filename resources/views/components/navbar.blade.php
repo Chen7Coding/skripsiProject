@@ -98,7 +98,7 @@
                                                     <path fill-rule="evenodd"
                                                         d="M2.5 3A1.5 1.5 0 001 4.5v11A1.5 1.5 0 002.5 17h15a1.5 1.5 0 001.5-1.5v-11A1.5 1.5 0 0017.5 3h-15zM2 4.5a.5.5 0 01.5-.5h15a.5.5 0 01.5.5v2.5H2V4.5zM2 15.5V8h16v7.5a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5z"
                                                         clip-rule="evenodd" />
-                                                </svg> Dashboard Owner
+                                                </svg> Dashboard Pemilik
                                             </a>
                                         @elseif (Auth::user()->role == 'karyawan')
                                             <a href="{{ route('admin.dashboard') }}"
@@ -110,7 +110,7 @@
                                                     <path fill-rule="evenodd"
                                                         d="M2.5 3A1.5 1.5 0 001 4.5v11A1.5 1.5 0 002.5 17h15a1.5 1.5 0 001.5-1.5v-11A1.5 1.5 0 0017.5 3h-15zM2 4.5a.5.5 0 01.5-.5h15a.5.5 0 01.5.5v2.5H2V4.5zM2 15.5V8h16v7.5a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5z"
                                                         clip-rule="evenodd" />
-                                                </svg>Dashboard Admin
+                                                </svg>Dashboard Karyawan
                                             </a>
                                         @else
                                             <a href="{{ route('profile.dashboard') }}"

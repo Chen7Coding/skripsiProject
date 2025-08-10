@@ -76,7 +76,7 @@
                                             <input type="radio" name="design_option" value="no_design"
                                                 x-model="designOption"
                                                 class="h-4 w-4 border-gray-300 text-gray-700 focus:ring-gray-700"
-                                                {{ old('design_option', isset($cartItem) && $cartItem->design_file_path ? 'has_design' : 'no_design') == 'no_design' ? 'checked' : '' }}>
+                                                @checked(old('design_option', isset($cartItem) && $cartItem->design_file_path ? 'has_design' : 'no_design') == 'no_design')>
                                             <span class="ml-2">Belum Punya Desain</span>
                                         </label>
                                     </div>
@@ -89,7 +89,7 @@
                                 <input id="design_file_path" name="design_file_path" type="file"
                                     class="mt-2 block w-full cursor-pointer text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-amber-100 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-amber-600 hover:file:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-500"
                                     accept=".jpg,.jpeg,.png,.pdf,.ai,.psd" />
-                                @error('design_file_path')
+                                @error('design_file')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                                 @if (isset($cartItem) && $cartItem->design_file_path)
@@ -146,8 +146,8 @@
 
                             <div>
                                 <label for="quantity" class="block text-sm font-bold text-gray-900">Jumlah</label>
-                                <input type="number" name="quantity" id="quantity" min="1"
-                                    x-model.number="quantity" value="{{ old('quantity', $cartItem->quantity ?? 1) }}"
+                                <input type="number" name="quantity"
+                                    value="{{ $cartItem->quantity ?? old('quantity', 1) }}" min="1"
                                     class="mt-2 block w-full max-w-[120px] rounded-md border-gray-300 shadow-sm focus:border-amber-600 focus:ring-amber-700 sm:text-sm">
                                 @error('quantity')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>

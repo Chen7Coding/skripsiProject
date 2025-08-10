@@ -31,7 +31,7 @@
                                         class="flex-shrink-0 relative w-28 h-28 sm:w-36 sm:h-36 rounded-md overflow-hidden border border-gray-200">
                                         <a href="{{ route('products.show', ['product' => $item->product->slug ?? '#']) }}"
                                             class="block w-full h-full">
-                                            <img src="{{ Storage::url($item->design_file_path) }}"
+                                            <img src="{{ $item->design_file_path ? Storage::url($item->design_file_path) : asset($item->product->image) }}"
                                                 alt="{{ $item->product->name ?? 'Produk Tidak Ditemukan' }}"
                                                 class="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105">
                                         </a>
@@ -67,10 +67,14 @@
                                                     Rp{{ number_format($item->price, 0, ',', '.') }}
                                                 </p>
                                                 <div class="mt-2 w-full max-w-[150px]">
-                                                    <form action="{{ route('cart.update', $item->product_id) }}"
-                                                        method="POST" class="flex items-center justify-end">
+                                                    <form action="{{ route('cart.update', $item->id) }}" method="POST"
+                                                        class="flex items-center justify-end">
                                                         @csrf
                                                         @method('PATCH')
+                                                        <input type="hidden" name="material"
+                                                            value="{{ $item->material }}">
+                                                        <input type="hidden" name="size" value="{{ $item->size }}">
+                                                        <input type="hidden" name="notes" value="{{ $item->notes }}">
                                                         <label for="quantity-{{ $item->id }}"
                                                             class="sr-only">Jumlah</label>
                                                         <input type="number" id="quantity-{{ $item->id }}"
@@ -92,14 +96,14 @@
                                             </p>
                                             <div class="flex items-center space-x-4">
                                                 <a href="{{ route('products.show', ['product' => $item->product->slug ?? '#']) }}?edit=1&edit_cart_item={{ $item->product_id }}"
-                                                    class="font-medium text-gray-500 hover:text-amber-600 transition-colors duration-200">Edit</a>
+                                                    class="ml-2 px-3 py-1.5 rounded-md bg-gray-500 text-white font-semibold shadow-md hover:bg-gray-700 transition-colors duration-200">Edit</a>
                                                 <div class="border-l border-gray-200 pl-4">
                                                     <form action="{{ route('cart.remove', $item->product_id) }}"
                                                         method="POST">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"
-                                                            class="font-medium text-red-600 hover:text-red-700 transition-colors duration-200">
+                                                            class="ml-2 px-3 py-1.5 rounded-md bg-red-500 text-white font-semibold shadow-md hover:bg-red-700 transition-colors duration-200">
                                                             Hapus
                                                         </button>
                                                     </form>
@@ -160,7 +164,7 @@
             @else
                 <div class="mt-16 rounded-lg bg-white p-16 text-center shadow-xl border border-gray-200">
                     <p class="text-2xl text-gray-700 font-semibold mb-6">Keranjang belanja Anda masih kosong.</p>
-                    <a href="{{ route('home') }}"
+                    <a href="{{ route('produk') }}"
                         class="inline-block rounded-lg bg-amber-600 py-3.5 px-10 font-bold text-white shadow-lg hover:bg-amber-700 transition-colors duration-200 transform hover:scale-105">
                         Mulai Belanja
                     </a>

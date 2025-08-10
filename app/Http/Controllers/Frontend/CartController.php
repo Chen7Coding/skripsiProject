@@ -45,7 +45,7 @@ class CartController extends Controller
 
         $designFilePath = null;
         if ($request->hasFile('design_file_path')) {
-            $designFilePath = $request->file('design_file_path')->store('public/designs');
+            $designFilePath = $request->file('design_file_path')->store('designs','public');
         }
 
         $product = Product::find($productId);
@@ -129,7 +129,7 @@ class CartController extends Controller
         return 0;
     }
 
-    public function update(Request $request, $productId)
+    public function update(Request $request, $id)
     {
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Anda harus login untuk memperbarui keranjang.');
@@ -144,7 +144,7 @@ class CartController extends Controller
         ]);
         
         $cartItem = Cart::where('user_id', Auth::id())
-                        ->where('product_id', $productId)
+                        ->where('id', $id)
                         ->first();
 
         if ($cartItem) {
@@ -157,7 +157,7 @@ class CartController extends Controller
                 if ($cartItem->design_file_path) {
                     Storage::delete($cartItem->design_file_path);
                 }
-                $cartItem->design_file_path = $request->file('design_file_path')->store('public/designs');
+                $cartItem->design_file_path = $request->file('design_file_path')->store('designs' , 'public');
             }
 
             $cartItem->save();

@@ -51,7 +51,7 @@
                     <div>
                         <label for="name" class="text-sm font-medium text-gray-700">Nama Lengkap Anda</label>
                         <input id="name" name="name" type="text" value="{{ old('name') }}" required
-                            class="mt-1 appearance-none block w-full px-3 py-3 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm @error('name') border-red-500 @else border-gray-300 @enderror"
+                            class="mt-1 appearance-none block w-full px-3 py-3 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm {{ $errors->has('name') ? 'border-red-500' : 'border-gray-300' }}"
                             placeholder="Masukkan Nama Lengkap Anda">
                         @error('name')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
@@ -62,7 +62,7 @@
                     <div>
                         <label for="username" class="text-sm font-medium text-gray-700">Username</label>
                         <input id="username" name="username" type="text" value="{{ old('username') }}" required
-                            class="mt-1 appearance-none block w-full px-3 py-3 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm @error('username') border-red-500 @else border-gray-300 @enderror"
+                            class="mt-1 appearance-none block w-full px-3 py-3 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm @error('username') {{ $errors->has('name') ? 'border-red-500' : 'border-gray-300' }}"
                             placeholder="Masukkan Username Anda">
                         @error('username')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
@@ -71,10 +71,11 @@
 
                     {{-- Input Email --}}
                     <div>
-                        <label for="email" class="text-sm font-medium text-gray-700">Email</label>
+                        <label for="email"
+                            class="text-sm font-medium text-gray-700">Email</label>
                         <input id="email" name="email" type="email" autocomplete="email"
                             value="{{ old('email') }}" required
-                            class="mt-1 appearance-none block w-full px-3 py-3 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm @error('email') border-red-500 @else border-gray-300 @enderror"
+                            class="mt-1 appearance-none block w-full px-3 py-3 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm @error('email') {{ $errors->has('name') ? 'border-red-500' : 'border-gray-300' }}"
                             placeholder="Masukkan Email Anda">
                         @error('email')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
@@ -83,10 +84,11 @@
 
                     {{-- Input Password --}}
                     <div>
-                        <label for="password" class="text-sm font-medium text-gray-700">Password</label>
+                        <label for="password"
+                            class="text-sm font-medium text-gray-700">Password</label>
                         <div class="relative mt-1">
                             <input id="password" name="password" type="password" autocomplete="new-password" required
-                                class="appearance-none block w-full px-3 py-3 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm @error('password') border-red-500 @else border-gray-300 @enderror"
+                                class="appearance-none block w-full px-3 py-3 border placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm {{ $errors->has('name') ? 'border-red-500' : 'border-gray-300' }}"
                                 placeholder="Minimal 8 karakter">
                             <div class="absolute inset-y-0 right-3 flex items-center">
                                 <button type="button" data-toggle-password="password" class="focus:outline-none">
