@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sidu Digital Print</title>
     @vite('resources/css/app.css')
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -19,11 +18,11 @@
 
 <body class="bg-gray-100">
     <div class="min-h-screen block lg:flex">
-        <div class="lg:flex w-full lg:w-1/2 bg-gray-800 text-white p-12 flex-col justify-between">
+        <div class="hidden lg:flex w-full lg:w-1/2 bg-gray-800 text-white p-12 flex-col justify-between">
             <div>
                 <img src="{{ asset('image/logo-sidu.png') }}" alt="Sidu Digital Print Logo" class="h-12 w-auto">
             </div>
-            <div class="space-y-4">
+            <div class="space-y-2">
                 <h1 class="text-4xl font-extrabold">Welcome to Sidu Digital Print!</h1>
                 <p class="text-gray-300 max-w-md">
                     Cetak digital jadi lebih mudah dan menyenangkan bersama kami.
@@ -63,7 +62,8 @@
                     </div>
                 @endif
 
-                <form class="mt-8 space-y-6" action="{{ route('login') }}" method="POST"> @csrf
+                <form class="mt-8 space-y-6" action="{{ route('login') }}" method="POST">
+                    @csrf
                     <input type="hidden" name="remember" value="true">
                     <div class="space-y-4">
                         <div>
@@ -158,10 +158,15 @@
             ];
             let index = 0;
             const imgEl = document.getElementById("sliderImage");
-            setInterval(() => {
-                index = (index + 1) % images.length;
-                imgEl.src = images[index];
-            }, 3000); // setiap 3 detik
+
+            // Tambahkan pengecekan ini untuk menghindari error jika elemen tidak ada
+            if (imgEl && images.length > 0) {
+                // Set interval hanya jika elemen dan gambar tersedia
+                setInterval(() => {
+                    index = (index + 1) % images.length;
+                    imgEl.src = images[index];
+                }, 3000); // setiap 3 detik
+            }
         });
     </script>
     <script>
@@ -181,6 +186,8 @@
             }
         }
     </script>
+    {{-- Memanggil JavaScript utama dan script tambahan melalui Vite --}}
+    @vite('resources/js/app.js')
 </body>
 
 </html>

@@ -31,7 +31,7 @@
                     </a>
                 </div>
                 <div class="flex items-center">
-                    <span class="font-semibold mr-4">Halo Pemilik,{{ Auth::user()->name }}</span>
+                    <span class="font-semibold mr-4">Halo Pemilik, {{ Auth::user()->name }}</span>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit"

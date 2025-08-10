@@ -8,6 +8,8 @@
     {{-- Ini penting untuk keamanan request AJAX --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link rel="icon" href="{{ asset('image/sidu-logo-final.png') }}?v=1.0" type="image/png">
+
     <title>@yield('title', 'Sidu Digital Print')</title>
 
     {{-- MEMANGGIL TAILWIND CSS --}}
