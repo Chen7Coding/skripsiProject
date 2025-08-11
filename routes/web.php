@@ -81,6 +81,10 @@ Route::get('/produk/{product:slug}', [App\Http\Controllers\Frontend\ProductContr
     Route::put('/order/{order}/confirm', [App\Http\Controllers\Frontend\OrderController::class, 'confirmReceived'])->name('order.confirm_received');
     // Route baru untuk mengambil biaya pengiriman secara dinamis
     Route::get('/checkout/shipping-cost', [App\Http\Controllers\Frontend\CheckoutController::class, 'getShippingCost'])->name('checkout.shipping-cost');
+
+     // Rute untuk mengunggah ulang desain
+    Route::patch('/orders/{orderItem}/reupload-design', [App\Http\Controllers\Frontend\OrderController::class, 'reuploadDesign'])
+        ->name('orders.reupload-design');
 });
 //route akses admin/karyawan
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {

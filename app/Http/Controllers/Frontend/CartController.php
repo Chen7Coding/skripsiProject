@@ -129,7 +129,7 @@ class CartController extends Controller
         return 0;
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $productId)
     {
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Anda harus login untuk memperbarui keranjang.');
@@ -144,7 +144,7 @@ class CartController extends Controller
         ]);
         
         $cartItem = Cart::where('user_id', Auth::id())
-                        ->where('id', $id)
+                        ->where('product_id', $productId)
                         ->first();
 
         if ($cartItem) {

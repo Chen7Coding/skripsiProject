@@ -66,8 +66,8 @@
                     <ul class="divide-y divide-gray-200">
                         @foreach ($order->orderItems as $item)
                             <li class="p-6 flex space-x-6">
-                                <img src="{{ asset($item->product->image ?? 'image/default-product.png') }}"
-                                    alt="{{ $item->product->name ?? '' }}"
+                                <img src="{{ asset($item->design_file_path ? 'storage/' . $item->design_file_path : $item->product->image) }}"
+                                    alt="{{ $item->product->name ?? 'Produk Dihapus' }}"
                                     class="h-24 w-24 rounded-md object-cover flex-shrink-0">
                                 <div class="flex-1">
                                     <h4 class="font-semibold text-gray-800">{{ $item->product->name ?? 'Produk Dihapus' }}
@@ -123,22 +123,18 @@
                     <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-3">Informasi Pengiriman</h3>
                     <dl class="space-y-3 text-sm">
                         <div class="flex justify-between">
-                            <dt class="text-gray-500">Nama Pelanggan</dt>
-                            <dd class="font-medium text-gray-800 text-right">{{ $order->name }}</dd>
+                            <dt class="text-gray-500">Nama Pelanggan: {{ $order->name }}</dt>
                         </div>
                         <div class="flex justify-between">
-                            <dt class="text-gray-500">Telepon</dt>
-                            <dd class="font-medium text-gray-800 text-right">{{ $order->phone }}</dd>
+                            <dt class="text-gray-500">Telepon: {{ $order->phone }}</dt>
                         </div>
                         <div class="flex justify-between">
-                            <dt class="text-gray-500">Email</dt>
-                            <dd class="font-medium text-gray-800 text-right">{{ $order->email }}</dd>
+                            <dt class="text-gray-500">Email: {{ $order->email }}</dt>
                         </div>
                         <div class="flex justify-between items-start">
-                            <dt class="text-gray-500">Alamat</dt>
-                            <dd class="font-medium text-gray-800 text-right ml-4">{{ $order->address }},
+                            <dt class="text-gray-500">Alamat: {{ $order->address }},
                                 {{ $order->kecamatan }}, {{ $order->shipping_city }}, {{ $order->shipping_province }}
-                                {{ $order->shipping_postal_code }}</dd>
+                                {{ $order->shipping_postal_code }}</dt>
                         </div>
                     </dl>
                 </div>

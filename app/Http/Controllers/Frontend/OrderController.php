@@ -72,6 +72,28 @@ class OrderController extends Controller
         }
     }    
 
+    public function reuploadDesign(Request $request, OrderItem $orderItem)
+{
+    // Lakukan validasi file unggahan
+    $request->validate([
+        'new_design_file' => 'required|file|mimes:jpg,jpeg,png,pdf,ai,psd|max:2048',
+    ]);
+
+    // Hapus file lama jika ada, ini sangat penting
+    if ($orderItem->design_file_path) {
+        Storage::disk('public')->delete($orderItem->design_file_path);
+    }
+
+    // Simpan file baru
+    $newFilePath = $request->file('new_design_file')->store('designs', 'public');
+
+    // Perbarui path file di database
+    $orderItem->design_file_path = $newFilePath;
+    $orderItem->save(); // Menggunakan save() untuk update
+
+    return redirect()->back()->with('success', 'File desain berhasil diunggah ulang!');
+}
+
      public function uploadPaymentProof(Request $request, Order $order)
     {
         // 1. Pastikan pesanan adalah milik user yang sedang login
