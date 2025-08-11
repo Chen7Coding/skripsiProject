@@ -34,5 +34,13 @@ class OrderController extends Controller
 
         return redirect()->route('admin.orders.show', $order->id)->with('success', 'Status pesanan berhasil diperbarui.');
     }
-    
+
+     public function verifyPayment(Order $order)
+    {
+        // Perbarui status pembayaran menjadi 'paid'
+        $order->payment_status = 'paid';
+        $order->save();
+
+        return redirect()->back()->with('success', 'Pembayaran berhasil diverifikasi.');
+    }
 }

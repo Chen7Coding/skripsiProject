@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-             $table->string('kecamatan')->nullable()->after('shipping_address');
-            $table->integer('shipping_cost')->default(0)->after('kecamatan');
-            $table->string('shipping_city')->nullable()->after('shipping_cost');
-            $table->string('shipping_province')->nullable()->after('shipping_city');
-            $table->string('payment_image')->nullable()->after('shipping_postal_code');
+             $table->string('kecamatan')->nullable();
+            $table->integer('shipping_cost')->default(0);
+            $table->string('shipping_city')->nullable();
+            $table->string('shipping_province')->nullable();
+            $table->string('payment_image')->nullable();
         });
     }
 

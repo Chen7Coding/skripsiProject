@@ -114,7 +114,8 @@ class OrderController extends Controller
         DB::beginTransaction();
         try {
             // 4. Simpan file bukti pembayaran ke storage
-            $filePath = $request->file('payment_proof')->store('public/payment_proofs');
+            $originalName = $request->file('payment_proof')->getClientOriginalName();
+            $filePath = $request->file('payment_proof')->storeAs('public/payment_proofs', $originalName);
 
             // 5. Update data di tabel `orders`
             $order->payment_status = 'paid';

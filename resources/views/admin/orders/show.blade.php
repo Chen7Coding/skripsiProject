@@ -152,7 +152,7 @@
 
                     {{-- Tombol Verifikasi Pembayaran hanya muncul jika belum diverifikasi --}}
                     <div class="mt-4">
-                        <form action="{{ route('admin.orders.verifyPayment', $order->id) }}" method="POST">
+                        <form action="{{ route('orders.verifyPayment', $order->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700">
                                 Verifikasi Pembayaran

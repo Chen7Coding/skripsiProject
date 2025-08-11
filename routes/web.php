@@ -106,6 +106,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('admin.profile.password.update');
     // Rute laporan pemesanan
     Route::get('/laporan/pemesanan', [LaporanController::class, 'index'])->name('admin.report.admin_laporan');
+     // Rute untuk verifikasi pembayaran
+    Route::post('/orders/{order}/verify-payment', [App\Http\Controllers\Admin\OrderController::class, 'verifyPayment'])
+        ->name('orders.verifyPayment');
 });
 
 Route::middleware(['auth', 'owner'])->prefix('owner')->group(function () {
