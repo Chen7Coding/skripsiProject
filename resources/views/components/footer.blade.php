@@ -3,7 +3,8 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <!-- Kolom Logo dan Deskripsi -->
             <div class="md:col-span-1">
-                <img class="h-10 w-auto" src="{{ asset('image/logo-sidu.png') }}" alt="Sidu Digital Print Logo">SIDU
+                <img class="h-10 w-auto" src="{{ asset('storage/' . $setting->store_logo) }}"
+                    alt="Sidu Digital Print Logo">SIDU
                 DIGITAL PRINT
                 {{-- Ganti dengan logo versi putih jika ada --}}
                 <p class="text-gray-400 text-sm">
@@ -16,7 +17,8 @@
                 <h3 class="text-sm font-semibold tracking-wider uppercase">Navigasi</h3>
                 <ul class="mt-4 space-y-2">
                     <li><a href="{{ route('home') }}" class="text-gray-400 hover:text-white text-sm">Home</a></li>
-                    <li><a href="/#produk" class="text-gray-400 hover:text-white text-sm">Produk</a></li>
+                    <li><a href="{{ route('promo') }}" class="text-gray-400 hover:text-white text-sm">Promo</a></li>
+                    <li><a href="{{ route('produk') }}" class="text-gray-400 hover:text-white text-sm">Produk</a></li>
                     <li><a href="{{ route('about') }}" class="text-gray-400 hover:text-white text-sm">Tentang Kami</a>
                     </li>
                     <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-white text-sm">Kontak Kami</a>
@@ -30,15 +32,15 @@
                 <ul class="mt-4 space-y-2 text-sm text-gray-400">
                     <li class="flex items-start">
                         <span class="mt-1 mr-2">&#128205;</span> <!-- Emoji Peta -->
-                        <span>Majakerta, Kec. Majalaya, Kabupaten Bandung, Jawa Barat</span>
+                        <span>{{ $setting->store_address }}</span>
                     </li>
                     <li class="flex items-center">
                         <span class="mr-2">&#128222;</span> <!-- Emoji Telepon -->
-                        <a href="tel:+6281234567890" class="hover:text-white">+62 812-3456-7890</a>
+                        <a href="tel:+6281234567890" class="hover:text-white">{{ $setting->store_contact }}</a>
                     </li>
                     <li class="flex items-center">
                         <span class="mr-2">&#9993;</span> <!-- Emoji Email -->
-                        <a href="mailto:info@sidudigital.com" class="hover:text-white">info@sidudigital.com</a>
+                        <a href="mailto:info@sidudigital.com" class="hover:text-white">{{ $setting->store_email }}</a>
                     </li>
                 </ul>
             </div>

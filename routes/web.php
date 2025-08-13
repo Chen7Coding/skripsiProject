@@ -81,10 +81,13 @@ Route::get('/produk/{product:slug}', [App\Http\Controllers\Frontend\ProductContr
     Route::put('/order/{order}/confirm', [App\Http\Controllers\Frontend\OrderController::class, 'confirmReceived'])->name('order.confirm_received');
     // Route baru untuk mengambil biaya pengiriman secara dinamis
     Route::get('/checkout/shipping-cost', [App\Http\Controllers\Frontend\CheckoutController::class, 'getShippingCost'])->name('checkout.shipping-cost');
-
      // Rute untuk mengunggah ulang desain
     Route::patch('/orders/{orderItem}/reupload-design', [App\Http\Controllers\Frontend\OrderController::class, 'reuploadDesign'])
         ->name('orders.reupload-design');
+    //invoice  Cetak
+    Route::get('/orders/{orderId}/invoice', [App\Http\Controllers\Frontend\OrderController::class, 'downloadInvoice'])->name('customer.invoice.download');
+
+        
 });
 //route akses admin/karyawan
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
@@ -119,5 +122,6 @@ Route::middleware(['auth', 'owner'])->prefix('owner')->group(function () {
     Route::put('/profile/update', [App\Http\Controllers\Owner\ProfileController::class, 'update'])->name('owner.profile.update');
     Route::get('/profile/password', [App\Http\Controllers\Owner\ProfileController::class, 'editPassword'])->name('owner.profile.password.edit');
     Route::put('/profile/password', [App\Http\Controllers\Owner\ProfileController::class, 'updatePassword'])->name('owner.profile.password.update');
-        
+     Route::get('/settings', [App\Http\Controllers\Owner\SettingController::class, 'index'])->name('owner.settings.index');
+    Route::post('/settings', [App\Http\Controllers\Owner\SettingController::class, 'update'])->name('owner.settings.update');    
 });

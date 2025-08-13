@@ -65,7 +65,7 @@
                     </div>
                     <ul class="divide-y divide-gray-200">
                         @foreach ($order->orderItems as $item)
-                            <li class="p-6 flex space-x-6">
+                            <li class="p-6 flex items-start space-x-6">
                                 <img src="{{ asset($item->design_file_path ? 'storage/' . $item->design_file_path : $item->product->image) }}"
                                     alt="{{ $item->product->name ?? 'Produk Dihapus' }}"
                                     class="h-24 w-24 rounded-md object-cover flex-shrink-0">
@@ -109,9 +109,24 @@
                             </li>
                         @endforeach
                     </ul>
-                    <div class="bg-gray-50 p-6 text-right">
-                        <p class="text-lg font-bold text-gray-800">Total Harga:
-                            Rp{{ number_format($order->total_price, 0, ',', '.') }}</p>
+                    <div class="p-6 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <p class="font-bold text-gray-900">Subtotal Harga Item:</p>
+                            <p class="font-bold text-gray-900">
+                                Rp{{ number_format($order->total_price - $order->shipping_cost, 0, ',', '.') }}
+                            </p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="font-bold text-gray-900">Biaya Pengiriman:</p>
+                            <p class="text-lg font-bold text-gray-900">
+                                Rp{{ number_format($order->shipping_cost, 0, ',', '.') }}
+                            </p>
+                        </div>
+                        <div class="flex justify-between items-center border-t pt-4">
+                            <p class="text-lg font-bold text-gray-800">Total Harga:</p>
+                            <p class="text-lg font-bold text-gray-800">
+                                Rp{{ number_format($order->total_price, 0, ',', '.') }}</p>
+                        </div>
                     </div>
                 </div>
             </div>

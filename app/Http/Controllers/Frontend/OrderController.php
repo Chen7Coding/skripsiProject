@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -72,6 +73,21 @@ class OrderController extends Controller
         }
     }    
 
+     public function downloadInvoice($orderId)
+    {
+        // Pastikan pengguna yang login memiliki akses ke pesanan ini
+        $order = Order::with('orderItems.product')
+                      ->where('user_id', Auth::id())
+                      ->where('id', $orderId)
+                      ->firstOrFail();
+
+        // Buat file PDF dari view
+        $pdf = Pdf::loadView('invoices.invoice', compact('order'));
+
+        // Unduh file PDF dengan nama unik
+        return $pdf->stream('invoice-' . $order->order_number . '.pdf');
+    }
+
     public function reuploadDesign(Request $request, OrderItem $orderItem)
 {
     // Lakukan validasi file unggahan
@@ -108,14 +124,14 @@ class OrderController extends Controller
 
         // 3. Validasi file yang diunggah
         $request->validate([
-            'payment_proof' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Contoh validasi
+            'payment_proof_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Contoh validasi
         ]);
 
         DB::beginTransaction();
         try {
             // 4. Simpan file bukti pembayaran ke storage
-            $originalName = $request->file('payment_proof')->getClientOriginalName();
-            $filePath = $request->file('payment_proof')->storeAs('public/payment_proofs', $originalName);
+            // $originalName = $request->file('payment_proof_url')->getClientOriginalName();
+            $filePath = $request->file('payment_proof_url')->store('payment_proofs', 'public');
 
             // 5. Update data di tabel `orders`
             $order->payment_status = 'paid';
@@ -153,5 +169,4 @@ class OrderController extends Controller
 
         return back()->with('success', 'Pesanan berhasil dikonfirmasi telah diterima!');
     }
-    
 }

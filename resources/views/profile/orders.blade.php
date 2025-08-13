@@ -163,8 +163,10 @@
                                         </li>
                                     @endforeach
                                 </ul>
-
-
+                                <div class="mt-2 pt-2 border-t border-gray-200 text-right text-lg font-bold text-gray-900">
+                                    Subtotal Harga Item:
+                                    Rp{{ number_format($order->total_price - $order->shipping_cost, 0, ',', '.') }}
+                                </div>
                                 <div class="mt-2 pt-2 border-t border-gray-200 text-right text-lg font-bold text-gray-900">
                                     Biaya Pengiriman: Rp{{ number_format($order->shipping_cost, 0, ',', '.') }}
                                 </div>
@@ -175,7 +177,19 @@
 
                             {{-- Kolom Kanan: Informasi Pengiriman & Pembayaran --}}
                             <div class="md:pl-6">
-                                <h3 class="text-lg font-semibold text-gray-800 mb-3">Informasi Pengiriman & Pembayaran</h3>
+                                <div class="flex justify-between items-center mb-6">
+                                    <h3 class="text-lg font-semibold text-gray-800">Informasi Pengiriman & Pembayaran</h3>
+                                    {{-- Tombol Unduh Invoice dipindahkan ke sini --}}
+                                    <a href="{{ route('customer.invoice.download', $order->id) }}" target="_blank"
+                                        class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-white bg-gray-900 hover:bg-amber-700 transition-colors duration-50">
+                                        <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                        </svg>
+                                        Unduh Invoice
+                                    </a>
+                                </div>
                                 <dl class="space-y-2 text-sm text-gray-700 mt-2">
                                     <div>
                                         <dt class="font-medium">Nama Penerima: {{ $order->name }}</dt>
@@ -222,10 +236,10 @@
                                             <form action="{{ route('orders.uploadPaymentProof', $order->id) }}"
                                                 method="POST" enctype="multipart/form-data" class="mt-4">
                                                 @csrf
-                                                <input type="file" name="payment_proof" required
-                                                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-500 sm:text-sm">
+                                                <input type="file" name="payment_proof_url" required
+                                                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:border-amber-500 sm:text-sm">
                                                 <button type="submit"
-                                                    class="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring focus:ring-blue-300">
+                                                    class="mt-3 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-amber-700 focus:ring focus:ring-amber-300">
                                                     Kirim Bukti Pembayaran
                                                 </button>
                                             </form>

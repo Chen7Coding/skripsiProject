@@ -10,6 +10,9 @@
 
     <link rel="icon" href="{{ asset('image/sidu-logo-final.png') }}?v=1.0" type="image/png">
 
+
+    {{--  <link rel="icon" href="{{ asset('storage/' . $setting->store_logo) }}?v=1.0" type="image/png"> --}}
+
     <title>@yield('title', 'Sidu Digital Print')</title>
 
     {{-- MEMANGGIL TAILWIND CSS --}}

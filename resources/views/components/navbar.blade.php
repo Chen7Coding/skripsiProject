@@ -3,7 +3,8 @@
         <div class="flex items-center justify-between h-16">
             <div class="flex items-center">
                 <a href="/" class="flex-shrink-0">
-                    <img class="h-10 w-auto" src="{{ asset('image/logo-sidu.png') }}" alt="Sidu Digital Print Logo">
+                    <img class="h-10 w-auto" src="{{ asset('storage/' . $setting->store_logo) }}"
+                        alt="Sidu Digital Print Logo">
                 </a>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">

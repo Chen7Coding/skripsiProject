@@ -124,7 +124,7 @@
                         </button>
                     </div>
                 </form>
-
+                {{-- 
                 <div class="relative flex py-2 items-center">
                     <div class="flex-grow border-t border-gray-200"></div>
                     <span class="flex-shrink mx-4 text-sm text-gray-400">atau lanjutkan dengan</span>
@@ -139,7 +139,7 @@
                         Masuk dengan Google
                     </a>
                 </div>
-
+ --}}
                 <div class="text-sm text-center">
                     <p class="text-gray-600">Belum punya akun?
                         <a href="/register" class="font-medium text-amber-600 hover:text-amber-700">

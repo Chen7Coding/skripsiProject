@@ -18,7 +18,26 @@ class ProfileController extends Controller
      */
     public function dashboard()
     {
-        return view('profile.pelanggan_dashboard');
+        $user = Auth::user();
+
+    $orders = Order::where('user_id', $user->id)
+                  ->latest()
+                  ->get();
+  // Hitung jumlah pesanan berdasarkan status
+         $dikemasPengirimanCount = Order::where('user_id', $user->id)
+                                ->whereIn('status', ['processing', 'shipping']) // Perbaiki di sini
+                                ->count();
+                                
+        $menungguBayarCount = Order::where('user_id', $user->id)
+                                ->where('status', 'pending')
+                                ->count();
+        
+        $pesananSelesaiCount = Order::where('user_id', $user->id)
+                                ->where('status', 'completed')
+                                ->count();
+
+    // Pastikan variabel $orders dikirimkan ke view
+    return view('profile.pelanggan_dashboard', compact('orders','dikemasPengirimanCount','menungguBayarCount','pesananSelesaiCount'));
     }
 
     /**
@@ -77,10 +96,6 @@ class ProfileController extends Controller
         // Arahkan kembali ke halaman edit dengan pesan sukses
         return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui!');
     }
-    
-    // ===================================================
-    // ============== FUNGSI BARU UNTUK PASSWORD =========
-    // ===================================================
 
     /**
      * Menampilkan halaman form untuk mengubah password.

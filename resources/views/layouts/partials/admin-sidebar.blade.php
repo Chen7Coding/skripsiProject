@@ -3,7 +3,7 @@
 {{-- =================================================== --}}
 <div class="flex items-center justify-center py-6 mt-4">
     <div class="flex flex-col items-center">
-        <img src="{{ asset('image/logo-sidu.png') }}" alt="Logo" class="h-14 w-auto">
+        <img src="{{ asset('storage/' . $setting->store_logo) }}" alt="Logo" class="h-14 w-auto">
         <span class="mt-3 text-lg font-bold tracking-wider text-white">SIDU DIGITAL PRINT</span>
     </div>
 </div>

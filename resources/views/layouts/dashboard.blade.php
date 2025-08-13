@@ -11,17 +11,13 @@
 
 <body class="bg-gray-100 font-sans">
     <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-100">
-
-        <!-- =================================================== -->
-        <!-- ============== SIDEBAR (DIPERBARUI) =============== -->
-        <!-- =================================================== -->
         <aside :class="sidebarOpen ? 'block' : 'hidden'"
             class="fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto bg-gray-900 text-white transition duration-300 transform lg:translate-x-0 lg:static lg:inset-0 lg:block">
 
             {{-- Logo Perusahaan --}}
             <div class="flex items-center justify-center py-6 mt-4">
                 <div class="flex flex-col items-center">
-                    <img src="{{ asset('image/logo-sidu.png') }}" alt="Logo" class="h-14 w-auto">
+                    <img src="{{ asset('storage/' . $setting->store_logo) }}" alt="Logo" class="h-14 w-auto">
                     <span class="mt-3 text-lg font-bold tracking-wider text-white">SIDU DIGITAL PRINT</span>
                 </div>
             </div>
@@ -134,6 +130,12 @@
             </main>
         </div>
     </div>
+
+    {{-- Link library Alpine.js dengan atribut 'defer' --}}
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+
+    {{-- Link file JavaScript Anda dengan atribut 'defer' --}}
+    {{-- <script src="{{ asset('js/dashboard_plg.js') }}" defer></script> --}}
 </body>
 
 </html>
