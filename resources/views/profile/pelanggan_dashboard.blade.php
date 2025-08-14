@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Dasbor Sederhana')
+@section('title', 'Dahboard Pelanngan')
 
 @section('dashboard-content')
     <div class="p-6 md:p-8">

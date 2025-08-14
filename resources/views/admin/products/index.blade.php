@@ -4,13 +4,14 @@
     <div class="container mx-auto py-6">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-semibold">Data Produk</h1>
-            <a href="{{ route('products.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            <a href="{{ route('products.create') }}" class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700">
                 + Tambah Produk
             </a>
         </div>
 
         @if (session('success'))
-            <div class="mb-4 text-green-600">
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md shadow-sm mb-4"
+                role="alert"">
                 {{ session('success') }}
             </div>
         @endif
@@ -19,7 +20,7 @@
             <table class="min-w-full text-sm text-gray-700">
                 <thead>
                     <tr class="bg-gray-100 text-left">
-                        <th class="px-4 py-2 border">#</th>
+                        <th class="px-4 py-2 border">No</th>
                         <th class="px-4 py-2 border">Nama Produk</th>
                         <th class="px-4 py-2 border">Harga</th>
                         <th class="px-4 py-2 border">Gambar</th>
@@ -34,14 +35,14 @@
                             <td class="px-4 py-2 border">Rp{{ number_format($product->price, 0, ',', '.') }}</td>
                             <td class="px-4 py-2 border">
                                 @if ($product->image)
-                                    <img src="{{ asset($product->image) }}" alt="gambar" class="w-16">
+                                    <img src="{{ asset('storage/' . $product->image) }}" alt="gambar produk" class="w-16">
                                 @else
-                                    <span class="text-gray-400">Tidak Ada</span>
+                                    <img src="{{ asset($product->image) }}" alt="gambar produk" class="w-16">
                                 @endif
                             </td>
                             <td class="px-4 py-2 border space-x-2">
                                 <a href="{{ route('products.edit', $product->id) }}"
-                                    class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">Edit</a>
+                                    class="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-700">Edit</a>
                                 <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="inline"
                                     onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
                                     @csrf

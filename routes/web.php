@@ -89,29 +89,44 @@ Route::get('/produk/{product:slug}', [App\Http\Controllers\Frontend\ProductContr
 
         
 });
+
 //route akses admin/karyawan
+//middleware Admin
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    
+    //Rute Dashboard Admun
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    // Rute-rute admin lainnya akan kita tambahkan di sini
+   
+    // Rute-Data Pelamggam
     Route::resource('pelanggan', CustomerController::class)->names('admin.customers'); //Route Data Pelanggan
+    
+    //Rute Pesanan
     Route::get('/pesanan', [AdminOrderController::class, 'index'])->name('admin.orders.index');
     Route::get('/pesanan/{order}', [AdminOrderController::class, 'show'])->name('admin.orders.show');
     Route::put('/pesanan/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+    
+    //Rute Produk (Resource)
     Route::resource('products', \App\Http\Controllers\Admin\AdminProductController::class)->except('show');
+   
+    //Rute Promo (Resource)
     Route::resource('promo', \App\Http\Controllers\Admin\PromoController::class);
-    // Rute untuk menampilkan form edit profil
+   
+    // Rute profil Admin
     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
-    // Rute untuk memproses update profil
     Route::put('/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
-    // Rute untuk menampilkan form ubah password
     Route::get('/profile/password', [AdminProfileController::class, 'editPassword'])->name('admin.profile.password.edit');
-    // Rute untuk memproses update password
     Route::put('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('admin.profile.password.update');
+    
     // Rute laporan pemesanan
     Route::get('/laporan/pemesanan', [LaporanController::class, 'index'])->name('admin.report.admin_laporan');
-     // Rute untuk verifikasi pembayaran
+    
+    // Rute untuk verifikasi pembayaran
     Route::post('/orders/{order}/verify-payment', [App\Http\Controllers\Admin\OrderController::class, 'verifyPayment'])
         ->name('orders.verifyPayment');
+
+    //Rute Pemesanan Offline
+    Route::get('/admin/orders/create', [App\Http\Controllers\Admin\OrderController::class, 'createForStaff'])->name('admin.order.create');
+    Route::post('/admin/orders/store', [App\Http\Controllers\Admin\OrderController::class, 'storeForStaff'])->name('admin.orders.store');
 });
 
 Route::middleware(['auth', 'owner'])->prefix('owner')->group(function () {

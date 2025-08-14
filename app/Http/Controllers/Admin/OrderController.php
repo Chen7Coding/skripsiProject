@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -42,5 +44,45 @@ class OrderController extends Controller
         $order->save();
 
         return redirect()->back()->with('success', 'Pembayaran berhasil diverifikasi.');
+    }
+   
+    public function createForStaff()
+    {
+        $products = Product::all(); // Fetch all products for the dropdown
+        return view('admin.orders.create', compact('products'));
+    }
+
+    public function storeForStaff(Request $request)
+    {
+        // 1. Validation
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+            'notes' => 'nullable|string',
+        ]);
+
+        // 2. Create the Order
+        $order = Order::create([
+            'user_id' => Auth::user()->id, // This links the order to the staff member
+            'order_number' => 'OFFLINE-' . time(),
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'total_price' => $request->quantity * Product::find($request->product_id)->price, // Calculate total price
+            'status' => 'processing',
+            'payment_status' => 'paid', // Assuming cash payment
+            'notes' => $request->notes,
+        ]);
+        
+        // 3. Create the OrderItem
+        $order->orderItems()->create([
+            'product_id' => $request->product_id,
+            'quantity' => $request->quantity,
+            'price' => Product::find($request->product_id)->price,
+            // You can add more item details here
+        ]);
+
+        return redirect()->route('admin.orders.index')->with('success', 'Pesanan offline berhasil dibuat!');
     }
 }

@@ -30,7 +30,7 @@
                 </div>
             </div>
             <a href="{{ route('admin.customers.create') }}"
-                class="w-full md:w-auto px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow-lg transition-colors duration-200 text-center">
+                class="w-full md:w-auto px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-lg transition-colors duration-200 text-center">
                 Tambah Pelanggan
             </a>
         </div>
@@ -48,7 +48,9 @@
                                 Alamat</th>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Bergabung</th>
-                            <th class="px-6 py-4 text-right"></th>
+                            <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                                Aksi
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">

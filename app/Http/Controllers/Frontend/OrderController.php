@@ -169,4 +169,5 @@ class OrderController extends Controller
 
         return back()->with('success', 'Pesanan berhasil dikonfirmasi telah diterima!');
     }
+
 }

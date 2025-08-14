@@ -1,6 +1,4 @@
-{{-- =================================================== --}}
 {{-- ============== BAGIAN LOGO & JUDUL ================ --}}
-{{-- =================================================== --}}
 <div class="flex items-center justify-center py-6 mt-4">
     <div class="flex flex-col items-center">
         <img src="{{ asset('storage/' . $setting->store_logo) }}" alt="Logo" class="h-14 w-auto">
@@ -8,9 +6,7 @@
     </div>
 </div>
 
-{{-- =================================================== --}}
 {{-- ============== BAGIAN NAVIGASI MENU =============== --}}
-{{-- =================================================== --}}
 <nav class="mt-6 px-4" x-data="{
     dataMasterOpen: {{ request()->routeIs('admin.customers.*', 'products.*', 'promo.*') ? 'true' : 'false' }},
     profileSettingsOpen: {{ request()->routeIs('admin.profile.*') ? 'true' : 'false' }}

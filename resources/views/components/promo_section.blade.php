@@ -15,7 +15,7 @@
                             Berlaku sampai: {{ \Carbon\Carbon::parse($promo->end_date)->format('d F Y') }}
                         </p>
                         <div class="mt-8">
-                            <a href="#produk"
+                            <a href="{{ route('produk') }}"
                                 class="inline-block rounded-md border border-transparent bg-gray-900 py-3 px-8 text-center font-medium text-white hover:bg-amber-700">
                                 Belanja Sekarang
                             </a>

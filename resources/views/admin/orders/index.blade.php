@@ -9,6 +9,28 @@
                 <h1 class="text-3xl font-bold text-gray-800">Data Pemesanan</h1>
                 <p class="mt-1 text-gray-500">Kelola semua pesanan yang masuk dari pelanggan.</p>
             </div>
+            {{--   <a href="{{ route('admin.order_create') }}"
+                class="inline-flex items-center w-full px-4 py-2 mt-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-200">
+                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                    <path fill-rule="evenodd"
+                        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13z"
+                        clip-rule="evenodd" />
+                </svg>
+                Input Pesanan Offline
+            </a> --}}
+
+            {{-- Kode yang sudah diperbaiki --}}
+            <a href="{{ route('admin.order.create') }}"
+                class="inline-flex items-center w-full px-4 py-2 mt-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-200">
+                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                    <path fill-rule="evenodd"sz
+                        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13z"
+                        clip-rule="evenodd" />
+                </svg>
+                Input Pesanan Offline
+            </a>
         </div>
 
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
