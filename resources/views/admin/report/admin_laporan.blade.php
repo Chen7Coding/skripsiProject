@@ -20,21 +20,7 @@
             {{-- Arahkan action form ke route yang sudah dibuat --}}
             <form action="{{ route('admin.report.admin_laporan') }}"
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-                {{-- Filter Tanggal Cepat --}}
-                <div class="sm:col-span-2 lg:col-span-1">
-                    <label class="text-sm font-medium text-gray-700">Pilih Periode Cepat</label>
-                    <div class="mt-1 flex space-x-2">
-                        <button type="button" @click="setToday(); $event.target.closest('form').submit();"
-                            class="px-3 py-1 text-xs font-medium text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300">Hari
-                            Ini</button>
-                        <button type="button" @click="setThisWeek(); $event.target.closest('form').submit();"
-                            class="px-3 py-1 text-xs font-medium text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300">Minggu
-                            Ini</button>
-                        <button type="button" @click="setThisMonth(); $event.target.closest('form').submit();"
-                            class="px-3 py-1 text-xs font-medium text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300">Bulan
-                            Ini</button>
-                    </div>
-                </div>
+
 
                 {{-- Filter Rentang Tanggal --}}
                 <div>
@@ -184,7 +170,7 @@
                     const day = today.getDay() || 7;
 
                     // Hitung tanggal untuk hari Senin
-                    const firstDayOfWeek = new Date(today.setDate(today.getDate() - day + 1));
+                    const firstDayOfWeek = new Date(today.setDate(today.getDate() - day + (day === 0 ? -6 : 1)));
 
                     // Hitung tanggal untuk hari Sabtu (5 hari setelah Senin)
                     const lastDayOfWeek = new Date(firstDayOfWeek);
@@ -201,7 +187,7 @@
 
                     // MENGATUR TANGGAL MULAI MENJADI TANGGAL 1 DI BULAN INI
                     this.startDate = new Date(y, m, 1).toISOString().slice(0, 10);
-                    console.log('Nilai Tanggal Mulai yang Dihasilkan:', calculatedStartDate);
+                    console.log('Nilai Tanggal Mulai yang Dihasilkan:', this.startDate);
                     // MENGATUR TANGGAL AKHIR MENJADI TANGGAL HARI INI
                     this.endDate = today.toISOString().slice(0, 10);
 

@@ -31,7 +31,7 @@
                                         class="flex-shrink-0 relative w-28 h-28 sm:w-36 sm:h-36 rounded-md overflow-hidden border border-gray-200">
                                         <a href="{{ route('products.show', ['product' => $item->product->slug ?? '#']) }}"
                                             class="block w-full h-full">
-                                            <img src="{{ $item->design_file_path ? Storage::url($item->design_file_path) : asset($item->product->image) }}"
+                                            <img src="{{ $item->design_file_path ? Storage::url($item->design_file_path) : asset('storage/' . $item->product->image) }}"
                                                 alt="{{ $item->product->name ?? 'Produk Tidak Ditemukan' }}"
                                                 class="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105">
                                         </a>

@@ -15,8 +15,12 @@
                                 class="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 ease-in-out group-hover:shadow-xl group-hover:-translate-y-1.5">
 
                                 <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
-                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}"
-                                        class="h-full w-full object-cover object-center transition-all duration-300 group-hover:scale-105">
+                                    @if ($product->image)
+                                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
+                                            class="aspect-w-1 aspect-1 h-full w-full object-cover object-center transition-all duration-300 group-hover:scale-105">
+                                    @else
+                                    @endif
+
                                 </div>
 
                                 <div class="flex flex-1 flex-col justify-between border-t border-gray-200 p-4">

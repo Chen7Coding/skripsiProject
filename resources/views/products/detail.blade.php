@@ -24,7 +24,7 @@
                 {{-- Kolom Kiri: Gambar dan Deskripsi --}}
                 <div>
                     <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-100 shadow-xl">
-                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}"
+                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
                             class="h-full w-full object-cover object-center">
                     </div>
                     <div class="mt-10 p-6 bg-white rounded-lg shadow-xl">
