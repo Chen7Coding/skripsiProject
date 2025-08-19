@@ -6,7 +6,6 @@
 
         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
-
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700">Nama Produk</label>
                 <input type="text" name="name" id="name" value="{{ old('name') }}"

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\ProductOption;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -40,15 +41,23 @@ class AdminProductController extends Controller
         ]);
 
         $data = $request->only(['name', 'description', 'price']);
-        $data['slug'] = Str::slug($request->name);
+        $slug = Str::slug($request->name);
+    
+        $originalSlug = $slug;
+        $count = 2;
+        while (Product::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+    }
+    $data['slug'] = $slug;
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');
         }
 
-        Product::create($data);
+        $product=Product::create($data);
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
+        return redirect()->route('products.store', $product->slug)->with('success', 'Produk berhasil ditambahkan. Silakan tambahkan opsi produk.');
     }
 
     /**
@@ -56,8 +65,36 @@ class AdminProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('admin.products.edit', compact('product'));
+         $productOptions = ProductOption::where('product_id', $product->id)
+                                            ->get()
+                                            ->groupBy('option_type');
+        return view('admin.products.edit', compact('product','productOptions'));
     }
+
+      public function storeOptions(Request $request, Product $product)
+{
+    $request->validate([
+        'option_type' => 'required|string|in:material,size,finishing',
+        'value' => 'required|string|max:255',
+        'price_modifier' => 'nullable|numeric|min:0',
+    ]);
+
+    $product->productOptions()->create([
+        'option_type' => $request->option_type,
+        'value' => $request->value,
+        'price_modifier' => $request->price_modifier ?? 0,
+    ]);
+
+    return back()->with('success', 'Opsi produk berhasil ditambahkan.');
+}
+
+public function destroyOptions(ProductOption $option)
+{
+    $option->delete();
+
+    return back()->with('success', 'Opsi produk berhasil dihapus.');
+}
+
 
     /**
      * Update the specified resource in storage.
@@ -83,7 +120,7 @@ class AdminProductController extends Controller
 
         $product->update($data);
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
+        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui.');
     }
 
     /**

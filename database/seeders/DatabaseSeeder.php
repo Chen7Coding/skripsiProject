@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             PromoSeeder::class,
             KecamatanSeeder::class,
+            ProductOptionSeeder::class,
         ]);
             } 
     }

@@ -113,6 +113,71 @@
                             </div>
 
                             <div class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+                                {{-- Dropdown Jenis Bahan (Dinamis) --}}
+                                @if ($productOptions->has('material'))
+                                    <div id="material-container">
+                                        <label for="material" class="block text-sm font-bold text-gray-900">Jenis
+                                            Bahan</label>
+                                        <select id="material" name="material"
+                                            class="mt-2 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm">
+                                            <option value="" disabled selected>Pilih Bahan</option>
+                                            {{-- PERBAIKI DI SINI --}}
+                                            @foreach ($productOptions->get('material', []) as $option)
+                                                <option value="{{ $option->value }}"
+                                                    {{ old('material', $cartItem->material ?? '') == $option->value ? 'selected' : '' }}>
+                                                    {{ $option->value }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('material')
+                                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                @endif
+                                {{-- Input Ukuran (Dinamis) --}}
+                                <div id="size-container">
+                                    @if ($productOptions->has('size'))
+                                        <label for="size" class="block text-sm font-bold text-gray-900">Ukuran</label>
+                                        <div id="size-options" class="mt-2 space-y-2">
+                                            {{-- Radio button ukuran akan diisi JavaScript --}}
+                                            @foreach ($productOptions->get('size', []) as $option)
+                                                <label class="inline-flex items-center mr-4">
+                                                    <input type="radio" class="form-radio" name="size"
+                                                        value="{{ $option->value }}"
+                                                        {{ old('size', $cartItem->size ?? '') == $option->value ? 'checked' : '' }}>
+                                                    <span class="ml-2">{{ $option->value }}</span>
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                        @error('size')
+                                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                        @enderror
+                                    @endif
+                                </div>
+
+                            </div>
+
+                            {{-- Dropdown Finishing (Dinamis) --}}
+                            <div id="finishing-container">
+                                @if ($productOptions->has('finishing'))
+                                    <label for="finishing" class="block text-sm font-bold text-gray-900">Finishing</label>
+                                    <div id="finishing-options" class="mt-2 space-y-2">
+                                        @foreach ($productOptions->get('finishing', []) as $option)
+                                            <label class="inline-flex items-center mr-4">
+                                                <input type="checkbox" class="form-checkbox" name="finishing[]"
+                                                    value="{{ $option->value }}"
+                                                    {{ in_array($option->value, old('finishing', $cartItem->finishing ?? [])) ? 'checked' : '' }}>
+                                                <span class="ml-2">{{ $option->value }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                    @error('finishing')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                @endif
+                            </div>
+
+                            {{--  <div class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
                                 <div>
                                     <label for="material" class="block text-sm font-bold text-gray-900">Jenis Bahan</label>
                                     <select id="material" name="material"
@@ -142,7 +207,7 @@
                                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div>
                                 <label for="quantity" class="block text-sm font-bold text-gray-900">Jumlah</label>
@@ -165,4 +230,68 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productSelect = document.getElementById('product_type');
+            const materialSelect = document.getElementById('material');
+            const sizeOptionsDiv = document.getElementById('size-options');
+            const finishingOptionsDiv = document.getElementById('finishing-options');
+            const productOptions = @json($productOptions); // Data dari controller
+
+            function updateMaterialAndFinishing(productId) {
+                // Sembunyikan dan bersihkan opsi yang lama
+                materialSelect.innerHTML = '<option value="" disabled selected>Pilih Bahan</option>';
+                sizeOptionsDiv.innerHTML = '';
+                finishingOptionsDiv.innerHTML = '';
+
+                if (productId && productOptions[productId] && productOptions[productId].material) {
+                    // Isi dropdown material
+                    productOptions[productId].material.forEach(option => {
+                        materialSelect.innerHTML +=
+                            `<option value="${option.value}">${option.value}</option>`;
+                    });
+                }
+
+                if (productId && productOptions[productId] && productOptions[productId].finishing) {
+                    // Isi checkbox finishing
+                    productOptions[productId].finishing.forEach(option => {
+                        finishingOptionsDiv.innerHTML += `
+                        <label class="inline-flex items-center mr-4">
+                            <input type="checkbox" class="form-checkbox" name="finishing[]" value="${option.value}">
+                            <span class="ml-2">${option.value}</span>
+                        </label>
+                    `;
+                    });
+                }
+            }
+
+            function updateSizes(selectedMaterial, productId) {
+                sizeOptionsDiv.innerHTML = '';
+                if (selectedMaterial && productId && productOptions[productId] && productOptions[productId].size) {
+                    productOptions[productId].size.forEach(option => {
+                        if (option.value.includes(selectedMaterial)) {
+                            sizeOptionsDiv.innerHTML += `
+                            <label class="inline-flex items-center mr-4">
+                                <input type="radio" class="form-radio" name="size" value="${option.value}">
+                                <span class="ml-2">${option.value}</span>
+                            </label>
+                        `;
+                        }
+                    });
+                }
+            }
+
+            // Listener untuk dropdown produk
+            productSelect.addEventListener('change', function() {
+                updateMaterialAndFinishing(this.value);
+            });
+
+            // Listener untuk dropdown material
+            materialSelect.addEventListener('change', function() {
+                const selectedMaterial = this.value;
+                const productId = productSelect.value;
+                updateSizes(selectedMaterial, productId);
+            });
+        });
+    </script>
 @endsection

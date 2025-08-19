@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\ProductOption;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -36,7 +37,12 @@ class ProductController extends Controller
             }
         }
 
+        // 2. Logika untuk mengambil opsi produk dinamis
+        $productOptions = ProductOption::where('product_id', $product->id)
+                                        ->get()
+                                        ->groupBy('option_type');
+
         // Kirim objek produk dan (jika ada) objek cartItem ke view
-        return view('products.detail', compact('product', 'cartItem'));
+        return view('products.detail', compact('product', 'cartItem', "productOptions"));
     }
 }

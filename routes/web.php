@@ -106,9 +106,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/pesanan/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
     
     //Rute Produk (Resource)
-    Route::resource('products', \App\Http\Controllers\Admin\AdminProductController::class)->except('show');
+    Route::resource('products', \App\Http\Controllers\Admin\AdminProductController::class)->except('show')->names('admin.products');
    
-    //Rute Promo (Resource)
+     // Rute untuk mengelola opsi produk (store dan destroy)
+    Route::post('/products/{product}/options', [App\Http\Controllers\Admin\AdminProductController::class, 'storeOptions'])->name('admin.products.options.store');
+    Route::delete('/products/options/{option}', [App\Http\Controllers\Admin\AdminProductController::class, 'destroyOptions'])->name('admin.products.options.destroy');
+
     Route::resource('promo', \App\Http\Controllers\Admin\PromoController::class);
    
     // Rute profil Admin

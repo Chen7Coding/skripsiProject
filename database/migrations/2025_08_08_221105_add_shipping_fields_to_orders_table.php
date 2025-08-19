@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
              $table->string('kecamatan')->nullable();
             $table->integer('shipping_cost')->default(0);
-            $table->string('shipping_city')->nullable();
-            $table->string('shipping_province')->nullable();
-            $table->string('payment_image')->nullable();
+          /*   $table->string('shipping_city')->nullable(); */
+           /*  $table->string('shipping_province')->nullable();
+            $table->string('payment_image')->nullable(); */
         });
     }
 

@@ -13,4 +13,10 @@ class Product extends Model
     public function orderItems () {
         return $this->hasMany(OrderItem::class);
     }
+
+    // Tambahkan relasi ini
+    public function productOptions()
+    {
+        return $this->hasMany(ProductOption::class);
+    }
 }

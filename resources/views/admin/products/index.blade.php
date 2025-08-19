@@ -4,7 +4,8 @@
     <div class="container mx-auto py-6">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-semibold">Data Produk</h1>
-            <a href="{{ route('products.create') }}" class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700">
+            <a href="{{ route('admin.products.create') }}"
+                class="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700">
                 + Tambah Produk
             </a>
         </div>
@@ -41,10 +42,10 @@
                                 @endif
                             </td>
                             <td class="px-4 py-2 border space-x-2">
-                                <a href="{{ route('products.edit', $product->id) }}"
+                                <a href="{{ route('admin.products.edit', $product->id) }}"
                                     class="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-700">Edit</a>
-                                <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="inline"
-                                    onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
+                                    class="inline" onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
