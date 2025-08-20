@@ -56,15 +56,31 @@
         </div>
     </div>
 
-    <a class="flex items-center px-4 py-3 mt-2 transition-colors duration-300 transform rounded-lg hover:bg-slate-800 hover:text-gray-100 {{ request()->routeIs('owner.reports.*') ? 'bg-amber-500 text-white font-bold' : 'text-gray-300' }}"
-        href="#">
-        <svg class="w-5 h-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M3.75 9.75h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5-1.5h16.5M3.75 6h16.5" />
-        </svg>
-        <span class="mx-4 font-medium whitespace-nowrap">Laporan Pemesanan</span>
-    </a>
+    <div x-data="{ openLaporan: false }" class="mt-2">
+        <button @click="openLaporan = !openLaporan"
+            class="flex items-center justify-between w-full px-4 py-3 transition-colors duration-300 transform rounded-lg hover:bg-slate-800 hover:text-gray-100 focus:outline-none {{ request()->routeIs('owner.transactions.*') ? 'bg-amber-500 text-white font-bold' : 'text-gray-300' }}">
+            <span class="flex items-center">
+                <svg class="w-5 h-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 9.75h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5-1.5h16.5M3.75 6h16.5" />
+                </svg>
+                <span class="mx-4 font-medium whitespace-nowrap">Laporan</span>
+            </span>
+            <span>
+                <svg class="w-4 h-4 transition-transform duration-300" :class="{ 'rotate-180': openLaporan }"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </span>
+        </button>
+        <div x-show="openLaporan" class="mt-2 ml-4 pl-4 border-l-2 border-slate-700" style="display: none;">
+            <a class="block py-2 px-4 text-sm rounded-lg text-gray-400 hover:bg-slate-800 hover:text-white {{ request()->routeIs('owner.transactions.index') ? 'text-amber-400 font-semibold' : '' }}"
+                href="{{ route('owner.laporan.pemesanan') }}"> Laporan Pemesanan </a>
+            <a class="block py-2 px-4 text-sm rounded-lg text-gray-400 hover:bg-slate-800 hover:text-white {{ request()->routeIs('owner.transactions.status') ? 'text-amber-400 font-semibold' : '' }}"
+                href="{{ route('owner.laporan.pendapatan') }}"> Laporan Pendapatan </a>
+        </div>
+    </div>
 
     <div class="mt-2">
         <button @click="openProfile = !openProfile"

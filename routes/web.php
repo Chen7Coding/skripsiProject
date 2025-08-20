@@ -139,11 +139,21 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 Route::middleware(['auth', 'owner'])->prefix('owner')->group(function () {
     Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('owner.dashboard');
      Route::resource('employee', EmployeeController::class)->names('owner.employee');
+
      // Route untuk Pengaturan Profil Owner
     Route::get('/profile/edit', [App\Http\Controllers\Owner\ProfileController::class, 'edit'])->name('owner.profile.edit');
     Route::put('/profile/update', [App\Http\Controllers\Owner\ProfileController::class, 'update'])->name('owner.profile.update');
     Route::get('/profile/password', [App\Http\Controllers\Owner\ProfileController::class, 'editPassword'])->name('owner.profile.password.edit');
     Route::put('/profile/password', [App\Http\Controllers\Owner\ProfileController::class, 'updatePassword'])->name('owner.profile.password.update');
      Route::get('/settings', [App\Http\Controllers\Owner\SettingController::class, 'index'])->name('owner.settings.index');
-    Route::post('/settings', [App\Http\Controllers\Owner\SettingController::class, 'update'])->name('owner.settings.update');    
+    Route::post('/settings', [App\Http\Controllers\Owner\SettingController::class, 'update'])->name('owner.settings.update');   
+    
+    Route::prefix('laporan')->group(function () {
+        // Rute untuk Laporan Pemesanan
+      // Rute untuk Laporan Pemesanan
+    Route::get('pemesanan', [App\Http\Controllers\Owner\OrderReportController::class, 'index'])->name('owner.laporan.pemesanan');
+    
+    // Rute untuk Laporan Pendapatan
+    Route::get('pendapatan', [App\Http\Controllers\Owner\IncomeReportController::class, 'index'])->name('owner.laporan.pendapatan');
+    });
 });
