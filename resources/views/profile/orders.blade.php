@@ -91,7 +91,7 @@
                                             <div
                                                 class="flex-shrink-0 w-24 h-24 rounded-md overflow-hidden border border-gray-200 mr-4">
                                                 <img id="item-image-{{ $item->id }}"
-                                                    src="{{ asset($item->design_file_path ? 'storage/' . $item->design_file_path : $item->product->image ?? 'https://placehold.co/96x96/E0E0E0/grey?text=No+Image') }}?v={{ $item->updated_at->timestamp }}"
+                                                    src="{{ asset($item->design_file_path ? 'storage/' . $item->design_file_path : 'storage/' . $item->product->image ?? 'https://placehold.co/96x96/E0E0E0/grey?text=No+Image') }}?v={{ $item->updated_at->timestamp }}"
                                                     alt="{{ $item->product->name ?? 'Produk Dihapus' }}"
                                                     class="w-full h-full object-cover object-center">
                                             </div>

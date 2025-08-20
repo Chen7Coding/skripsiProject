@@ -66,7 +66,7 @@
                     <ul class="divide-y divide-gray-200">
                         @foreach ($order->orderItems as $item)
                             <li class="p-6 flex items-start space-x-6">
-                                <img src="{{ asset($item->design_file_path ? 'storage/' . $item->design_file_path : $item->product->image) }}"
+                                <img src="{{ asset($item->design_file_path ? 'storage/' . $item->design_file_path : 'storage/' . $item->product->image) }}"
                                     alt="{{ $item->product->name ?? 'Produk Dihapus' }}"
                                     class="h-24 w-24 rounded-md object-cover flex-shrink-0">
                                 <div class="flex-1">
@@ -97,6 +97,11 @@
                                                     <a href="{{ asset('storage/' . $item->design_file_path) }}"
                                                         target="_blank" class="text-amber-600 hover:underline">
                                                         Lihat File
+                                                    </a>
+                                                    <span class="mx-1 text-gray-400">|</span>
+                                                    <a href="{{ route('admin.orders.download-design', $item->id) }}"
+                                                        class="text-amber-900 hover:underline">
+                                                        Unduh File
                                                     </a>
                                                 </dd>
                                             </div>

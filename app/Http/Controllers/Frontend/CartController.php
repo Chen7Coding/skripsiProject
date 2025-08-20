@@ -129,41 +129,43 @@ class CartController extends Controller
         return 0;
     }
 
-    public function update(Request $request, $productId)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Anda harus login untuk memperbarui keranjang.');
-        }
+   public function update(Request $request, $itemId)
+{
+    // Pastikan pengguna sudah login
+    if (!Auth::check()) {
+        return redirect()->route('login');
+    }
 
-        $request->validate([
-            'quantity' => 'required|integer|min:1',
-            'material' => 'nullable|string',
-            'size' => 'nullable|string',
-            'notes' => 'nullable|string',
-            'design_file_path' => 'nullable|file|mimes:jpg,png,pdf,cdr,psd|max:10240',
-        ]);
-        
-        $cartItem = Cart::where('user_id', Auth::id())
-                        ->where('product_id', $productId)
-                        ->first();
+    // Cari item keranjang berdasarkan ID dan user_id
+    $cartItem = Cart::where('user_id', Auth::id())
+                     ->find($itemId);
 
-        if ($cartItem) {
-            $cartItem->quantity = $request->input('quantity');
-            $cartItem->material = $request->input('material');
-            $cartItem->size = $request->input('size');
-            $cartItem->notes = $request->input('notes');
-
-            if ($request->hasFile('design_file_path')) {
-                if ($cartItem->design_file_path) {
-                    Storage::delete($cartItem->design_file_path);
-                }
-                $cartItem->design_file_path = $request->file('design_file_path')->store('designs' , 'public');
-            }
-
-            $cartItem->save();
-            return redirect()->route('cart.index')->with('success', 'Keranjang berhasil diperbarui.');
-        }
-
+    if (!$cartItem) {
         return back()->with('error', 'Item keranjang tidak ditemukan.');
     }
+
+    $request->validate([
+        'quantity' => 'required|integer|min:1',
+        'material' => 'nullable|string',
+        'size' => 'nullable|string',
+        'notes' => 'nullable|string',
+        'design_file_path' => 'nullable|file|mimes:jpg,png,pdf,cdr,psd|max:10240',
+    ]);
+
+    $cartItem->quantity = $request->input('quantity');
+    $cartItem->material = $request->input('material');
+    $cartItem->size = $request->input('size');
+    $cartItem->notes = $request->input('notes');
+
+    if ($request->hasFile('design_file_path')) {
+        if ($cartItem->design_file_path) {
+            Storage::delete($cartItem->design_file_path);
+        }
+        $cartItem->design_file_path = $request->file('design_file_path')->store('designs', 'public');
+    }
+
+    $cartItem->save();
+    
+    return redirect()->route('cart.index')->with('success', 'Keranjang berhasil diperbarui.');
+}
 }

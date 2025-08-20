@@ -3,35 +3,57 @@
 @section('title', 'Laporan Pemesanan')
 
 @section('admin-content')
-
-    {{-- x-data dan x-init untuk inisialisasi Alpine.js dari data controller --}}
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8" x-data="dateFilter()" x-init="startDate = '{{ $startDate }}';
-    endDate = '{{ $endDate }}'">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
 
         {{-- Header Halaman --}}
-        <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-8 no-print">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-800">Laporan Pemesanan</h1>
-                <p class="mt-1 text-gray-500">Pilih rentang waktu untuk melihat dan mencetak laporan.</p>
-            </div>
+        <div class="mb-8 no-print">
+            <h1 class="text-3xl font-bold text-gray-800">Laporan Pemesanan</h1>
+            <p class="mt-1 text-gray-500">Pilih rentang waktu untuk melihat dan mencetak laporan.</p>
         </div>
 
-        <div class="bg-white p-4 rounded-lg shadow-sm mb-8 no-print">
-            {{-- Arahkan action form ke route yang sudah dibuat --}}
-            <form action="{{ route('admin.report.admin_laporan') }}"
+        {{-- ============================== --}}
+        {{-- ==== FILTER DAN RINGKASAN ==== --}}
+        {{-- ============================== --}}
+        <div class="bg-white p-6 rounded-lg shadow-sm mb-8 no-print">
+            <h2 class="text-xl font-semibold mb-4">Ringkasan Periode</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                {{-- Total Pendapatan --}}
+                <div class="bg-amber-50 p-4 rounded-lg">
+                    <p class="text-sm text-amber-700">Total Pendapatan</p>
+                    <p class="text-2xl font-bold text-amber-800">Rp{{ number_format($totalRevenue, 0, ',', '.') }}</p>
+                </div>
+                {{-- Total Pesanan --}}
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <p class="text-sm text-blue-700">Total Pesanan</p>
+                    <p class="text-2xl font-bold text-blue-800">{{ $totalOrders }}</p>
+                </div>
+                {{-- Pesanan Selesai --}}
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <p class="text-sm text-green-700">Pesanan Selesai</p>
+                    <p class="text-2xl font-bold text-green-800">{{ $totalCompletedOrders }}</p>
+                </div>
+                {{-- Rata-rata Nilai Pesanan --}}
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <p class="text-sm text-gray-700">Rata-rata Pesanan</p>
+                    <p class="text-2xl font-bold text-gray-800">Rp{{ number_format($averageOrderValue, 0, ',', '.') }}</p>
+                </div>
+            </div>
+
+            {{-- Form Filter --}}
+            <form action="{{ route('admin.report.admin_laporan') }}" method="GET"
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-
-
-                {{-- Filter Rentang Tanggal --}}
+                {{-- Input Tanggal --}}
                 <div>
                     <label for="start_date" class="text-sm font-medium text-gray-700">Dari Tanggal</label>
-                    <input type="date" name="start_date" id="start_date" x-model="startDate"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm">
+                    <input type="date" name="start_date" id="start_date"
+                        value="{{ \Carbon\Carbon::parse($startDate)->format('Y-m-d') }}"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm">
                 </div>
                 <div>
                     <label for="end_date" class="text-sm font-medium text-gray-700">Sampai Tanggal</label>
-                    <input type="date" name="end_date" id="end_date" x-model="endDate"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm">
+                    <input type="date" name="end_date" id="end_date"
+                        value="{{ \Carbon\Carbon::parse($endDate)->format('Y-m-d') }}"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm">
                 </div>
 
                 {{-- Tombol Aksi --}}
@@ -40,32 +62,37 @@
                         class="w-full inline-flex justify-center items-center px-4 py-2 bg-amber-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-amber-700">
                         Cari
                     </button>
-                    <button type="button" @click="printReport()"
-                        class="w-full inline-flex justify-center items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
-                        Cetak
-                    </button>
+                </div>
+
+                <div class="flex space-x-2">
+                    <a href="{{ route('admin.report.export-pdf') }}?start_date={{ $startDate }}&end_date={{ $endDate }}"
+                        class="w-full inline-flex justify-center items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700">
+                        PDF
+                    </a>
+                    <a href="{{ route('admin.report.export-csv') }}?start_date={{ $startDate }}&end_date={{ $endDate }}"
+                        class="w-full inline-flex justify-center items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700">
+                        CSV
+                    </a>
                 </div>
             </form>
+
+            {{-- Input Search di tabel --}}
+            <div class="mt-4">
+                <input type="text" id="searchInput" placeholder="Cari data di tabel..."
+                    class="w-full rounded-md border-gray-300 shadow-sm sm:text-sm px-3 py-2">
+            </div>
         </div>
 
+        {{-- ================================= --}}
+        {{-- ======== TABEL RINCIAN ======== --}}
+        {{-- ================================= --}}
         <div id="print-area">
-            {{-- Header Laporan (muncul saat dicetak) --}}
-            <div class="hidden print:block mb-8 text-center">
-                <h2 class="text-2xl font-bold">Laporan Pemesanan</h2>
-                <p>Periode: <span
-                        x-text="formatDate(startDate)">{{ \Carbon\Carbon::parse($startDate)->locale('id')->isoFormat('D MMMM YYYY') }}</span>
-                    s/d <span
-                        x-text="formatDate(endDate)">{{ \Carbon\Carbon::parse($endDate)->locale('id')->isoFormat('D MMMM YYYY') }}</span>
-                </p>
-                <p class="mt-1 text-sm">Sidu Digital Print</p>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <div class="p-6 border-b">
-                    <h3 class="text-xl font-semibold text-gray-800">Laporan Transaksi Pemesanan</h3>
+                    <h3 class="text-xl font-semibold text-gray-800">Detail Transaksi Pesanan</h3>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
+                    <table id="ordersTable" class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -78,11 +105,12 @@
                                     Total</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Metode Pembayaran</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            {{-- Mengisi data dari controller secara dinamis --}}
-                            @forelse ($laporanPemesanan as $order)
+                            @forelse ($orders as $order)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         {{ \Carbon\Carbon::parse($order->created_at)->locale('id')->isoFormat('D MMM YYYY') }}
@@ -90,14 +118,16 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">{{ $order->order_number }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        {{ $order->user->name }}</td>
+                                        {{ $order->user->name ?? 'Pelanggan Dihapus' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         Rp{{ number_format($order->total_price, 0, ',', '.') }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $order->status }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ ucfirst($order->status) }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $order->payment_method ?? '-' }}
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5"
+                                    <td colspan="6"
                                         class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
                                         Tidak ada data pemesanan pada periode ini.
                                     </td>
@@ -107,106 +137,20 @@
                     </table>
                 </div>
             </div>
-
-            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <div class="p-6 border-b">
-                    <h3 class="text-xl font-semibold text-gray-800">Laporan Data Pelanggan</h3>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Nama Pelanggan</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Email</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Total Pesanan</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Total Pengeluaran</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            {{-- Mengisi data dari controller secara dinamis --}}
-                            @forelse ($laporanPelanggan as $pelanggan)
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        {{ $pelanggan->name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $pelanggan->email }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $pelanggan->total_pesanan }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                        Rp{{ number_format($pelanggan->total_pengeluaran, 0, ',', '.') }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4"
-                                        class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
-                                        Tidak ada data pelanggan yang melakukan pemesanan pada periode ini.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
         </div>
+
     </div>
 
+    {{-- Script Search --}}
     <script>
-        function dateFilter() {
-            return {
-                startDate: '',
-                endDate: '',
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            let filter = this.value.toLowerCase();
+            let rows = document.querySelectorAll("#ordersTable tbody tr");
 
-                setToday() {
-                    const today = new Date();
-                    this.startDate = today.toISOString().slice(0, 10);
-                    this.endDate = today.toISOString().slice(0, 10);
-                    document.querySelector('form').submit();
-                },
-                setThisWeek() {
-                    const today = new Date();
-                    // Dapatkan nomor hari (0=Minggu, 1=Senin, dst)
-                    const day = today.getDay() || 7;
-
-                    // Hitung tanggal untuk hari Senin
-                    const firstDayOfWeek = new Date(today.setDate(today.getDate() - day + (day === 0 ? -6 : 1)));
-
-                    // Hitung tanggal untuk hari Sabtu (5 hari setelah Senin)
-                    const lastDayOfWeek = new Date(firstDayOfWeek);
-                    lastDayOfWeek.setDate(lastDayOfWeek.getDate() + 5);
-
-                    this.startDate = firstDayOfWeek.toISOString().slice(0, 10);
-                    this.endDate = lastDayOfWeek.toISOString().slice(0, 10);
-                    document.querySelector('form').submit();
-                },
-                setThisMonth() {
-                    const today = new Date();
-                    const y = today.getFullYear();
-                    const m = today.getMonth();
-
-                    // MENGATUR TANGGAL MULAI MENJADI TANGGAL 1 DI BULAN INI
-                    this.startDate = new Date(y, m, 1).toISOString().slice(0, 10);
-                    console.log('Nilai Tanggal Mulai yang Dihasilkan:', this.startDate);
-                    // MENGATUR TANGGAL AKHIR MENJADI TANGGAL HARI INI
-                    this.endDate = today.toISOString().slice(0, 10);
-
-                    document.querySelector('form').submit();
-                },
-                formatDate(dateString) {
-                    if (!dateString) return '...';
-                    const date = new Date(dateString + 'T00:00:00Z');
-                    const options = {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric'
-                    };
-                    return date.toLocaleDateString('id-ID', options);
-                },
-                printReport() {
-                    window.print();
-                }
-            }
-        }
+            rows.forEach(row => {
+                let text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? "" : "none";
+            });
+        });
     </script>
 @endsection

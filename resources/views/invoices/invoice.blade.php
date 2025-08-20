@@ -7,385 +7,222 @@
     <title>Invoice - {{ $order->order_number }}</title>
     <style>
         body {
-            font-family: 'Helvetica', sans-serif;
+            font-family: sans-serif;
             font-size: 12px;
             margin: 0;
             padding: 0;
             background-color: #ffffff;
+            color: #333;
         }
 
         .invoice-box {
             width: 100%;
             max-width: 800px;
-            margin: auto;
+            margin: 20px auto;
             padding: 30px;
             border: 1px solid #eee;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
             line-height: 1.6;
-            color: #555;
         }
 
-        .invoice-box table {
-            width: 100%;
-            line-height: inherit;
-            text-align: left;
-            border-collapse: collapse;
-        }
-
-        .invoice-box table td {
-            padding: 8px;
-            vertical-align: top;
-        }
-
-        .invoice-box table tr td:nth-child(2) {
-            text-align: right;
-        }
-
-        .invoice-box table tr.top table td {
-            padding-bottom: 20px;
-        }
-
-        .invoice-box table tr.top table td.title {
-            font-size: 32px;
-            line-height: 32px;
-            color: #333;
-        }
-
-        .invoice-box table tr.information table td {
-            padding-bottom: 40px;
-        }
-
-        .invoice-box table tr.heading td {
-            background: #eee;
-            border-bottom: 1px solid #ddd;
-            font-weight: bold;
-            padding: 10px;
-        }
-
-        .invoice-box table tr.item td {
-            border-bottom: 1px solid #eee;
-        }
-
-        .invoice-box table tr.item.last td {
-            border-bottom: none;
-        }
-
-        .invoice-box table tr.total td:nth-child(2) {
-            border-top: 2px solid #eee;
-            font-weight: bold;
-        }
-
-        .invoice-box .logo {
-            max-width: 150px;
-        }
-
-        .header-title {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        .footer-signature {
-            margin-top: 50px;
-            text-align: right;
-        }
-
-        .footer-signature p {
-            margin: 0;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="invoice-box">
-        <table cellpadding="0" cellspacing="0">
-            <tr class="top">
-                <td colspan="2">
-                    <table>
-                        <tr>
-                            <td class="title">
-                                <img src="{{ public_path('path/to/your/logo.png') }}" class="logo">
-                            </td>
-                            <td>
-                                <div style="font-size: 24px; font-weight: bold; color: #8a2be2;">INVOICE</div>
-                                No. {{ $order->order_number }}<br>
-                                Tanggal: {{ $order->created_at->format('d F Y') }}
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr class="information">
-                <td colspan="2">
-                    <table>
-                        <tr>
-                            <td>
-                                {{-- Detail Perusahaan --}}
-                                Sidu Digital Print<br>
-                                Jl. Raya Majalaya - Cicalengka, Pajagalan Ruko Alsifa C3<br>
-                                Telp: 0812-3456-7890<br>
-                                Email: info@sidudigitalprint.com
-                            </td>
-                            <td>
-                                {{-- Detail Pelanggan --}}
-                                Kepada: {{ $order->name }}<br>
-                                Telp: {{ $order->phone }}<br>
-                                Email: {{ $order->email }}<br>
-                                Alamat: {{ $order->address }}, {{ $order->shipping_city }}
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-            <tr class="heading">
-                <td>Keterangan</td>
-                <td style="text-align: center;">Harga</td>
-            </tr>
-
-            @foreach ($order->orderItems as $item)
-                <tr class="item">
-                    <td>
-                        {{ $item->product->name ?? 'Produk Dihapus' }} <br>
-                        <small>
-                            Bahan: {{ $item->material ?? '-' }} |
-                            Ukuran: {{ $item->size ?? '-' }} |
-                            Jumlah: {{ $item->quantity }} pcs
-                        </small>
-                    </td>
-                    <td>Rp{{ number_format($item->quantity * $item->price, 0, ',', '.') }}</td>
-                </tr>
-            @endforeach
-
-            <tr class="item">
-                <td>Biaya Pengiriman</td>
-                <td>Rp{{ number_format($order->shipping_cost, 0, ',', '.') }}</td>
-            </tr>
-
-            <tr class="total">
-                <td></td>
-                <td>
-                    Sub Total: Rp{{ number_format($order->total_price - $order->shipping_cost, 0, ',', '.') }}<br>
-                    Total Tagihan: Rp{{ number_format($order->total_price, 0, ',', '.') }}
-                </td>
-            </tr>
-        </table>
-
-        <div class="footer-signature">
-            <p>Mengetahui,</p>
-            <p style="margin-top: 50px;">(________________________)</p>
-            <p>Nuki Bagja</p>
-        </div>
-    </div>
-</body>
-
-</html>
-
-
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Invoice - {{ $order->order_number }}</title>
-    <style>
-        body {
-            font-family: 'Helvetica', sans-serif;
-            font-size: 12px;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-        }
-
-        .invoice-box {
-            width: 100%;
-            max-width: 800px;
-            margin: auto;
-            padding: 30px;
-            border: 1px solid #eee;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-            line-height: 1.6;
-            color: #555;
-        }
-
-        .invoice-box table {
-            width: 100%;
-            line-height: inherit;
-            text-align: left;
-            border-collapse: collapse;
-        }
-
-        .invoice-box table td {
-            padding: 8px;
-            vertical-align: top;
-        }
-
-        .invoice-box table tr td:nth-child(2) {
-            text-align: right;
-        }
-
-        .invoice-box table tr.top table td {
-            padding-bottom: 20px;
-        }
-
-        .invoice-box table tr.top table td.title {
-            font-size: 32px;
-            line-height: 32px;
-            color: #333;
-        }
-
-        .invoice-box table tr.information table td {
-            padding-bottom: 40px;
-        }
-
-        .invoice-box table tr.heading td {
-            background: #eee;
-            border-bottom: 1px solid #ddd;
-            font-weight: bold;
-            padding: 10px;
-        }
-
-        .invoice-box table tr.item td {
-            border-bottom: 1px solid #eee;
-        }
-
-        .invoice-box table tr.item.last td {
-            border-bottom: none;
-        }
-
-        .invoice-box table tr.total td:nth-child(2) {
-            border-top: 2px solid #eee;
-            font-weight: bold;
-        }
-
-        .invoice-box .logo {
-            max-width: 150px;
-        }
-
-        .header-title {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        .footer-signature {
-            margin-top: 50px;
-            text-align: right;
-        }
-
-        .footer-signature p {
-            margin: 0;
-        }
-
+        /* HEADER */
         .invoice-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 25px;
         }
 
-        .invoice-header-title {
-            font-size: 24px;
+        .invoice-header img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .invoice-header-right {
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .invoice-header-right .title {
+            font-size: 28px;
             font-weight: bold;
             color: #8a2be2;
         }
 
-        .invoice-details {
+        /* INFO SECTION */
+        .info-section {
             display: flex;
             justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .info-section .column {
+            width: 48%;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* TABLE */
+        .table-container {
             margin-top: 20px;
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .invoice-table th,
+        .invoice-table td {
+            border: 1px solid #eee;
+            padding: 8px 10px;
+            vertical-align: top;
+        }
+
+        .invoice-table th {
+            background-color: #8a2be2;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .invoice-table td {
+            font-size: 12px;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        /* TOTAL */
+        .total-section {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .total-section table {
+            width: 45%;
+            float: right;
+            border-collapse: collapse;
+        }
+
+        .total-section td {
+            padding: 6px 10px;
+        }
+
+        .total-section tr td:first-child {
+            text-align: left;
+        }
+
+        .total-section tr td:last-child {
+            text-align: right;
+        }
+
+        .total-section tr:last-child {
+            border-top: 2px solid #eee;
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 60px;
+            text-align: right;
+        }
+
+        .footer p {
+            margin: 5px 0;
         }
     </style>
 </head>
 
 <body>
     <div class="invoice-box">
+
+        <!-- HEADER -->
         <div class="invoice-header">
-            <img src="{{ public_path('path/to/your/logo.png') }}" class="logo">
-            <div>
-                <div class="invoice-header-title">INVOICE</div>
-                <p style="margin: 0;">No. {{ $order->order_number }}</p>
+            <img src="{{ public_path('path/to/your/logo.png') }}" alt="Logo">
+            <div class="invoice-header-right">
+                <div class="title">INVOICE</div>
+                <div>No. {{ $order->order_number }}</div>
+                <div>Tanggal: {{ $order->created_at->format('d F Y') }}</div>
             </div>
         </div>
 
-        <div class="invoice-details">
-            <div>
-                <p style="margin: 0;">Sidu Digital Print</p>
-                <p style="margin: 0;">{{ $order->address }}, {{ $order->shipping_city }}</p>
-                <p style="margin: 0;">Telp: {{ $order->phone }}</p>
-                <p style="margin: 0;">Email: {{ $order->email }}</p>
+        <!-- INFO -->
+        <div class="info-section">
+            <div class="column">
+                <strong>TOKO SIDU DIGITAL PRINT</strong><br>
+                Jl. Raya Majalaya - Cicalengka, Pajagalan Ruko Alsifa C3<br>
+                Telp: 0812-3456-7890<br>
+                Email: info@sidudigitalprint.com
             </div>
-            <div>
-                <p style="margin: 0;">Kepada: {{ $order->name }}</p>
-                <p style="margin: 0;">Tanggal: {{ $order->created_at->format('d F Y') }}</p>
-                <p style="margin: 0;">Status: {{ $order->status === 'paid' ? 'Lunas' : 'Belum Lunas' }}</p>
+            <div class="column">
+                <strong>Kepada:</strong> {{ $order->name }}<br>
+                Telp: {{ $order->phone }}<br>
+                Email: {{ $order->email }}<br>
+                Alamat: {{ $order->address }}
             </div>
         </div>
 
-        <h3 class="header-title" style="background: #f0f0f0; padding: 10px;">Detail Pemesanan</h3>
+        <!-- TABLE -->
+        <div class="table-container">
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th class="text-left">Keterangan</th>
+                        <th class="text-right">Harga Satuan</th>
+                        <th class="text-right">Jml</th>
+                        <th class="text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($order->orderItems as $item)
+                        <tr>
+                            <td>
+                                {{ $item->product->name ?? 'Produk Dihapus' }} <br>
+                                <small>Bahan: {{ $item->material ?? '-' }} | Ukuran: {{ $item->size ?? '-' }}</small>
+                            </td>
+                            <td class="text-right">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
+                            <td class="text-right">{{ $item->quantity }} pcs</td>
+                            <td class="text-right">
+                                Rp{{ number_format($item->quantity * $item->price, 0, ',', '.') }}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-        <table cellpadding="0" cellspacing="0" style="margin-top: 20px;">
-            <tr class="heading" style="background-color: #8a2be2; color: white;">
-                <td>Keterangan</td>
-                <td style="text-align: center;">Harga</td>
-                <td style="text-align: center;">Jml</td>
-                <td>Total</td>
-            </tr>
-
-            @foreach ($order->orderItems as $item)
-                <tr class="item">
-                    <td>
-                        {{ $item->product->name ?? 'Produk Dihapus' }} <br>
-                        <small>
-                            Bahan: {{ $item->material ?? '-' }} |
-                            Ukuran: {{ $item->size ?? '-' }}
-                        </small>
-                    </td>
-                    <td style="text-align: center;">Rp{{ number_format($item->price, 0, ',', '.') }}</td>
-                    <td style="text-align: center;">{{ $item->quantity }} pcs</td>
-                    <td>Rp{{ number_format($item->quantity * $item->price, 0, ',', '.') }}</td>
+        <!-- TOTAL -->
+        <div class="total-section">
+            <table>
+                <tr>
+                    <td>Sub Total:</td>
+                    <td>Rp{{ number_format($order->total_price - $order->shipping_cost, 0, ',', '.') }}</td>
                 </tr>
-            @endforeach
-
-            <tr class="total">
-                <td colspan="2" style="border-top: none;"></td>
-                <td style="border-top: 2px solid #eee; font-weight: bold;">Sub Total:</td>
-                <td style="border-top: 2px solid #eee; font-weight: bold;">
-                    Rp{{ number_format($order->total_price - $order->shipping_cost, 0, ',', '.') }}
-                </td>
-            </tr>
-            <tr class="total">
-                <td colspan="2" style="border-top: none;"></td>
-                <td style="border-top: 2px solid #eee; font-weight: bold;">Biaya Kirim:</td>
-                <td style="border-top: 2px solid #eee; font-weight: bold;">
-                    Rp{{ number_format($order->shipping_cost, 0, ',', '.') }}
-                </td>
-            </tr>
-            <tr class="total">
-                <td colspan="2" style="border-top: none;"></td>
-                <td style="border-top: 2px solid #eee; font-weight: bold;">Total:</td>
-                <td style="border-top: 2px solid #eee; font-weight: bold;">
-                    Rp{{ number_format($order->total_price, 0, ',', '.') }}
-                </td>
-            </tr>
-        </table>
-
-        <div style="margin-top: 40px;">
-            <p style="font-weight: bold;">Informasi Pembayaran:</p>
-            <p>Metode: {{ $order->payment_method ?? 'Belum Ditentukan' }}</p>
-            <p>Status: {{ $order->payment_status === 'paid' ? 'Lunas' : 'Belum Lunas' }}</p>
+                <tr>
+                    <td>Biaya Kirim:</td>
+                    <td>Rp{{ number_format($order->shipping_cost, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Total Tagihan:</strong></td>
+                    <td><strong>Rp{{ number_format($order->total_price, 0, ',', '.') }}</strong></td>
+                </tr>
+            </table>
         </div>
 
-        <div class="footer-signature">
+        <!-- FOOTER -->
+        <div class="footer">
             <p>Mengetahui,</p>
             <p style="margin-top: 50px;">(________________________)</p>
             <p>Nuki Bagja</p>
         </div>
+
     </div>
 </body>
 

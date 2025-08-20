@@ -8,6 +8,7 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -36,6 +37,24 @@ class OrderController extends Controller
 
         return redirect()->route('admin.orders.show', $order->id)->with('success', 'Status pesanan berhasil diperbarui.');
     }
+    
+    
+    public function downloadDesign(OrderItem $item)
+{
+    
+if ($item->design_file_path) {
+    $path = $item->design_file_path; // contoh: 'designs/foo.pdf'
+
+    if (Storage::disk('public')->exists($path)) {
+        // Fallback universal:
+        return response()->download(storage_path('app/public/'.$path));
+        
+        // Kalau versi kamu mendukung:
+        // return Storage::disk('public')->download($path);
+    }
+}   
+    return back()->with('error', 'File desain tidak ditemukan.');
+}
 
      public function verifyPayment(Order $order)
     {

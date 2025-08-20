@@ -127,6 +127,18 @@
                                         <option value="Albatros"
                                             {{ old('material', $cartItem->material ?? '') == 'Albatros' ? 'selected' : '' }}>
                                             Albatros</option>
+                                        <option value="Art Paper"
+                                            {{ old('material', $cartItem->material ?? '') == 'Art Paper' ? 'selected' : '' }}>
+                                            Art Paper</option>
+                                        <option value="Art Carton"
+                                            {{ old('material', $cartItem->material ?? '') == 'Art Carton' ? 'selected' : '' }}>
+                                            Art Carton</option>
+                                        <option value="Vinyl Putih / Transparan"
+                                            {{ old('material', $cartItem->material ?? '') == 'Vinyl Putih / Transparan' ? 'selected' : '' }}>
+                                            Vinyl Putih / Transparan</option>
+                                        <option value="NCR rangkap 2 / 3"
+                                            {{ old('material', $cartItem->material ?? '') == 'NCR rangkap 2 / 3' ? 'selected' : '' }}>
+                                            NCR rangkap 2 / 3</option>
                                     </select>
                                     @error('material')
                                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -134,10 +146,46 @@
                                 </div>
                                 <div>
                                     <label for="size" class="block text-sm font-bold text-gray-900">Ukuran</label>
-                                    <input type="text" name="size" id="size"
-                                        value="{{ old('size', $cartItem->size ?? '') }}"
-                                        class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm placeholder-gray-400"
-                                        placeholder="Contoh: 2x1 meter">
+                                    <select id="size" name="size"
+                                        class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm placeholder-gray-400">
+                                        <option value="" disabled selected>Pilih Ukuran</option>
+                                        <option value="1x1 meter"
+                                            {{ old('size', $cartItem->size ?? '') == '1x1 meter' ? 'selected' : '' }}>
+                                            1x1 meter</option>
+                                        <option value="1x2 meter"
+                                            {{ old('size', $cartItem->size ?? '') == '1x2 meter' ? 'selected' : '' }}>
+                                            1x2 meter</option>
+                                        <option value="1x3 meter"
+                                            {{ old('size', $cartItem->size ?? '') == '1x3 meter' ? 'selected' : '' }}>
+                                            1x3 meter</option>
+                                        <option value="1x4 meter"
+                                            {{ old('size', $cartItem->size ?? '') == '1x4 meter' ? 'selected' : '' }}>
+                                            1x4 meter</option>
+                                        <option value="60 x 160 cm "
+                                            {{ old('size', $cartItem->size ?? '') == '60 x 160 cm' ? 'selected' : '' }}>
+                                            60x160 cm</option>
+                                        <option value="80 x 200 cm"
+                                            {{ old('size', $cartItem->size ?? '') == '80 x 200 cm' ? 'selected' : '' }}>
+                                            80x200 cm</option>
+                                        <option value="A6"
+                                            {{ old('size', $cartItem->size ?? '') == 'A6' ? 'selected' : '' }}>
+                                            A6</option>
+                                        <option value="A5"
+                                            {{ old('size', $cartItem->size ?? '') == 'A5' ? 'selected' : '' }}>
+                                            A5</option>
+                                        <option value="A4"
+                                            {{ old('size', $cartItem->size ?? '') == 'A4' ? 'selected' : '' }}>
+                                            A4</option>
+                                        <option value="A3"
+                                            {{ old('size', $cartItem->size ?? '') == 'A3' ? 'selected' : '' }}>
+                                            A3</option>
+                                        <option value="F5"
+                                            {{ old('size', $cartItem->size ?? '') == 'F5' ? 'selected' : '' }}>
+                                            F5</option>
+                                        <option value="F4"
+                                            {{ old('size', $cartItem->size ?? '') == 'F4' ? 'selected' : '' }}>
+                                            F4</option>
+                                    </select>
                                     @error('size')
                                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                     @enderror
@@ -154,10 +202,16 @@
                                 @enderror
                             </div>
 
-                            <button type="submit"
-                                class="mt-8 w-full rounded-md border border-transparent bg-amber-600 py-3 px-8 flex items-center justify-center text-base font-bold text-white hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-colors duration-200">
-                                {{ isset($cartItem) ? 'Update Keranjang' : 'Tambahkan ke Keranjang' }}
-                            </button>
+                            @if (auth()->check() && auth()->user()->role === 'pelanggan')
+                                <button type="submit"
+                                    class="mt-8 w-full rounded-md border border-transparent bg-amber-600 py-3 px-8 flex items-center justify-center text-base font-bold text-white hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-colors duration-200">
+                                    {{ isset($cartItem) ? 'Update Keranjang' : 'Tambahkan ke Keranjang' }}
+                                </button>
+                            @else
+                                <p class="mt-8 text-center text-gray-500">
+                                    Anda harus login sebagai pelanggan untuk memesan.
+                                </p>
+                            @endif
                         </form>
                     </div>
 

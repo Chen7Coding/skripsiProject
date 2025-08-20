@@ -67,9 +67,8 @@ Route::get('/produk/{product:slug}', [App\Http\Controllers\Frontend\ProductContr
 // TAMBAHKAN RUTE BARU UNTUK MELIHAT & MENAMBAH KE KERANJANG
     Route::post('/keranjang/tambah', [App\Http\Controllers\Frontend\CartController::class, 'store'])->name('cart.store');
     Route::get('/keranjang', [App\Http\Controllers\Frontend\CartController::class, 'index'])->name('cart.index');
-    // Ubah {rowId} menjadi {productId}
-    Route::patch('/keranjang/update/{productId}', [App\Http\Controllers\Frontend\CartController::class, 'update'])->name('cart.update');
-    Route::delete('/keranjang/hapus/{productId}', [App\Http\Controllers\Frontend\CartController::class, 'remove'])->name('cart.remove');
+    Route::patch('/keranjang/update/{itemId}', [App\Http\Controllers\Frontend\CartController::class, 'update'])->name('cart.update');
+    Route::delete('/keranjang/hapus/{itemId}', [App\Http\Controllers\Frontend\CartController::class, 'remove'])->name('cart.remove');
 
     // RUTE BARU UNTUK CHECKOUT
     Route::get('/checkout', [App\Http\Controllers\Frontend\CheckoutController::class, 'index'])->name('checkout.index');
@@ -99,6 +98,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
    
     // Rute-Data Pelamggam
     Route::resource('pelanggan', CustomerController::class)->names('admin.customers'); //Route Data Pelanggan
+     // Rute untuk halaman data karyawan
+    Route::get('/data-karyawan', [\App\Http\Controllers\Admin\KaryawanController::class, 'index'])->name('admin.karyawan.index');
+    // Rute untuk menampilkan form tambah karyawan
+    Route::get('/tambah-karyawan', [App\Http\Controllers\Admin\KaryawanController::class, 'create'])->name('admin.karyawan.create');
+    // Rute untuk menyimpan data karyawan baru
+    Route::post('/tambah-karyawan', [App\Http\Controllers\Admin\KaryawanController::class, 'store'])->name('admin.karyawan.store');
     
     //Rute Pesanan
     Route::get('/pesanan', [AdminOrderController::class, 'index'])->name('admin.orders.index');
@@ -107,7 +112,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     
     //Rute Produk (Resource)
     Route::resource('products', \App\Http\Controllers\Admin\AdminProductController::class)->except('show');
-   
+    Route::get('/orders/download-design/{item}', [AdminOrderController::class, 'downloadDesign'])->name('admin.orders.download-design');
+});
     //Rute Promo (Resource)
     Route::resource('promo', \App\Http\Controllers\Admin\PromoController::class);
    
@@ -119,7 +125,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     
     // Rute laporan pemesanan
     Route::get('/laporan/pemesanan', [LaporanController::class, 'index'])->name('admin.report.admin_laporan');
-    
+    Route::get('/laporan/pemesanan/export-pdf', [LaporanController::class, 'exportPdf'])->name('admin.report.export-pdf');
+    Route::get('/laporan/pemesanan/export-csv', [LaporanController::class, 'exportCsv'])->name('admin.report.export-csv');
     // Rute untuk verifikasi pembayaran
     Route::post('/orders/{order}/verify-payment', [App\Http\Controllers\Admin\OrderController::class, 'verifyPayment'])
         ->name('orders.verifyPayment');
@@ -127,7 +134,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     //Rute Pemesanan Offline
     Route::get('/admin/orders/create', [App\Http\Controllers\Admin\OrderController::class, 'createForStaff'])->name('admin.order.create');
     Route::post('/admin/orders/store', [App\Http\Controllers\Admin\OrderController::class, 'storeForStaff'])->name('admin.orders.store');
-});
+   
 
 Route::middleware(['auth', 'owner'])->prefix('owner')->group(function () {
     Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('owner.dashboard');
