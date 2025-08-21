@@ -6,11 +6,13 @@ use view;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Setting;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporanController extends Controller
 {
@@ -45,19 +47,24 @@ class LaporanController extends Controller
             'endDate'
         ));
     }
+
+    
     public function exportPdf(Request $request)
 {
+    set_time_limit(300);
     $startDate = $request->input('start_date');
     $endDate = $request->input('end_date');
-
-    $orders = Order::with('user')->whereBetween('created_at', [$startDate, $endDate])->get();
-    
-    $pdf = PDF::loadView('admin.report.export-pdf', compact('orders', 'startDate', 'endDate'));
-    return $pdf->download('laporan-pemesanan-' . $startDate . '-sd-' . $endDate . '.pdf');
-}
+    $settings = Setting::first();
+       $orders = Order::with('user')->whereBetween('created_at', [$startDate, $endDate])->get();
+        
+        // Kirimkan variabel 'settings' ke view
+        $pdf = PDF::loadView('admin.report.export-pdf', compact('orders', 'startDate', 'endDate', 'settings'));
+        return $pdf->stream('laporan-pemesanan-' . $startDate . '-sd-' . $endDate . '.pdf');
+    }
 
 public function exportCsv(Request $request)
 {
+    set_time_limit(300);
     $startDate = $request->input('start_date');
     $endDate = $request->input('end_date');
 

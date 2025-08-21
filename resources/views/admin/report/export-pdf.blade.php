@@ -73,7 +73,10 @@
 <body>
     <div class="header" style="display: flex; align-items: center;">
         <div style="flex: 0 0 auto;">
-            <img src="{{ asset('storage/' . $setting->store_logo) }}" alt="Sidu Digital Print Logo" style="height:70px;">
+            @if ($settings && $settings->store_logo)
+                <img src="{{ asset('storage/' . $settings->store_logo) }}" alt="Sidu Digital Print Logo"
+                    style="height:90px;">
+            @endif
         </div>
         <div style="flex: 1; text-align: center;">
             <h2 style="margin: 0;">TOKO SIDU DIGITAL PRINT</h2>

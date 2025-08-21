@@ -40,7 +40,7 @@
             </div>
 
             {{-- Form Filter --}}
-            <form action="{{ route('admin.report.admin_laporan') }}" method="GET"
+            <form action="{{ route('admin.report.admin_laporan') }}" method="GET" target="_blank"
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
                 {{-- Input Tanggal --}}
                 <div>

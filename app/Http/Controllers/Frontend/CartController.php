@@ -138,11 +138,11 @@ class CartController extends Controller
 
     // Cari item keranjang berdasarkan ID dan user_id
     $cartItem = Cart::where('user_id', Auth::id())
-                     ->find($itemId);
+                     ->findOrFail($itemId);
 
-    if (!$cartItem) {
-        return back()->with('error', 'Item keranjang tidak ditemukan.');
-    }
+    // if (!$cartItem) {
+    //     return back()->with('error', 'Item keranjang tidak ditemukan.');
+    // }
 
     $request->validate([
         'quantity' => 'required|integer|min:1',
