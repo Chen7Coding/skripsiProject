@@ -48,10 +48,10 @@ class LaporanController extends Controller
         ));
     }
 
-    
+
     public function exportPdf(Request $request)
 {
-    set_time_limit(300);
+    set_time_limit(90);
     $startDate = $request->input('start_date');
     $endDate = $request->input('end_date');
     $settings = Setting::first();
@@ -64,7 +64,6 @@ class LaporanController extends Controller
 
 public function exportCsv(Request $request)
 {
-    set_time_limit(300);
     $startDate = $request->input('start_date');
     $endDate = $request->input('end_date');
 

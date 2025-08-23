@@ -18,25 +18,22 @@ class ProductController extends Controller
     public function show(Request $request, Product $product)
     {
         // PERUBAHAN 2: Logika untuk menangani mode edit
-        $cartItem = null;
+       $cartItem = null;
 
-        // Ambil data item dari keranjang berdasarkan rowId yang ada di URL
-        $productIdToEdit = request('edit_cart_item');
+    $itemIdToEdit = request('edit_cart_item'); // Ganti nama variabel agar lebih jelas
 
-        // Cek apakah ada parameter 'edit' di URL dan keranjang tidak kosong
-        if (Auth::check() && $productIdToEdit) {
-        
-            // Cari item di keranjang database milik user yang sedang login
-            $cartItem = Cart::where('user_id', Auth::id())
-                            ->where('product_id', $productIdToEdit)
-                            ->first();
-            // Jika cartItem ditemukan, pastikan itu memang produk yang sedang dilihat
-            if ($cartItem && $cartItem->product_id != $product->id) {
-                $cartItem = null; // Reset jika product_id tidak cocok
-            }
+    if (Auth::check() && $itemIdToEdit) {
+    
+        // PERBAIKAN DI SINI: Cari berdasarkan ID item keranjang, bukan ID produk.
+        $cartItem = Cart::where('user_id', Auth::id())
+                        ->where('id', $itemIdToEdit) // Perbaikan utama
+                        ->first();
+                        
+        if ($cartItem && $cartItem->product_id != $product->id) {
+            $cartItem = null;
         }
+    }
 
-        // Kirim objek produk dan (jika ada) objek cartItem ke view
-        return view('products.detail', compact('product', 'cartItem'));
+    return view('products.detail', compact('product', 'cartItem'));
     }
 }

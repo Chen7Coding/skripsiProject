@@ -50,15 +50,13 @@
                     <div class="mt-10 border-t border-gray-200 pt-10" x-data="{
                         designOption: '{{ old('design_option', isset($cartItem) && $cartItem->design_file_path ? 'has_design' : 'no_design') }}',
                     }">
-                        <form action="{{ isset($cartItem) ? route('cart.update', $cartItem->id) : route('cart.store') }}"
+                        <form action="{{ $cartItem ? route('cart.update', $cartItem->id) : route('cart.store') }}"
                             method="POST" enctype="multipart/form-data" class="space-y-6">
                             @csrf
                             @if (isset($cartItem))
                                 @method('PATCH')
                             @endif
-                            {{-- <input type="hidden" name="product_id" value="{{ $product->id }}"> --}}
-                            {{-- Tidak perlu lagi hidden product_id, karena sudah ada di URL --}}
-
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <div>
                                 <label class="text-base font-bold text-gray-900">Opsi Desain</label>
                                 <fieldset class="mt-4">

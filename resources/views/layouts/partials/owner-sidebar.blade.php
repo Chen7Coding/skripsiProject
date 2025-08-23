@@ -50,7 +50,7 @@
         </button>
         <div x-show="openTransaksi" class="mt-2 ml-4 pl-4 border-l-2 border-slate-700" style="display: none;">
             <a class="block py-2 px-4 text-sm rounded-lg text-gray-400 hover:bg-slate-800 hover:text-white {{ request()->routeIs('owner.transactions.index') ? 'text-amber-400 font-semibold' : '' }}"
-                href="#">Lihat Transaksi</a>
+                href="{{ route('owner.transaksi.index') }}">Lihat Transaksi</a>
             <a class="block py-2 px-4 text-sm rounded-lg text-gray-400 hover:bg-slate-800 hover:text-white {{ request()->routeIs('owner.transactions.status') ? 'text-amber-400 font-semibold' : '' }}"
                 href="#">Status Pembayaran</a>
         </div>

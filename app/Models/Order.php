@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -50,5 +51,11 @@ class Order extends Model
         // Asumsi: tabel orders memiliki kolom 'user_id'
         // yang terhubung ke 'id' di tabel 'users'
         return $this->belongsTo(User::class, 'user_id'); // Ganti 'User::class' dengan model pelanggan jika berbeda
+    }
+
+      public function items(): HasMany
+    {
+        // Asumsi: tabel 'order_items' memiliki kolom 'order_id'
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
 }

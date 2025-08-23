@@ -41,6 +41,7 @@ Route::get('/tentang-kami', [HomeController::class, 'about'])->name('about');
 
 // Rute untuk Halaman Kontak Kami
 Route::get('/kontak-kami', [HomeController::class, 'contact'])->name('contact');
+Route::post('/kirim-pesan', [HomeController::class, 'kirimPesan'])->name('kirim.pesan');
 
 // Rute untuk Halaman & Proses Autentikasi
 Route::get('/login', function () { return view('auth.login'); })->name('login');
@@ -95,6 +96,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     
     //Rute Dashboard Admun
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/dashboard/new-orders', [DashboardController::class, 'checkNewOrders'])->name('admin.dashboard.new-orders');
    
     // Rute-Data Pelamggam
     Route::resource('pelanggan', CustomerController::class)->names('admin.customers'); //Route Data Pelanggan
@@ -138,9 +140,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 Route::middleware(['auth', 'owner'])->prefix('owner')->group(function () {
     Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('owner.dashboard');
-     Route::resource('employee', EmployeeController::class)->names('owner.employee');
-
-     // Route untuk Pengaturan Profil Owner
+    Route::resource('employee', EmployeeController::class)->names('owner.employee');
+    Route::get('/transaksi', [App\Http\Controllers\Owner\TransaksiController::class, 'index'])->name('owner.transaksi.index');
+    // Rute BARU untuk melihat detail transaksi
+    Route::get('transaksi/{id}', [App\Http\Controllers\Owner\TransaksiController::class, 'show'])->name('owner.transaksi.detail');
+    
+    // Route untuk Pengaturan Profil Owner
     Route::get('/profile/edit', [App\Http\Controllers\Owner\ProfileController::class, 'edit'])->name('owner.profile.edit');
     Route::put('/profile/update', [App\Http\Controllers\Owner\ProfileController::class, 'update'])->name('owner.profile.update');
     Route::get('/profile/password', [App\Http\Controllers\Owner\ProfileController::class, 'editPassword'])->name('owner.profile.password.edit');
@@ -149,10 +154,8 @@ Route::middleware(['auth', 'owner'])->prefix('owner')->group(function () {
     Route::post('/settings', [App\Http\Controllers\Owner\SettingController::class, 'update'])->name('owner.settings.update');   
     
     Route::prefix('laporan')->group(function () {
-        // Rute untuk Laporan Pemesanan
       // Rute untuk Laporan Pemesanan
     Route::get('pemesanan', [App\Http\Controllers\Owner\OrderReportController::class, 'index'])->name('owner.laporan.pemesanan');
-    
     // Rute untuk Laporan Pendapatan
     Route::get('pendapatan', [App\Http\Controllers\Owner\IncomeReportController::class, 'index'])->name('owner.laporan.pendapatan');
     });

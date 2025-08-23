@@ -95,7 +95,7 @@
                                                     class="text-amber-600">Rp{{ number_format($item->quantity * $item->price, 0, ',', '.') }}</span>
                                             </p>
                                             <div class="flex items-center space-x-4">
-                                                <a href="{{ route('products.show', ['product' => $item->product->slug ?? '#']) }}?edit=1&edit_cart_item={{ $item->product_id }}"
+                                                <a href="{{ route('products.show', ['product' => $item->product->slug, 'edit_cart_item' => $item->id]) }}"
                                                     class="ml-2 px-3 py-1.5 rounded-md bg-gray-500 text-white font-semibold shadow-md hover:bg-gray-700 transition-colors duration-200">Edit</a>
                                                 <div class="border-l border-gray-200 pl-4">
                                                     <form action="{{ route('cart.remove', $item->product_id) }}"
