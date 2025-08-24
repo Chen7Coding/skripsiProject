@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
+use App\Helpers\WhatsAppHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -33,7 +35,35 @@ class OrderController extends Controller
             'status' => 'required|in:pending,processing,shipping,completed,cancelled',
         ]);
 
+          // Simpan status lama sebelum diperbarui
+        $oldStatus = $order->status;
+        $newStatus = $request->status;
+        
         $order->update(['status' => $request->status]);
+
+         // Kirim notifikasi jika status berubah
+        if ($oldStatus != $newStatus) {
+            $order->load('user'); // Muat relasi user untuk mendapatkan nomor pelanggan
+
+            // Ambil nomor pemilik dari pengaturan
+            $ownerSettings = Setting::first();
+            $ownerNumber = $ownerSettings->owner_whatsapp_number ?? null;
+            
+            // Ambil nomor pelanggan dari order
+            $customerNumber = $order->user->whatsapp_number ?? null;
+
+            // Pesan untuk pemilik
+            $ownerMessage = "Halo, status pesanan *#{$order->order_number}* telah diperbarui menjadi '{$newStatus}'.";
+             if ($ownerNumber) {
+            WhatsAppHelper::sendNotification($ownerNumber, $ownerMessage);
+            }
+            // Pesan untuk pelanggan
+            $customerMessage = "Halo, status pesanan Anda *#{$order->order_number}* telah diperbarui menjadi '{$newStatus}'.";
+             if ($customerNumber) {
+            WhatsAppHelper::sendNotification($customerNumber, $customerMessage);
+        }
+    }
+
 
         return redirect()->route('admin.orders.show', $order->id)->with('success', 'Status pesanan berhasil diperbarui.');
     }

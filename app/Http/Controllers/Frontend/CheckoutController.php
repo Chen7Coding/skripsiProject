@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Kecamatan;
 use App\Models\OrderItem;
+use App\Helpers\WhatsAppHelper;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -119,6 +120,26 @@ class CheckoutController extends Controller
             Cart::where('user_id', Auth::id())->delete();
 
             DB::commit();
+
+            // === Kirim Notifikasi WhatsApp ===
+        $order->load('user', 'items.product');
+        $customerNumber = $order->user->whatsapp_number;
+
+        if ($customerNumber) {
+            $items = $order->items->map(function ($item) {
+                return "- {$item->product->name} ({$item->quantity}x)";
+            })->implode("\n");
+
+            $customerMessage = "Halo *{$order->user->name}* 👋\n\n"
+                . "Terima kasih telah memesan di *Sidu Digital Print* 🙏\n\n"
+                . "Nomor Pesanan: *#{$order->order_number}*\n"
+                . "Status: *{$order->status}*\n\n"
+                . "Detail Pesanan:\n{$items}\n\n"
+                . "Total: Rp " . number_format($order->total_amount, 0, ',', '.');
+
+            WhatsAppHelper::sendNotification($customerNumber, $customerMessage);
+        }
+
 
             return redirect()->route('checkout.success', ['order_number' => $order->order_number]);
 

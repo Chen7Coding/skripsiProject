@@ -38,9 +38,10 @@ class AdminProfileController extends Controller
             'address' => 'nullable|string',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-
-        // Mengambil semua data yang relevan dari request
+                
+        // Inisialisasi array data yang akan diupdate
         $dataToUpdate = $request->only(['name', 'username', 'email', 'phone', 'address']);
+        
 
         // Menangani upload foto
         if ($request->hasFile('photo')) {
@@ -50,12 +51,12 @@ class AdminProfileController extends Controller
             $dataToUpdate['photo'] = $request->file('photo')->store('photos', 'public');
         }
 
+        // Lakukan SATU KALI update
         $user->update($dataToUpdate);
 
         // Arahkan kembali ke halaman edit dengan pesan sukses
         return redirect()->route('admin.profile.edit')->with('success', 'Profil berhasil diperbarui!');
     }
-
     /**
      * Menampilkan halaman form untuk mengubah password.
      */

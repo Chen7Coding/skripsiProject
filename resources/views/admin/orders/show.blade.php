@@ -17,16 +17,14 @@
         </div>
 
         {{-- =================================================== --}}
-        {{-- ============== HEADER HALAMAN (DIPERBAIKI) ======== --}}
+        {{-- ============== HEADER HALAMAN =================== --}}
         {{-- =================================================== --}}
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-800">Detail Pesanan</h1>
             <div class="mt-2 flex items-center gap-4">
                 <p class="font-semibold text-amber-600 text-lg">{{ $order->order_number }}</p>
 
-                {{-- PERBAIKAN: Kode status badge yang lebih rapi dan dengan terjemahan --}}
                 @php
-                    // Kunci array tetap dalam Bahasa Inggris (sesuai data di database)
                     $statusClasses = [
                         'completed' => 'bg-green-100 text-green-800',
                         'pending' => 'bg-yellow-100 text-yellow-800',
@@ -34,7 +32,6 @@
                         'processing' => 'bg-blue-100 text-blue-800',
                         'shipping' => 'bg-purple-100 text-purple-800',
                     ];
-                    // Array untuk menerjemahkan status ke Bahasa Indonesia
                     $statusTranslations = [
                         'completed' => 'Pesanan Selesai',
                         'pending' => 'Menunggu Konfirmasi',
@@ -48,7 +45,6 @@
                     class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold {{ $statusClasses[$order->status] ?? $defaultClasses }}">
                     {{ $statusTranslations[$order->status] ?? ucfirst($order->status) }}
                 </span>
-
             </div>
             <p class="mt-1 text-sm text-gray-500">
                 {{ $order->created_at->timezone('Asia/Jakarta')->format('d F Y, H:i') }}
@@ -143,13 +139,13 @@
                     <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-3">Informasi Pengiriman</h3>
                     <dl class="space-y-3 text-sm">
                         <div class="flex justify-between">
-                            <dt class="text-gray-500">Nama Pelanggan: {{ $order->name }}</dt>
+                            <dt class="text-gray-500">Nama Pelanggan: {{ $order->user->name ?? 'N/A' }}</dt>
                         </div>
                         <div class="flex justify-between">
-                            <dt class="text-gray-500">Telepon: {{ $order->phone }}</dt>
+                            <dt class="text-gray-500">Telepon: {{ $order->user->phone ?? 'N/A' }}</dt>
                         </div>
                         <div class="flex justify-between">
-                            <dt class="text-gray-500">Email: {{ $order->email }}</dt>
+                            <dt class="text-gray-500">Email: {{ $order->user->email ?? 'N/A' }}</dt>
                         </div>
                         <div class="flex justify-between items-start">
                             <dt class="text-gray-500">Alamat: {{ $order->address }},
@@ -159,35 +155,7 @@
                     </dl>
                 </div>
 
-                {{-- Cek apakah order memiliki bukti pembayaran dan statusnya 'paid' --}}
-                @if ($order->payment_status === 'paid' && $order->payment_proof_url)
-                    <div class="mt-4 p-4 border border-gray-200 rounded-md bg-gray-50">
-                        <h4 class="text-md font-semibold text-gray-800">Bukti Pembayaran</h4>
-                        <p class="mt-2">Pelanggan telah mengunggah bukti pembayaran, perlu diverifikasi.</p>
-                        <a href="{{ Storage::url($order->payment_proof_url) }}" target="_blank"
-                            class="mt-2 inline-block px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-                            Lihat Bukti Pembayaran
-                        </a>
-                    </div>
-
-                    {{-- Tombol Verifikasi Pembayaran hanya muncul jika belum diverifikasi --}}
-                    <div class="mt-4">
-                        <form action="{{ route('orders.verifyPayment', $order->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700">
-                                Verifikasi Pembayaran
-                            </button>
-                        </form>
-                    </div>
-                @elseif ($order->payment_status === 'unpaid')
-                    {{-- Jika bukti pembayaran belum ada --}}
-                    <div class="mt-4 p-4 border border-gray-200 rounded-md bg-yellow-50 text-yellow-700">
-                        <h4 class="text-md font-semibold">Belum Ada Bukti Pembayaran</h4>
-                        <p>Pelanggan belum mengunggah bukti pembayaran.</p>
-                    </div>
-                @endif
-
-                <!-- Ubah Status Pesanan -->
+                <!-- Bagian Ubah Status Pesanan -->
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">Ubah Status Pesanan</h3>
                     <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="POST">
@@ -198,7 +166,6 @@
                                 <label for="status" class="sr-only">Status Pesanan</label>
                                 <select name="status" id="status"
                                     class="block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm">
-                                    {{-- Value tetap dalam Bahasa Inggris --}}
                                     <option value="pending" @if ($order->status == 'pending') selected @endif>Menunggu
                                         Konfirmasi</option>
                                     <option value="processing" @if ($order->status == 'processing') selected @endif>Pesanan

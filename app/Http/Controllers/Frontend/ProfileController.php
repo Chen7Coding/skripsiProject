@@ -70,6 +70,7 @@ class ProfileController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        // Validasi lengkap sesuai form
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
@@ -79,19 +80,33 @@ class ProfileController extends Controller
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        // Ambil nomor telepon dari input
+        $phoneNumber = $request->input('phone');
+        
+        // Inisialisasi array data yang akan diupdate
         $dataToUpdate = $request->only(['name', 'username', 'email', 'phone', 'address']);
+        
+        // Logika konversi nomor telepon
+        if ($phoneNumber) { // Hanya proses jika nomor tidak kosong
+            if (str_starts_with($phoneNumber, '0')) {
+                $whatsappNumber = '62' . substr($phoneNumber, 1);
+            } else {
+                $whatsappNumber = $phoneNumber;
+            }
+            $dataToUpdate['whatsapp_number'] = $whatsappNumber;
+        }
 
-        // PERBAIKAN: Logika untuk menangani upload foto baru
+        // Menangani upload foto
         if ($request->hasFile('photo')) {
-            // Hapus foto lama jika ada
             if ($user->photo) {
                 Storage::disk('public')->delete($user->photo);
             }
-            // Simpan foto baru dan dapatkan path-nya
             $dataToUpdate['photo'] = $request->file('photo')->store('photos', 'public');
         }
 
+        // Lakukan SATU KALI update
         $user->update($dataToUpdate);
+
 
         // Arahkan kembali ke halaman edit dengan pesan sukses
         return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui!');

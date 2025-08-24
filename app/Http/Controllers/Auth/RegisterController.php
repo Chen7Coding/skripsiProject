@@ -20,7 +20,9 @@ class RegisterController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        // 2. Buat pengguna baru di database
+        
+
+        // 3. Buat pengguna baru di database
         User::create([
             'name' => $request ->name,
             'username' => $request->username,
@@ -29,7 +31,7 @@ class RegisterController extends Controller
             'role' => 'pelanggan', // Set role default
         ]);
 
-        // 3. Arahkan pengguna ke halaman login setelah berhasil mendaftar
+        // 4. Arahkan pengguna ke halaman login setelah berhasil mendaftar
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 }
