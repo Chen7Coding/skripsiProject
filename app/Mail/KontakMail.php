@@ -30,14 +30,14 @@ class KontakMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.kontak', // Ini akan kita buat di langkah 4
-            with: [
-                'nama' => $this->data['name'],
-                'email' => $this->data['email'],
-                'telepon' => $this->data['phone'],
-                'topik' => $this->data['topic'],
-                'deskripsi' => $this->data['message'],
-            ]
+           view: 'emails.kontak',
+        with: [
+            'nama' => $this->data['name'],
+            'email' => $this->data['email'],
+            'telepon' => $this->data['phone'],
+            'topik' => $this->data['topic'],
+            'deskripsi' => $this->data['message'],
+        ]
         );
     }
 }

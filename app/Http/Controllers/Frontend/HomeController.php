@@ -60,7 +60,7 @@ class HomeController extends Controller
 
         } catch (\Exception $e) {
             // Tangani error jika pengiriman email gagal
-            return redirect()->back()->with('error', 'Maaf, pesan Anda gagal terkirim. Silakan coba lagi.');
+            return redirect()->back()->with('error', 'Maaf, pesan Anda gagal terkirim. Silakan coba lagi.' . $e->getMessage() );
         }
     }
 

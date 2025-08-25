@@ -53,12 +53,19 @@ class OrderController extends Controller
             $customerNumber = $order->user->whatsapp_number ?? null;
 
             // Pesan untuk pemilik
-            $ownerMessage = "Halo, status pesanan *#{$order->order_number}* telah diperbarui menjadi '{$newStatus}'.";
+            $ownerMessage =  "🔔 *Pembaruan Status Pesanan!* 🔔\n\n"
+                      . "Nomor Pesanan: *#{$order->order_number}*\n"
+                      . "Status Baru: *{$newStatus}*\n"
+                      . "Pelanggan: {$order->user->name}\n"
+                      . "Total: Rp " . number_format($order->total_price, 0, ',', '.') . "\n\n";
              if ($ownerNumber) {
             WhatsAppHelper::sendNotification($ownerNumber, $ownerMessage);
             }
             // Pesan untuk pelanggan
-            $customerMessage = "Halo, status pesanan Anda *#{$order->order_number}* telah diperbarui menjadi '{$newStatus}'.";
+            $customerMessage = "🛍️ *Sidu Digital Print*\n\n"
+             . "Halo, {$order->user->name}!\n\n"
+             . "Status pesanan Anda *#{$order->order_number}* telah diperbarui menjadi *{$newStatus}*.\n\n"
+             . "Terima kasih telah berbelanja bersama kami! 🙏";
              if ($customerNumber) {
             WhatsAppHelper::sendNotification($customerNumber, $customerMessage);
         }

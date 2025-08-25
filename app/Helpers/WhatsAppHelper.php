@@ -18,7 +18,7 @@ class WhatsAppHelper
     public static function sendNotification($recipient, $message)
     {
         $client = new Client();
-        $apiToken = env('FONNTE_API_TOKEN'); // ambil dari .env, bukan hardcode
+        $apiToken = config('services.fonnte.token'); // ambil dari .env, bukan hardcode
 
         // Format nomor WA (ubah 08 jadi 628)
         if (substr($recipient, 0, 1) === '0') {

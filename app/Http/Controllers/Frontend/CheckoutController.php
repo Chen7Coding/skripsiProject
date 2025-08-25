@@ -66,6 +66,15 @@ class CheckoutController extends Controller
             'payment_method' => 'required|string|in:Transfer Bank,Pembayaran di Tempat (COD),E-Wallet',
             'shipping_cost' => 'required|numeric|min:0',
         ]);
+
+        $phoneNumber = $validated['phone'];
+
+        // Format nomor untuk WhatsApp
+        if (str_starts_with($phoneNumber, '0')) {
+            $whatsappNumber = '62' . substr($phoneNumber, 1);
+        } else {
+            $whatsappNumber = $phoneNumber;
+        }
         
         $userCartItems = Cart::where('user_id', Auth::id())->get();
         if ($userCartItems->isEmpty()) {
@@ -102,6 +111,7 @@ class CheckoutController extends Controller
                 'shipping_city' => 'Kabupaten Bandung', // Mengambil nilai statis
                 'shipping_province' => 'Jawa Barat', // Mengambil nilai statis
                 'shipping_postal_code' => $validated['postal_code'],
+                'whatsapp_number' => $whatsappNumber,
             ]);
 
             foreach ($userCartItems as $cartItem) {
@@ -124,6 +134,7 @@ class CheckoutController extends Controller
             // === Kirim Notifikasi WhatsApp ===
         $order->load('user', 'items.product');
         $customerNumber = $order->user->whatsapp_number;
+        $ownerNumber = config('services.owner.whatsapp_number');
 
         if ($customerNumber) {
             $items = $order->items->map(function ($item) {
@@ -131,16 +142,34 @@ class CheckoutController extends Controller
             })->implode("\n");
 
             $customerMessage = "Halo *{$order->user->name}* 👋\n\n"
-                . "Terima kasih telah memesan di *Sidu Digital Print* 🙏\n\n"
-                . "Nomor Pesanan: *#{$order->order_number}*\n"
+                . "Terima kasih telah memesan di *Sidu Digital Print* 🙏\n
+                Pesanan Anda akan segera kami proses\n\n"
+                . "Nomor Pesanan: *({$order->order_number})*\n"
+                . "Tanggal: *{$order->created_at->format('d F Y, H:i')}*\n"
+                . "Metode Pembayaran: *{$order->payment_method}*\n\n" 
                 . "Status: *{$order->status}*\n\n"
                 . "Detail Pesanan:\n{$items}\n\n"
-                . "Total: Rp " . number_format($order->total_amount, 0, ',', '.');
+                . "Biaya Pengiriman: *{$shippingCost}"
+                . "Total: Rp " . number_format($order->total_price, 0, ',', '.');
 
             WhatsAppHelper::sendNotification($customerNumber, $customerMessage);
         }
 
+         // Kirim notifikasi ke pemilik
+            if ($ownerNumber) {
+                $items = $order->orderItems->map(function ($item) {
+                    return "- {$item->product->name} ({$item->quantity}x)";
+                })->implode("\n");
 
+                $ownerMessage = "Halo Sidu Digital Print, ada pesanan baru masuk! \n
+                Silakan segera proses pesanan\n\n"
+                    . "Nomor Pesanan: *#{$order->order_number}*\n"
+                    . "Tanggal: *{$order->created_at->format('d F Y, H:i')}*\n"
+                    . "Pelanggan: {$order->user->name}\n"
+                    . "Total: Rp " . number_format($order->total_price, 0, ',', '.');
+
+                WhatsAppHelper::sendNotification($ownerNumber, $ownerMessage);
+            }
             return redirect()->route('checkout.success', ['order_number' => $order->order_number]);
 
         } catch (\Exception $e) {

@@ -276,6 +276,19 @@
                                             </form>
                                         </div>
                                     @endif
+                                    <div class="mt-4 pt-4 border-t border-gray-200">
+                                        @if ($order->status == 'pending')
+                                            <form action="{{ route('order.cancel', $order->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit"
+                                                    class="w-full inline-flex justify-center rounded-md border border-transparent bg-red-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                                                    onclick="return confirm('Apakah Anda yakin ingin membatalkan pesanan ini?');">
+                                                    Batalkan Pesanan
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
                                 </dl>
                             </div>
                         </div>

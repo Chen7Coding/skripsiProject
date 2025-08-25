@@ -1,25 +1,27 @@
 <?php
 
+use App\Models\Promo;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Frontend\HomeController;
+
+//controller admin
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Frontend\CartController; 
 use App\Http\Controllers\Owner\EmployeeController;
-
-//controller admin
 use App\Http\Controllers\Admin\DashboardController;
+//controller pemilik
 use App\Http\Controllers\Frontend\ProductController;
 use App\Http\Controllers\Frontend\ProfileController;
+use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Admin\AdminProfileController;
-//controller pemilik
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Frontend\OrderController as FrontendOrderController;
 use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
-use App\Models\Product;
-use App\Models\Promo;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +52,11 @@ Route::get('/register', function () { return view('auth.register'); })->name('re
 Route::post('/register', [RegisterController::class, 'store']);
 Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
+// Rute untuk Lupa Password
+Route::get('/forgot-password', [PasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [PasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [PasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [PasswordController::class, 'reset'])->name('password.update');
 // Rute untuk Produk
 Route::get('/produk/{product:slug}', [App\Http\Controllers\Frontend\ProductController::class, 'show'])->name('products.show');
 
@@ -79,6 +86,10 @@ Route::get('/produk/{product:slug}', [App\Http\Controllers\Frontend\ProductContr
     Route::post('/orders/{order}/upload-proof', [App\Http\Controllers\Frontend\OrderController::class, 'uploadPaymentProof'])->name('orders.uploadPaymentProof');
     //Konfirmasi pesanan
     Route::put('/order/{order}/confirm', [App\Http\Controllers\Frontend\OrderController::class, 'confirmReceived'])->name('order.confirm_received');
+    // Rute untuk membatalkan pesanan oleh pelanggan
+  // Rute untuk membatalkan pesanan
+    Route::put('/orders/{order}/cancel', [App\Http\Controllers\Frontend\OrderController::class, 'cancel'])->name('order.cancel');
+
     // Route baru untuk mengambil biaya pengiriman secara dinamis
     Route::get('/checkout/shipping-cost', [App\Http\Controllers\Frontend\CheckoutController::class, 'getShippingCost'])->name('checkout.shipping-cost');
      // Rute untuk mengunggah ulang desain
@@ -132,7 +143,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // Rute untuk verifikasi pembayaran
     Route::post('/orders/{order}/verify-payment', [App\Http\Controllers\Admin\OrderController::class, 'verifyPayment'])
         ->name('orders.verifyPayment');
-
     //Rute Pemesanan Offline
     Route::get('/admin/orders/create', [App\Http\Controllers\Admin\OrderController::class, 'createForStaff'])->name('admin.order.create');
     Route::post('/admin/orders/store', [App\Http\Controllers\Admin\OrderController::class, 'storeForStaff'])->name('admin.orders.store');

@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
-use App\Models\Product;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\OrderItem;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Helpers\WhatsAppHelper;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -170,4 +171,31 @@ class OrderController extends Controller
         return back()->with('success', 'Pesanan berhasil dikonfirmasi telah diterima!');
     }
 
+      /**
+     * Memproses pembatalan pesanan dari pelanggan.
+     */
+    public function cancel(Order $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            return back()->with('error', 'Anda tidak memiliki hak akses untuk pesanan ini.');
+        }
+
+        if ($order->status !== 'pending') {
+            return back()->with('error', 'Pesanan tidak bisa dibatalkan.');
+        }
+
+        $order->status = 'cancelled';
+        $order->save();
+
+        // Di sini Anda bisa menambahkan notifikasi ke pemilik
+        // ...
+         // Kirim notifikasi ke admin atau pemilik
+        $ownerNumber = config('services.owner.whatsapp_number');
+        $ownerMessage = "⚠️ *Pemberitahuan Pembatalan Pesanan* ⚠️\n\n"
+        . "Pesanan *#{$order->order_number}* telah dibatalkan oleh pelanggan.";
+
+        WhatsAppHelper::sendNotification($ownerNumber, $ownerMessage);
+
+        return back()->with('success', 'Pesanan berhasil dibatalkan!');
+    }
 }

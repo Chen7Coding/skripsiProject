@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'fonnte' => [
+        'token' => env('FONNTE_API_TOKEN'),
+    ],
+
+    'owner' => [
+        'whatsapp_number' => env('FONNTE_SENDER_NUMBER'),
+    ]
+
 ];
