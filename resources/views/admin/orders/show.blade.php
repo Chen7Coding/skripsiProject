@@ -155,6 +155,41 @@
                     </dl>
                 </div>
 
+                {{-- Cek apakah order memiliki bukti pembayaran --}}
+                @if ($order->payment_status === 'paid' && $order->payment_proof_url)
+                    {{-- Tampilan bukti pembayaran --}}
+                    <div class="mt-4 p-4 border border-gray-200 rounded-md bg-white shadow-md">
+                        <h4 class="text-lg font-semibold text-gray-800">Bukti Pembayaran</h4>
+                        <p class="mt-2 text-gray-600">
+                            Pelanggan telah mengunggah bukti pembayaran. Silakan verifikasi.
+                        </p>
+                        <a href="{{ Storage::url($order->payment_proof_url) }}" target="_blank"
+                            class=" mt-3 block w-full px-4 py-2 text-center text-white bg-blue-600 rounded-lg 
+               hover:bg-blue-700 transition-colors">
+                            Lihat Bukti Pembayaran
+                        </a>
+
+                        {{-- Tombol Verifikasi Pembayaran --}}
+                        <div class="mt-4">
+                            <form action="{{ route('orders.verifyPayment', $order->id) }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full inline-flex justify-center rounded-md border border-transparent 
+                           bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm 
+                           hover:bg-green-700 transition-colors">
+                                    Verifikasi Pembayaran
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @elseif ($order->payment_status === 'unpaid')
+                    {{-- Jika bukti pembayaran belum ada --}}
+                    <div class="mt-4 p-4 border border-gray-200 rounded-md bg-yellow-50 text-yellow-700 shadow-md">
+                        <h4 class="text-md font-semibold">Belum Ada Bukti Pembayaran</h4>
+                        <p>Pelanggan belum mengunggah bukti pembayaran.</p>
+                    </div>
+                @endif
+
                 <!-- Bagian Ubah Status Pesanan -->
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">Ubah Status Pesanan</h3>

@@ -116,11 +116,6 @@
                 </div>
                 <div class="flex items-center">
                     <span class="font-semibold mr-4">Halo, {{ Auth::user()->name }}</span>
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit"
-                            class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700">Keluar</button>
-                    </form>
                 </div>
             </header>
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">
