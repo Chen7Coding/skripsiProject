@@ -74,10 +74,13 @@ class ProfileController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:20',
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id, 'regex:/^[^@]+@gmail\.com$/i'],
+            'phone' => ['nullable', 'string', 'max:20', 'regex:/^(\+62|0)[0-9]{8,15}$/'],
             'address' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:10204',
+        ], [
+            'phone.regex' => 'Format nomor telepon tidak valid. Gunakan format yang benar.',
+            'email.regex' => 'Email harus menggunakan domain Gmail (@gmail.com).',
         ]);
 
         // Ambil nomor telepon dari input
@@ -96,20 +99,25 @@ class ProfileController extends Controller
             $dataToUpdate['whatsapp_number'] = $whatsappNumber;
         }
 
-        // Menangani upload foto
-        if ($request->hasFile('photo')) {
-            if ($user->photo) {
-                Storage::disk('public')->delete($user->photo);
-            }
-            $dataToUpdate['photo'] = $request->file('photo')->store('photos', 'public');
+    // === PRIORITAS 1: kalau upload foto baru ===
+    if ($request->hasFile('photo')) {
+        // hapus foto lama kalau ada
+        if ($user->photo) {
+            Storage::disk('public')->delete($user->photo);
         }
-
-        // Lakukan SATU KALI update
+        // simpan foto baru
+        $dataToUpdate['photo'] = $request->file('photo')->store('photos', 'public');
+    } 
+    // === PRIORITAS 2: kalau user klik hapus foto ===
+    elseif ($request->has('remove_photo') && $request->input('remove_photo') == 'true') {
+        if ($user->photo) {
+            Storage::disk('public')->delete($user->photo);
+        }
+        $dataToUpdate['photo'] = null;
+    }
         $user->update($dataToUpdate);
-
-
-        // Arahkan kembali ke halaman edit dengan pesan sukses
-        return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui!');
+    // Arahkan kembali ke halaman edit dengan pesan sukses
+    return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui!');
     }
 
     /**

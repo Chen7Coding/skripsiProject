@@ -14,7 +14,7 @@
                     <p class="mt-4 text-lg text-gray-600">
                         Cetak digital jadi lebih mudah dan menyenangkan bersama kami.
                     </p>
-                    <a href="#produk"
+                    <a href="{{ route('produk') }}"
                         class="mt-8 inline-block bg-gray-900 text-white font-bold py-3 px-8 rounded-lg hover:bg-amber-700 transition duration-300">
                         Pesan Sekarang
                     </a>

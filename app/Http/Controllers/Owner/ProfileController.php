@@ -33,17 +33,27 @@ class ProfileController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string|max:20',
+           'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id, 'regex:/^[^@]+@gmail\.com$/i'],
+            'phone' => ['nullable', 'string', 'max:20', 'regex:/^(\+62|0)[0-9]{8,15}$/'],
             'address' => 'nullable|string',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ], [
+            'phone.regex' => 'Format nomor telepon tidak valid. Gunakan format yang benar.',
+            'email.regex' => 'Email harus menggunakan domain Gmail (@gmail.com).',
         ]);
 
         // Mengambil semua data yang relevan dari request
         $dataToUpdate = $request->only(['name', 'username', 'email', 'phone', 'address']);
 
+        if ($request->has('remove_photo') && $request->input('remove_photo') == 'true') {
+            // Hapus foto lama dari storage
+            if ($user->photo) {
+                Storage::disk('public')->delete($user->photo);
+            }
+            $dataToUpdate['photo'] = null; // Set kolom photo menjadi NULL di database
+        }
         // Menangani upload foto
-        if ($request->hasFile('photo')) {
+       elseif ($request->hasFile('photo')) {
             if ($user->photo) {
                 Storage::disk('public')->delete($user->photo);
             }

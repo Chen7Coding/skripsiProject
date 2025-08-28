@@ -18,9 +18,13 @@
             @endif
 
             {{-- Alpine.js untuk live preview gambar --}}
-            <div x-data="{ photoPreview: '{{ $user->photo ? asset('storage/' . $user->photo) : asset('image/default-avatar.png') }}' }">
+            <div x-data="{ photoPreview: '{{ old('remove_photo') == 'true'
+                ? asset('image/default-avatar.png')
+                : ($user->photo
+                    ? asset('storage/' . $user->photo)
+                    : asset('image/default-avatar.png')) }}' }">
                 {{-- Pastikan route ini sudah Anda buat untuk owner: 'owner.profile.update' --}}
-                <form action="{{ route('owner.profile.update') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -34,7 +38,7 @@
                                 <h3 class="text-lg font-medium text-gray-900">Foto Profil</h3>
                                 <p class="mt-1 text-sm text-gray-500">Klik pada gambar untuk mengganti foto.</p>
 
-                                <div class="mt-4">
+                                <div class="mt-4 flex flex-col items-center space-y-3">
                                     <input type="file" name="photo" id="photo" class="hidden"
                                         @change="photoPreview = URL.createObjectURL($event.target.files[0])">
 
@@ -45,6 +49,17 @@
                                     @error('photo')
                                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
+                                </div>
+                                <div class="mt-4 flex flex-col items-center">
+                                    @if ($user->photo)
+                                        <button type="button"
+                                            onclick="document.getElementById('remove_photo').value = 'true';document.getElementById('update-form').submit();"
+                                            x-on:click="photoPreview = '{{ asset('image/default-avatar.png') }}'"
+                                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none cursor-pointer">
+                                            Hapus Foto
+                                        </button>
+                                    @endif
+                                    <input type="hidden" name="remove_photo" id="remove_photo" value="false">
                                 </div>
                             </div>
 
@@ -97,7 +112,7 @@
                                         <input type="text" name="phone" id="phone"
                                             value="{{ old('phone', $user->phone ?? '') }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
-                                            placeholder="Contoh: 08123456789">
+                                            placeholder="Masukan Nomor HP Anda">
                                         @error('phone')
                                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                         @enderror
@@ -109,7 +124,7 @@
                                             Lengkap</label>
                                         <textarea name="address" id="address" rows="4"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm"
-                                            placeholder="Masukkan alamat lengkap Anda...">{{ old('address', $user->address ?? '') }}</textarea>
+                                            placeholder="Masukkan alamat lengkap Anda">{{ old('address', $user->address ?? '') }}</textarea>
                                         @error('address')
                                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                         @enderror

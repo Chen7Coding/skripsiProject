@@ -30,10 +30,13 @@ use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
 */
 
 // Rute Halaman Utama (Landing Page)
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('welcome');
+// Rute untuk halaman 'home' yang akan muncul di URL
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Rute baru untuk halaman promo
-Route::get('/promo', function () {$promos = Promo::all(); return view('promo', compact('promos')); })->name('promo');
+/* Route::get('/promo', function () {$promos = Promo::all(); return view('promo', compact('promos')); })->name('promo'); */
+Route::get('/promo', [App\Http\Controllers\Frontend\PromoController::class, 'index'])->name('promo');
 
 // Rute baru untuk halaman produk
 Route::get('/produk', function () { $products = Product::all(); return view('produk', compact('products')); })->name('produk');
