@@ -19,8 +19,19 @@
                 </div>
             @endif
 
-            <div class="grid grid-cols-1 gap-y-10 lg:grid-cols-2 lg:gap-x-12">
+            {{-- Menampilkan semua error validasi di atas form (opsional, tapi disarankan) --}}
+            @if ($errors->any())
+                <div class="mb-6 rounded-lg border border-red-400 bg-red-100 px-6 py-4 text-red-700 shadow-sm" role="alert">
+                    <h3 class="font-bold">Terjadi kesalahan:</h3>
+                    <ul class="mt-2 list-disc list-inside text-sm">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
+            <div class="grid grid-cols-1 gap-y-10 lg:grid-cols-2 lg:gap-x-12">
                 {{-- Kolom Kiri: Gambar dan Deskripsi --}}
                 <div>
                     <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-100 shadow-xl">
@@ -59,6 +70,9 @@
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <div>
                                 <label class="text-base font-bold text-gray-900">Opsi Desain</label>
+                                <p class="mt-4 text-xs text-gray-500 mb-2">(Hanya format JPG, JPEG, dan PNG yang
+                                    diperbolehkan).
+                                </p>
                                 <fieldset class="mt-4">
                                     <div class="flex items-center gap-x-6">
                                         <label
@@ -86,14 +100,15 @@
                                     Desain</label>
                                 <input id="design_file_path" name="design_file_path" type="file"
                                     class="mt-2 block w-full cursor-pointer text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-amber-100 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-amber-600 hover:file:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                                    accept=".jpg,.jpeg,.png,.pdf,.ai,.psd" />
-                                @error('design_file')
+                                    accept=".jpg,.jpeg,.png" />
+                                {{-- KESALAHAN ADA DI SINI, GANTI `design_file` menjadi `design_file_path` --}}
+                                @error('design_file_path')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                                 @if (isset($cartItem) && $cartItem->design_file_path)
                                     <p class="mt-2 text-xs text-gray-500">File saat ini:
                                         <a href="{{ asset('storage/' . $cartItem->design_file_path) }}" target="_blank"
-                                            class="text-amber-600 hover:underline font-medium">Lihat File</a>. Upload baru
+                                            class="text-amber-600 hover:underline font-medium">Lihat File</a>. Unggah baru
                                         untuk mengganti.
                                     </p>
                                 @endif

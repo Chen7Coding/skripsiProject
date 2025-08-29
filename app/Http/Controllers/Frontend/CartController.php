@@ -37,7 +37,9 @@ class CartController extends Controller
             'material' => 'nullable|string',
             'size' => 'nullable|string',
             'notes' => 'nullable|string',
-            'design_file_path' => 'nullable|file|mimes:jpg,png,pdf,cdr,psd|max:10240',
+            'design_file_path' => 'nullable|file|mimes:jpg,png,jpeg|max:10240',
+        ],[
+            'design_file_path.mimes' => 'Format file yang Anda unggah tidak sesuai. Hanya JPG, PNG, dan JPEG yang diperbolehkan.',
         ]);
 
         $productId = $request->input('product_id');
@@ -149,8 +151,10 @@ class CartController extends Controller
         'material' => 'nullable|string',
         'size' => 'nullable|string',
         'notes' => 'nullable|string',
-        'design_file_path' => 'nullable|file|mimes:jpg,png,pdf,cdr,psd|max:10240',
-    ]);
+        'design_file_path' => 'nullable|file|mimes:jpg,png,jpeg|max:10240',
+    ], [
+            'design_file_path.mimes' => 'Format file yang Anda unggah tidak sesuai. Hanya JPG, PNG, dan JPEG yang diperbolehkan.',
+        ]);
 
     $cartItem->quantity = $request->input('quantity');
     $cartItem->material = $request->input('material');
