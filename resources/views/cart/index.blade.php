@@ -53,6 +53,12 @@
                                                     <div>
                                                         <dt class="inline font-medium">Ukuran:</dt>
                                                         <dd class="inline ml-1">{{ $item->size ?? '-' }}</dd>
+                                                        {{-- Tambahkan baris ini untuk menampilkan ukuran kustom --}}
+                                                        @if ($item->length && $item->width)
+                                                            <dd class="block text-xs text-gray-500">
+                                                                ({{ $item->length }}cm x {{ $item->width }}cm)
+                                                            </dd>
+                                                        @endif
                                                     </div>
                                                     @if ($item->notes)
                                                         <div class="mt-1">
@@ -71,10 +77,13 @@
                                                         class="flex items-center justify-end">
                                                         @csrf
                                                         @method('PATCH')
+                                                        {{-- Menambahkan input hidden untuk data ukuran kustom --}}
                                                         <input type="hidden" name="material"
                                                             value="{{ $item->material }}">
                                                         <input type="hidden" name="size" value="{{ $item->size }}">
                                                         <input type="hidden" name="notes" value="{{ $item->notes }}">
+                                                        <input type="hidden" name="length" value="{{ $item->length }}">
+                                                        <input type="hidden" name="width" value="{{ $item->width }}">
                                                         <label for="quantity-{{ $item->id }}"
                                                             class="sr-only">Jumlah</label>
                                                         <input type="number" id="quantity-{{ $item->id }}"
@@ -95,6 +104,7 @@
                                                     class="text-amber-600">Rp{{ number_format($item->quantity * $item->price, 0, ',', '.') }}</span>
                                             </p>
                                             <div class="flex items-center space-x-4">
+                                                {{-- Ini adalah baris yang disesuaikan --}}
                                                 <a href="{{ route('products.show', ['product' => $item->product->slug, 'edit_cart_item' => $item->id]) }}"
                                                     class="ml-2 px-3 py-1.5 rounded-md bg-gray-500 text-white font-semibold shadow-md hover:bg-gray-700 transition-colors duration-200">Edit</a>
                                                 <div class="border-l border-gray-200 pl-4">

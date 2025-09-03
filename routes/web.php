@@ -62,6 +62,8 @@ Route::get('/reset-password/{token}', [PasswordController::class, 'showResetForm
 Route::post('/reset-password', [PasswordController::class, 'reset'])->name('password.update');
 // Rute untuk Produk
 Route::get('/produk/{product:slug}', [App\Http\Controllers\Frontend\ProductController::class, 'show'])->name('products.show');
+// Rute untuk mendapatkan harga produk secara dinamis
+Route::get('/products/{product}/price', [ProductController::class, 'getPrice'])->name('products.price');
 
     // Rute yang memerlukan login (dilindungi middleware)
  Route::middleware('auth')->group(function () {
