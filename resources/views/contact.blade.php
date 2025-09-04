@@ -78,18 +78,17 @@
                         Pesan</button>
                 </div>
             </form>
-
-            <!-- Peta Lokasi -->
-            <div class="mt-16">
-                <div class="mx-auto max-w-4xl">
-                    <h3 class="text-xl font-semibold text-center text-gray-900 mb-4">Lokasi Kami</h3>
-                    <div class="aspect-w-16 aspect-h-9 rounded-lg shadow-xl overflow-hidden">
-                        <!-- Ganti dengan kode embed Google Maps Anda -->
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3959.6676317055244!2d107.76353669999999!3d-7.0482867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68c0d52a6c633b%3A0x4ab8b55a388b6f6b!2sPUSAT%20PERCETAKAN_SIDU%20DIGITAL%20PRINTING_MAJALAYA!5e0!3m2!1sid!2sid!4v1753322445538!5m2!1sid!2sid"
-                            width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
+        </div>
+        <!-- Peta Lokasi -->
+        <div class="mt-16">
+            <div class="mx-auto max-w-4xl">
+                <h3 class="text-xl font-semibold text-center text-gray-900 mb-4">Lokasi Kami</h3>
+                <div class="aspect-w-16 aspect-h-9 rounded-lg shadow-xl overflow-hidden">
+                    <!-- Ganti dengan kode embed Google Maps Anda -->
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3959.6676317055244!2d107.76353669999999!3d-7.0482867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68c0d52a6c633b%3A0x4ab8b55a388b6f6b!2sPUSAT%20PERCETAKAN_SIDU%20DIGITAL%20PRINTING_MAJALAYA!5e0!3m2!1sid!2sid!4v1753322445538!5m2!1sid!2sid"
+                        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
         </div>

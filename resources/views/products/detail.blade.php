@@ -206,14 +206,16 @@
                                             <label for="predefined_size_option"
                                                 class="ml-2 block text-sm text-gray-900">Pilih Ukuran</label>
                                         </div>
-                                        <div class="flex items-center">
-                                            <input id="custom_size_option" name="size_option_type" type="radio"
-                                                value="custom" x-model="sizeOptionType" @change="updatePrice()"
-                                                class="h-4 w-4 border-gray-300 text-amber-600 focus:ring-amber-500"
-                                                @checked(old('size_option_type', $cartItem->length ?? null ? 'custom' : 'predefined') == 'custom')>
-                                            <label for="custom_size_option"
-                                                class="ml-2 block text-sm text-gray-900">Ukuran Kustom</label>
-                                        </div>
+                                        @if (!in_array($cartItem?->product->unit ?? $product->unit, ['book', 'sheet']))
+                                            <div class="flex items-center">
+                                                <input id="custom_size_option" name="size_option_type" type="radio"
+                                                    value="custom" x-model="sizeOptionType" @change="updatePrice()"
+                                                    class="h-4 w-4 border-gray-300 text-amber-600 focus:ring-amber-500"
+                                                    @checked(old('size_option_type', $cartItem->length ?? null ? 'custom' : 'predefined') == 'custom')>
+                                                <label for="custom_size_option"
+                                                    class="ml-2 block text-sm text-gray-900">Ukuran Kustom</label>
+                                            </div>
+                                        @endif
                                     </div>
                                     <div x-show="sizeOptionType === 'predefined'" x-transition>
                                         <select id="size" name="size"

@@ -18,7 +18,7 @@
 
 <body class="bg-gray-100 font-sans antialiased">
     <div class="min-h-screen block lg:flex">
-        <div class="hidden lg:flex w-full lg:w-1/2 bg-gray-800 text-white p-12 flex-col justify-between">
+        <div class="w-full lg:w-1/2 bg-gray-800 text-white p-12 flex-col justify-between">
             <div>
                 <a href="{{ route('home') }}">
                     <img src="{{ asset('image/logo-sidu.png') }}" alt="Sidu Digital Print Logo" class="h-12 w-auto">

@@ -22,11 +22,13 @@ class LaporanController extends Controller
         $endDate = $request->input('end_date', Carbon::now());
 
         $endDateWithTime = Carbon::parse($endDate)->endOfDay();
+        $perPage = $request->input('per_page', 10);
         
         $orders = Order::with('user')
             ->whereBetween('created_at', [$startDate, $endDateWithTime])
-            ->get();
-        
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+            
         // Hapus query laporan pelanggan untuk sementara
         // $laporanPelanggan = ...
 
@@ -44,7 +46,8 @@ class LaporanController extends Controller
             'totalCompletedOrders', 
             'averageOrderValue', 
             'startDate', 
-            'endDate'
+            'endDate',
+            'perPage'
         ));
     }
 

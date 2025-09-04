@@ -45,10 +45,18 @@
 
                 {{-- Tombol Ekspor --}}
                 <div class="flex items-center space-x-2">
-                    <button
-                        class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors">PDF</button>
-                    <button
-                        class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">CSV</button>
+                    {{-- Tombol Export PDF --}}
+                    <a href="{{ route('owner.laporan.pendapatan.export-pdf', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
+                        target="_blank"
+                        class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors">
+                        PDF
+                    </a>
+
+                    {{-- Tombol Export CSV --}}
+                    <a href="{{ route('owner.laporan.pendapatan.export-csv', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
+                        class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
+                        CSV
+                    </a>
                 </div>
             </div>
 

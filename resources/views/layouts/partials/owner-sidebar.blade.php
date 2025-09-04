@@ -30,31 +30,16 @@
         <span class="mx-4 font-medium whitespace-nowrap">Data Karyawan</span>
     </a>
 
-    <div class="mt-2">
-        <button @click="openTransaksi = !openTransaksi"
-            class="flex items-center justify-between w-full px-4 py-3 transition-colors duration-300 transform rounded-lg hover:bg-slate-800 hover:text-gray-100 focus:outline-none {{ request()->routeIs('owner.transactions.*') ? 'bg-amber-500 text-white font-bold' : 'text-gray-300' }}">
-            <span class="flex items-center">
-                <svg class="w-5 h-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
-                </svg>
-                <span class="mx-4 font-medium whitespace-nowrap">Transaksi</span>
-            </span>
-            <span>
-                <svg class="w-4 h-4 transition-transform duration-300" :class="{ 'rotate-180': openTransaksi }"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            </span>
-        </button>
-        <div x-show="openTransaksi" class="mt-2 ml-4 pl-4 border-l-2 border-slate-700" style="display: none;">
-            <a class="block py-2 px-4 text-sm rounded-lg text-gray-400 hover:bg-slate-800 hover:text-white {{ request()->routeIs('owner.transactions.index') ? 'text-amber-400 font-semibold' : '' }}"
-                href="{{ route('owner.transaksi.index') }}">Lihat Transaksi</a>
-            <a class="block py-2 px-4 text-sm rounded-lg text-gray-400 hover:bg-slate-800 hover:text-white {{ request()->routeIs('owner.transactions.status') ? 'text-amber-400 font-semibold' : '' }}"
-                href="#">Status Pembayaran</a>
-        </div>
-    </div>
+    {{-- Data Pemesanan --}}
+    <a class="flex items-center px-4 py-3 mt-2 text-gray-300 transition-colors duration-300 transform rounded-lg hover:bg-gray-800 hover:text-gray-100 {{ request()->routeIs('admin.orders.*') ? 'bg-amber-500 text-white font-bold' : '' }}"
+        href="">
+        <svg class="w-5 h-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+        </svg>
+        {{-- PERBAIKAN: Menambahkan whitespace-nowrap --}}
+        <span class="mx-4 font-medium whitespace-nowrap">Data Pemesanan</span>
+    </a>
 
     <div x-data="{ openLaporan: false }" class="mt-2">
         <button @click="openLaporan = !openLaporan"

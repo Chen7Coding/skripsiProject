@@ -12,9 +12,10 @@ use App\Http\Controllers\Frontend\HomeController;
 //controller admin
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Frontend\CartController; 
+use App\Http\Controllers\Frontend\PromoController;
 use App\Http\Controllers\Owner\EmployeeController;
-use App\Http\Controllers\Admin\DashboardController;
 //controller pemilik
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Frontend\ProductController;
 use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Frontend\CheckoutController;
@@ -36,8 +37,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Rute baru untuk halaman promo
 /* Route::get('/promo', function () {$promos = Promo::all(); return view('promo', compact('promos')); })->name('promo'); */
-Route::get('/promo', [App\Http\Controllers\Frontend\PromoController::class, 'index'])->name('promo');
-
+Route::get('/promo', [PromoController::class, 'index'])->name('frontend.promo.index');
 // Rute baru untuk halaman produk
 Route::get('/produk', function () { $products = Product::all(); return view('produk', compact('products')); })->name('produk');
 
@@ -112,7 +112,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     
     //Rute Dashboard Admun
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-        Route::get('/dashboard/new-orders', [DashboardController::class, 'checkNewOrders'])->name('admin.dashboard.new-orders');
+    Route::get('/dashboard/new-orders', [DashboardController::class, 'checkNewOrders'])->name('admin.dashboard.new-orders');
    
     // Rute-Data Pelamggam
     Route::resource('pelanggan', CustomerController::class)->names('admin.customers'); //Route Data Pelanggan
@@ -131,10 +131,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     //Rute Produk (Resource)
     Route::resource('products', \App\Http\Controllers\Admin\AdminProductController::class)->except('show');
     Route::get('/orders/download-design/{item}', [AdminOrderController::class, 'downloadDesign'])->name('admin.orders.download-design');
-});
+
     //Rute Promo (Resource)
-    Route::resource('promo', \App\Http\Controllers\Admin\PromoController::class);
-   
+    Route::resource('admin/promo', App\Http\Controllers\Admin\PromoController::class)->names('admin.promo');
     // Rute profil Admin
     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::put('/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
@@ -151,15 +150,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     //Rute Pemesanan Offline
     Route::get('/admin/orders/create', [App\Http\Controllers\Admin\OrderController::class, 'createForStaff'])->name('admin.order.create');
     Route::post('/admin/orders/store', [App\Http\Controllers\Admin\OrderController::class, 'storeForStaff'])->name('admin.orders.store');
-   
+});
 
 Route::middleware(['auth', 'owner'])->prefix('owner')->group(function () {
     Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('owner.dashboard');
     Route::resource('employee', EmployeeController::class)->names('owner.employee');
-    Route::get('/transaksi', [App\Http\Controllers\Owner\TransaksiController::class, 'index'])->name('owner.transaksi.index');
-    // Rute BARU untuk melihat detail transaksi
-    Route::get('transaksi/{id}', [App\Http\Controllers\Owner\TransaksiController::class, 'show'])->name('owner.transaksi.detail');
-    
+  
     // Route untuk Pengaturan Profil Owner
     Route::get('/profile/edit', [App\Http\Controllers\Owner\ProfileController::class, 'edit'])->name('owner.profile.edit');
     Route::put('/profile/update', [App\Http\Controllers\Owner\ProfileController::class, 'update'])->name('owner.profile.update');
@@ -171,7 +167,15 @@ Route::middleware(['auth', 'owner'])->prefix('owner')->group(function () {
     Route::prefix('laporan')->group(function () {
       // Rute untuk Laporan Pemesanan
     Route::get('pemesanan', [App\Http\Controllers\Owner\OrderReportController::class, 'index'])->name('owner.laporan.pemesanan');
-    // Rute untuk Laporan Pendapatan
-    Route::get('pendapatan', [App\Http\Controllers\Owner\IncomeReportController::class, 'index'])->name('owner.laporan.pendapatan');
+     Route::get('/cetak-pdf', [App\Http\Controllers\Owner\OrderReportController::class, 'exportPdf'])->name('owner.laporan.pemesanan.cetak-pdf');
+    Route::get('/cetak-csv', [App\Http\Controllers\Owner\OrderReportController::class, 'exportCsv']) ->name('owner.laporan.pemesanan.cetak-csv');
+   
+     // Rute untuk Laporan Pendapatan
+        Route::get('pendapatan', [App\Http\Controllers\Owner\IncomeReportController::class, 'index'])->name('owner.laporan.pendapatan');
+ Route::get('/export-pdf', [App\Http\Controllers\Owner\IncomeReportController::class, 'exportPdf'])
+            ->name('owner.laporan.pendapatan.export-pdf');
+        Route::get('/export-csv', [App\Http\Controllers\Owner\IncomeReportController::class, 'exportCsv'])
+            ->name('owner.laporan.pendapatan.export-csv');
+
     });
 });

@@ -95,5 +95,4 @@
     </div>
 
     {{-- Kode panel notifikasi --}}
-
 @endsection

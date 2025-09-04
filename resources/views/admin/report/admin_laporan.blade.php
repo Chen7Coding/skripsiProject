@@ -91,6 +91,20 @@
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <div class="p-6 border-b">
                     <h3 class="text-xl font-semibold text-gray-800">Detail Transaksi Pesanan</h3>
+                    {{-- Dropdown Per Page --}}
+                    <form method="GET" class="flex items-center gap-2">
+                        <label for="per_page">Tampilkan</label>
+                        <select name="per_page" id="per_page" onchange="this.form.submit()" class="border rounded p-1">
+                            <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10</option>
+                            <option value="25" {{ request('per_page') == 25 ? 'selected' : '' }}>25</option>
+                            <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+                            <option value="100" {{ request('per_page') == 100 ? 'selected' : '' }}>100</option>
+                        </select>
+                        <span>data</span>
+                        {{-- biar filter tanggal ikut terbawa --}}
+                        <input type="hidden" name="start_date" value="{{ $startDate }}">
+                        <input type="hidden" name="end_date" value="{{ $endDate }}">
+                    </form>
                 </div>
                 <div class="overflow-x-auto">
                     <table id="ordersTable" class="min-w-full divide-y divide-gray-200">
@@ -137,9 +151,12 @@
                         </tbody>
                     </table>
                 </div>
+                {{-- Pagination --}}
+                <div class="p-4">
+                    {{ $orders->appends(request()->except('page'))->links() }}
+                </div>
             </div>
         </div>
-
     </div>
 
     {{-- Script Search --}}

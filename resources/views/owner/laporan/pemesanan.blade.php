@@ -41,7 +41,7 @@
             </div>
 
             {{-- Form Filter --}}
-            <form action="{{ route('admin.report.admin_laporan') }}" method="GET" target="_blank"
+            <form action="{{ route('owner.laporan.pemesanan') }}" method="GET"
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
                 {{-- Input Tanggal --}}
                 <div>
@@ -66,11 +66,12 @@
                 </div>
 
                 <div class="flex space-x-2">
-                    <a href="{{ route('admin.report.export-pdf') }}?start_date={{ $startDate }}&end_date={{ $endDate }}"
+                    <a href="{{ route('owner.laporan.pemesanan.cetak-pdf') }}?start_date={{ $startDate }}&end_date={{ $endDate }}"
+                        target="blank"
                         class="w-full inline-flex justify-center items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700">
                         PDF
                     </a>
-                    <a href="{{ route('admin.report.export-csv') }}?start_date={{ $startDate }}&end_date={{ $endDate }}"
+                    <a href="{{ route('owner.laporan.pemesanan.cetak-csv') }}?start_date={{ $startDate }}&end_date={{ $endDate }}"
                         class="w-full inline-flex justify-center items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700">
                         CSV
                     </a>
@@ -137,6 +138,10 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            {{-- Tambahkan di sini untuk tautan pagination --}}
+            <div class="mt-4 no-print">
+                {{ $orders->links() }}
             </div>
         </div>
 

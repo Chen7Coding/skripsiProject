@@ -17,7 +17,8 @@
                 <h3 class="text-sm font-semibold tracking-wider uppercase">Navigasi</h3>
                 <ul class="mt-4 space-y-2">
                     <li><a href="{{ route('home') }}" class="text-gray-400 hover:text-white text-sm">Home</a></li>
-                    <li><a href="{{ route('promo.index') }}" class="text-gray-400 hover:text-white text-sm">Promo</a>
+                    <li><a
+                            href="{{ route('frontend.promo.index') }} "class="text-gray-400 hover:text-white text-sm">Promo</a>
                     </li>
                     <li><a href="{{ route('produk') }}" class="text-gray-400 hover:text-white text-sm">Produk</a></li>
                     <li><a href="{{ route('about') }}" class="text-gray-400 hover:text-white text-sm">Tentang Kami</a>

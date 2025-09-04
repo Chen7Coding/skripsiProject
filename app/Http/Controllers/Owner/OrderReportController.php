@@ -21,10 +21,12 @@ class OrderReportController extends Controller
         $endDateWithTime = Carbon::parse($endDate)->endOfDay();
         
         // Mengambil semua pesanan dalam rentang tanggal dan memuat relasi 'pelanggan'
-        $orders = Order::with('pelanggan')
-                       ->whereBetween('created_at', [$startDate, $endDateWithTime])
-                       ->get();
-        
+          $orders  = Order::with('pelanggan')
+                        ->whereBetween('created_at', [$startDate, $endDateWithTime])
+                        ->latest()
+                        ->paginate(10); // Panggil paginate() langsung pada query builder
+
+         
         // Menghitung metrik laporan dari koleksi pesanan yang sudah difilter
         $totalRevenue = $orders->where('payment_status', 'paid')->sum('total_price'); // Sesuaikan status
         $totalOrders = $orders->count();
@@ -49,9 +51,11 @@ class OrderReportController extends Controller
     $endDate = $request->input('end_date');
 
     $orders = Order::with('user')->whereBetween('created_at', [$startDate, $endDate])->get();
+        /*  $settings = Setting::first(); // ambil setting toko */
     
-    $pdf = pdf::loadView('admin.report.export-pdf', compact('orders', 'startDate', 'endDate'));
-    return $pdf->download('laporan-pemesanan-' . $startDate . '-sd-' . $endDate . '.pdf');
+    $pdf = pdf::loadView('owner.laporan.cetak-pdf', compact('orders', 'startDate', 'endDate', ''));
+    return $pdf->stream('laporan-pemesanan-' . $startDate . '-sd-' . $endDate . '.pdf');
+
 }
 
 public function exportCsv(Request $request)

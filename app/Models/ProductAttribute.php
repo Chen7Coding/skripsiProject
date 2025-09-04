@@ -24,4 +24,12 @@ class ProductAttribute extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function create()
+{
+    $materials = ProductAttribute::distinct()->pluck('material');
+    $sizes = ProductAttribute::distinct()->pluck('size');
+
+    return view('admin.products.create', compact('materials', 'sizes'));
+}
 }

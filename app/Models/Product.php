@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\OrderItem;
+use App\Models\ProductAttribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -17,6 +18,6 @@ class Product extends Model
 
      public function attributes()
     {
-        return $this->hasMany(ProductAttribute::class);
+        return $this->hasMany(ProductAttribute::class,'product_id','id');
     }
 }
