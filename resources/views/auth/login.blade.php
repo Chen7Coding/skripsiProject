@@ -67,10 +67,10 @@
                     <input type="hidden" name="remember" value="true">
                     <div class="space-y-4">
                         <div>
-                            <label for="username" class="text-sm font-medium text-gray-700">Username atau Email</label>
-                            <input id="username" name="username" type="text" required
+                            <label for="email" class="text-sm font-medium text-gray-700">Email</label>
+                            <input id="email" name="email" type="text" required
                                 class="mt-1 appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-amber-500 focus:border-amber-500 sm:text-sm"
-                                placeholder="Masukkan username atau email">
+                                placeholder="Masukkan Email Anda">
                         </div>
                         <div>
                             <label for="password" class="text-sm font-medium text-gray-700">Password</label>

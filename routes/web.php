@@ -152,30 +152,34 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/admin/orders/store', [App\Http\Controllers\Admin\OrderController::class, 'storeForStaff'])->name('admin.orders.store');
 });
 
-Route::middleware(['auth', 'owner'])->prefix('owner')->group(function () {
-    Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('owner.dashboard');
-    Route::resource('employee', EmployeeController::class)->names('owner.employee');
-  
-    // Route untuk Pengaturan Profil Owner
-    Route::get('/profile/edit', [App\Http\Controllers\Owner\ProfileController::class, 'edit'])->name('owner.profile.edit');
-    Route::put('/profile/update', [App\Http\Controllers\Owner\ProfileController::class, 'update'])->name('owner.profile.update');
-    Route::get('/profile/password', [App\Http\Controllers\Owner\ProfileController::class, 'editPassword'])->name('owner.profile.password.edit');
-    Route::put('/profile/password', [App\Http\Controllers\Owner\ProfileController::class, 'updatePassword'])->name('owner.profile.password.update');
-     Route::get('/settings', [App\Http\Controllers\Owner\SettingController::class, 'index'])->name('owner.settings.index');
-    Route::post('/settings', [App\Http\Controllers\Owner\SettingController::class, 'update'])->name('owner.settings.update');   
+Route::middleware(['auth', 'owner'])->prefix('owner')->name('owner.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [App\Http\Controllers\Owner\DashboardController::class, 'index'])->name('dashboard');
     
-    Route::prefix('laporan')->group(function () {
-      // Rute untuk Laporan Pemesanan
-    Route::get('pemesanan', [App\Http\Controllers\Owner\OrderReportController::class, 'index'])->name('owner.laporan.pemesanan');
-     Route::get('/cetak-pdf', [App\Http\Controllers\Owner\OrderReportController::class, 'exportPdf'])->name('owner.laporan.pemesanan.cetak-pdf');
-    Route::get('/cetak-csv', [App\Http\Controllers\Owner\OrderReportController::class, 'exportCsv']) ->name('owner.laporan.pemesanan.cetak-csv');
-   
-     // Rute untuk Laporan Pendapatan
-        Route::get('pendapatan', [App\Http\Controllers\Owner\IncomeReportController::class, 'index'])->name('owner.laporan.pendapatan');
- Route::get('/export-pdf', [App\Http\Controllers\Owner\IncomeReportController::class, 'exportPdf'])
-            ->name('owner.laporan.pendapatan.export-pdf');
-        Route::get('/export-csv', [App\Http\Controllers\Owner\IncomeReportController::class, 'exportCsv'])
-            ->name('owner.laporan.pendapatan.export-csv');
-
-    });
+    // Manajemen Karyawan
+    Route::resource('employee', EmployeeController::class)->names('employee');
+    
+    // Rute Pesanan
+    Route::get('/orders', [App\Http\Controllers\Owner\OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [App\Http\Controllers\Owner\OrderController::class, 'show'])->name('orders.show');
+//verifikasi pembayaran
+    Route::post('/orders/{order}/verify-payment', [App\Http\Controllers\Admin\OrderController::class, 'verifyPayment'])
+    ->name('orders.verifyPayment');
+    // Pengaturan Profil & Aplikasi
+    Route::get('/profile/edit', [App\Http\Controllers\Owner\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [App\Http\Controllers\Owner\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/password', [App\Http\Controllers\Owner\ProfileController::class, 'editPassword'])->name('profile.password.edit');
+    Route::put('/profile/password', [App\Http\Controllers\Owner\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::get('/settings', [App\Http\Controllers\Owner\SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [App\Http\Controllers\Owner\SettingController::class, 'update'])->name('settings.update');
+    
+    // ---- Laporan Pemesanan ----
+    Route::get('laporan/pemesanan', [App\Http\Controllers\Owner\OrderReportController::class, 'index'])->name('laporan.pemesanan');
+    Route::get('laporan/pemesanan/cetak-pdf', [App\Http\Controllers\Owner\OrderReportController::class, 'exportPdf'])->name('laporan.pemesanan.cetak-pdf');
+    Route::get('laporan/pemesanan/cetak-csv', [App\Http\Controllers\Owner\OrderReportController::class, 'exportCsv'])->name('laporan.pemesanan.cetak-csv');
+    
+    // ---- Laporan Pendapatan ----
+    Route::get('laporan/pendapatan', [App\Http\Controllers\Owner\IncomeReportController::class, 'index'])->name('laporan.pendapatan');
+    Route::get('laporan/pendapatan/export-pdf', [App\Http\Controllers\Owner\IncomeReportController::class, 'exportPdf'])->name('laporan.pendapatan.export-pdf');
+    Route::get('laporan/pendapatan/export-csv', [App\Http\Controllers\Owner\IncomeReportController::class, 'exportCsv'])->name('laporan.pendapatan.export-csv');
 });

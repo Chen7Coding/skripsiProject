@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+{{-- @extends('layouts.admin')
 
 @section('title', 'Input Pesanan Offline')
 
@@ -63,3 +63,4 @@
         </div>
     </div>
 @endsection
+ --}}

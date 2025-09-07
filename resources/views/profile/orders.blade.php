@@ -230,35 +230,45 @@
                                         @endif
                                     </div>
 
-                                    @if ($order->payment_status === 'unpaid')
+                                    @if ($order->payment_status === 'unpaid' && !$order->payment_proof_url)
+                                        {{-- Kondisi 1: Belum dibayar, belum ada bukti --}}
                                         <div class="mt-6">
                                             <h3 class="text-lg font-medium text-gray-900">Unggah Bukti Pembayaran</h3>
                                             <form action="{{ route('orders.uploadPaymentProof', $order->id) }}"
                                                 method="POST" enctype="multipart/form-data" class="mt-4">
                                                 @csrf
-                                                <input type="file" name="payment_proof_url" required
-                                                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:border-amber-500 sm:text-sm">
+                                                <input type="file" name="payment_proof_url" required>
                                                 <button type="submit"
-                                                    class="mt-3 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-amber-700 focus:ring focus:ring-amber-300">
+                                                    class="mt-3 px-4 py-2 bg-gray-900 text-white rounded-lg">
                                                     Kirim Bukti Pembayaran
                                                 </button>
                                             </form>
                                         </div>
-                                    @elseif ($order->payment_status === 'paid')
+                                    @elseif ($order->payment_proof_url && $order->payment_status !== 'paid')
+                                        {{-- Kondisi 2: Ada bukti pembayaran, tapi belum lunas --}}
                                         <div class="mt-6">
                                             <h3 class="text-lg font-medium text-gray-900">Bukti Pembayaran Anda</h3>
-                                            <div class="mt-4 p-4 border border-gray-200 rounded-md bg-gray-50">
-                                                @if ($order->payment_proof_url)
-                                                    <p>Bukti pembayaran telah diunggah.</p>
-                                                    <a href="{{ Storage::url($order->payment_proof_url) }}"
-                                                        target="_blank"
-                                                        class="text-blue-600 hover:text-blue-800 underline mt-2 inline-block">
-                                                        Lihat Bukti Pembayaran
-                                                    </a>
-                                                @else
-                                                    <p>Bukti pembayaran telah dikonfirmasi, namun file tidak ditemukan.
-                                                        Hubungi admin jika ada masalah.</p>
-                                                @endif
+                                            <div
+                                                class="mt-4 p-4 border border-yellow-200 rounded-md bg-yellow-50 text-yellow-700">
+                                                <p>Bukti pembayaran telah diunggah.</p>
+                                                <a href="{{ Storage::url($order->payment_proof_url) }}" target="_blank"
+                                                    class="text-blue-600 hover:underline">
+                                                    Lihat Bukti Pembayaran
+                                                </a>
+                                                <p class="mt-1">Menunggu verifikasi dari admin.</p>
+                                            </div>
+                                        </div>
+                                    @elseif ($order->payment_status === 'paid')
+                                        {{-- Kondisi 3: Sudah lunas --}}
+                                        <div class="mt-6">
+                                            <h3 class="text-lg font-medium text-gray-900">Bukti Pembayaran Anda</h3>
+                                            <div
+                                                class="mt-4 p-4 border border-green-200 rounded-md bg-green-50 text-green-700">
+                                                <p>Pembayaran Lunas. Bukti pembayaran telah diverifikasi.</p>
+                                                <a href="{{ Storage::url($order->payment_proof_url) }}" target="_blank"
+                                                    class="text-blue-600 hover:underline">
+                                                    Lihat Bukti Pembayaran
+                                                </a>
                                             </div>
                                         </div>
                                     @endif

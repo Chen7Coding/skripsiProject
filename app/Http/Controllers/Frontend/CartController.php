@@ -159,6 +159,19 @@ class CartController extends Controller
         $cartItem = Cart::where('user_id', Auth::id())->findOrFail($itemId);
         $product = $cartItem->product;
 
+         if ($request->has('quick_update')) {
+        // Validasi sederhana
+        $request->validate([
+            'quantity' => ['required', 'integer', 'min:1'],
+        ]);
+
+        $cartItem->update([
+            'quantity' => $request->quantity,
+        ]);
+
+        return redirect()->route('cart.index')->with('success', 'Jumlah item berhasil diperbarui.');
+    }
+
         // Aturan validasi khusus untuk update
         $rules = [
             'quantity' => ['required', 'integer', 'min:1'],

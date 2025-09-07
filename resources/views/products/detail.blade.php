@@ -261,7 +261,7 @@
                             {{-- Jumlah --}}
                             <div>
                                 <label for="quantity" class="block text-sm font-bold text-gray-900">Jumlah</label>
-                                <input type="number" name="quantity" x-model.number="quantity"
+                                <input type="number" id= "quantity" name="quantity" x-model.number="quantity"
                                     @input.debounce.500ms="updatePrice()" min="1"
                                     class="mt-2 block w-full max-w-[120px] rounded-md border-gray-300 shadow-sm focus:border-amber-600 focus:ring-amber-700 sm:text-sm">
                                 @error('quantity')

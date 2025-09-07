@@ -31,13 +31,12 @@
     </a>
 
     {{-- Data Pemesanan --}}
-    <a class="flex items-center px-4 py-3 mt-2 text-gray-300 transition-colors duration-300 transform rounded-lg hover:bg-gray-800 hover:text-gray-100 {{ request()->routeIs('admin.orders.*') ? 'bg-amber-500 text-white font-bold' : '' }}"
-        href="">
+    <a class="flex items-center px-4 py-3 mt-2 text-gray-300 transition-colors duration-300 transform rounded-lg hover:bg-gray-800 hover:text-gray-100 {{ request()->routeIs('owner.orders.*') ? 'bg-amber-500 text-white font-bold' : '' }}"
+        href="{{ route('owner.orders.index') }}">
         <svg class="w-5 h-5 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
             stroke-width="1.5" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
         </svg>
-        {{-- PERBAIKAN: Menambahkan whitespace-nowrap --}}
         <span class="mx-4 font-medium whitespace-nowrap">Data Pemesanan</span>
     </a>
 

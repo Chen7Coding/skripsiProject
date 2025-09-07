@@ -8,18 +8,26 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+     // Fungsi untuk menampilkan halaman login
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
     // Fungsi untuk menangani proses login
     public function store(Request $request)
 {
-    $credentials = $request->validate([
-        'username' => 'required|string',
-        'password' => 'required|string',
-    ]);
-
+   // 1. Validasi input: gunakan email dan password
+        $credentials = $request->validate([
+            'email' => ['required', 'string', 'email'],
+            'password' => 'required|string',
+        ]);
+        
+        // 2. Coba autentikasi pengguna
     if (Auth::attempt($credentials, $request->boolean('remember-me'))) {
         $request->session()->regenerate();
 
-         // LOGIKA PENGALIHAN BERDASARKAN PERAN
+         // 3 LOGIKA PENGALIHAN BERDASARKAN PERAN
         if (Auth::user()->role == 'pemilik') {
             return redirect()->route('home');
         }
@@ -32,9 +40,10 @@ class LoginController extends Controller
         return redirect()->route('home');
     }
 
-    return back()->withErrors([
-        'username' => 'Username atau password yang diberikan salah.',
-    ])->onlyInput('username');
+   // 4. Jika autentikasi gagal
+        return back()->withErrors([
+            'email' => 'Email atau password yang Anda masukkan salah.',
+        ])->onlyInput('email');
 }
 
     // Fungsi untuk menangani proses logout

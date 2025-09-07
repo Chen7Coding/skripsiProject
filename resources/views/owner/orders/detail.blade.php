@@ -1,19 +1,12 @@
-@extends('layouts.admin')
+@extends('layouts.owner')
 
 @section('title', 'Detail Pesanan')
 
-@section('admin-content')
+@section('owner-content')
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-        {{-- Tempat Menampilkan Notifikasi --}}
-        @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <span class="block sm:inline">{{ session('success') }}</span>
-            </div>
-        @endif
-
         {{-- Tombol Kembali --}}
         <div class="mb-6">
-            <a href="{{ route('admin.orders.index') }}"
+            <a href="{{ route('owner.orders.index') }}"
                 class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
@@ -23,9 +16,7 @@
             </a>
         </div>
 
-        {{-- =================================================== --}}
-        {{-- ============== HEADER HALAMAN =================== --}}
-        {{-- =================================================== --}}
+        {{-- HEADER --}}
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-800">Detail Pesanan</h1>
             <div class="mt-2 flex items-center gap-4">
@@ -58,9 +49,8 @@
             </p>
         </div>
 
-
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- KOLOM KIRI: RINCIAN ITEM -->
+            <!-- KOLOM KIRI -->
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-lg shadow-md">
                     <div class="p-6 border-b">
@@ -101,11 +91,7 @@
                                                         target="_blank" class="text-amber-600 hover:underline">
                                                         Lihat File
                                                     </a>
-                                                    <span class="mx-1 text-gray-400">|</span>
-                                                    <a href="{{ route('admin.orders.download-design', $item->id) }}"
-                                                        class="text-amber-900 hover:underline">
-                                                        Unduh File
-                                                    </a>
+                                                    {{-- UNDuh dihapus untuk owner --}}
                                                 </dd>
                                             </div>
                                         @endif
@@ -139,7 +125,7 @@
                 </div>
             </div>
 
-            <!-- KOLOM KANAN: INFO & AKSI -->
+            <!-- KOLOM KANAN -->
             <div class="lg:col-span-1 space-y-8">
                 <!-- Informasi Pengiriman -->
                 <div class="bg-white rounded-lg shadow-md p-6">
@@ -162,88 +148,24 @@
                     </dl>
                 </div>
 
-                <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-                    <h2 class="text-lg font-semibold mb-2">Bukti Pembayaran</h2>
-
-                    @if ($order->payment_status === 'paid')
-                        {{-- Kondisi 1: Pembayaran SUDAH diverifikasi --}}
-                        <div class="p-4 border border-green-200 rounded-md bg-green-50 text-green-700">
-                            <h4 class="text-md font-semibold">Pembayaran Terverifikasi</h4>
-                            <p>Pembayaran pesanan ini telah berhasil diverifikasi.</p>
-                        </div>
+                {{-- Tampilkan bukti pembayaran (tanpa tombol verifikasi) --}}
+                @if ($order->payment_status === 'paid' && $order->payment_proof_url)
+                    <div class="mt-4 p-4 border border-gray-200 rounded-md bg-white shadow-md">
+                        <h4 class="text-lg font-semibold text-gray-800">Bukti Pembayaran</h4>
                         <a href="{{ Storage::url($order->payment_proof_url) }}" target="_blank"
-                            class="mt-3 block px-4 py-2 text-center text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">
+                            class="mt-3 block w-full px-4 py-2 text-center text-white bg-blue-600 rounded-lg 
+               hover:bg-blue-700 transition-colors">
                             Lihat Bukti Pembayaran
                         </a>
-                    @elseif ($order->payment_proof_url)
-                        {{-- Kondisi 2: Ada bukti pembayaran tapi BELUM diverifikasi --}}
-                        <p class="text-gray-600">Pelanggan telah mengunggah bukti pembayaran. Silakan verifikasi.</p>
+                    </div>
+                @elseif ($order->payment_status === 'unpaid')
+                    <div class="mt-4 p-4 border border-gray-200 rounded-md bg-yellow-50 text-yellow-700 shadow-md">
+                        <h4 class="text-md font-semibold">Belum Ada Bukti Pembayaran</h4>
+                        <p>Pelanggan belum mengunggah bukti pembayaran.</p>
+                    </div>
+                @endif
 
-                        <div class="mt-3 space-y-3">
-                            <a href="{{ Storage::url($order->payment_proof_url) }}" target="_blank"
-                                class="w-full inline-flex items-center justify-center px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">
-                                Lihat Bukti Pembayaran
-                            </a>
-
-                            <form action="{{ route('orders.verifyPayment', $order->id) }}" method="POST">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full inline-flex items-center justify-center px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors">
-                                    Verifikasi Pembayaran
-                                </button>
-                            </form>
-                        </div>
-                    @else
-                        {{-- Kondisi 3: Belum ada bukti pembayaran sama sekali --}}
-                        <p class="text-gray-600">Pelanggan belum mengunggah bukti pembayaran.</p>
-                    @endif
-                </div>
-
-
-                {{--  ubah status pesanan --}}
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Ubah Status Pesanan</h3>
-
-                    {{-- Cek jika status pesanan adalah final (selesai atau dibatalkan) --}}
-                    {{-- Tampilkan blok ini jika status pesanan adalah final --}}
-                    @if ($order->status === 'completed')
-                        <div class="p-4 bg-green-50 border border-green-200 rounded-md">
-                            <p class="text-sm font-medium text-green-700">Status pesanan telah **Selesai**.</p>
-                        </div>
-                    @elseif ($order->status === 'cancelled')
-                        <div class="p-4 bg-red-50 border border-red-200 rounded-md">
-                            <p class="text-sm font-medium text-red-700">Status pesanan telah **Dibatalkan**.</p>
-                        </div>
-                    @else
-                        {{-- Tampilkan form jika status masih bisa diubah --}}
-                        <form action="{{ route('admin.orders.updateStatus', $order->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <div class="flex items-center space-x-2">
-                                <div class="flex-grow">
-                                    <label for="status" class="sr-only">Status Pesanan</label>
-                                    <select name="status" id="status"
-                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm">
-                                        <option value="pending" @if ($order->status == 'pending') selected @endif>Menunggu
-                                            Konfirmasi</option>
-                                        <option value="processing" @if ($order->status == 'processing') selected @endif>
-                                            Pesanan Diproses</option>
-                                        <option value="shipping" @if ($order->status == 'shipping') selected @endif>Pesanan
-                                            Dalam Pengiriman</option>
-                                        <option value="completed" @if ($order->status == 'completed') selected @endif>
-                                            Pesanan Selesai</option>
-                                        <option value="cancelled" @if ($order->status == 'cancelled') selected @endif>
-                                            Pesanan Batal</option>
-                                    </select>
-                                </div>
-                                <button type="submit"
-                                    class="flex-shrink-0 rounded-md border border-transparent bg-amber-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
-                                    Perbarui
-                                </button>
-                            </div>
-                        </form>
-                    @endif
-                </div>
+                {{-- Bagian ubah status dihilangkan --}}
             </div>
         </div>
     </div>

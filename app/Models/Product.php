@@ -16,8 +16,10 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-     public function attributes()
+    public function attributes()
     {
-        return $this->hasMany(ProductAttribute::class,'product_id','id');
+        // Laravel secara default akan mencari 'product_id' di tabel product_attributes
+        // Jadi, tidak perlu secara eksplisit menuliskannya.
+        return $this->hasMany(ProductAttribute::class);
     }
 }
