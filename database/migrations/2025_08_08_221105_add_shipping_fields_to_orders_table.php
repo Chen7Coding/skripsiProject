@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
              $table->string('kecamatan')->nullable();
             $table->integer('shipping_cost')->default(0);
-            $table->string('shipping_city')->nullable();
-            $table->string('shipping_province')->nullable();
+           /*  $table->string('shipping_city')->nullable();
+            $table->string('shipping_province')->nullable(); */
             $table->string('payment_image')->nullable();
         });
     }
@@ -30,8 +30,8 @@ return new class extends Migration
             $table->dropColumn([
                 'kecamatan',
                 'shipping_cost',
-                'shipping_city',
-                'shipping_province',
+              /*   'shipping_city',
+                'shipping_province', */
                 'payment_image'
             ]);
         });
