@@ -4,9 +4,14 @@
 
             <!-- Logo & Menu desktop -->
             <div class="flex items-center">
-                <a href="{{ route('welcome') }}" class="flex-shrink-0">
+                {{-- Perbaiki di sini: Cek jika $setting ada dan memiliki store_logo --}}
+                @if (isset($setting) && $setting->store_logo)
                     <img class="h-10 w-auto" src="{{ asset('storage/' . $setting->store_logo) }}"
                         alt="Sidu Digital Print Logo">
+                @else
+                    {{-- Tampilkan logo default jika tidak ada logo di database --}}
+                    <img class="h-10 w-auto" src="{{ asset('path/to/default/logo.png') }}" alt="Default Logo">
+                @endif
                 </a>
 
                 <div class="hidden md:block">
