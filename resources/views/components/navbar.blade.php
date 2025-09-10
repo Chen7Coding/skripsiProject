@@ -4,17 +4,6 @@
 
             <!-- Logo & Menu desktop -->
             <div class="flex items-center">
-<<<<<<< HEAD
-                <a href="/" class="flex-shrink-0">
-                    {{-- Perbaiki di sini: Cek jika $setting ada dan memiliki store_logo --}}
-                    @if (isset($setting) && $setting->store_logo)
-                        <img class="h-10 w-auto" src="{{ asset('storage/' . $setting->store_logo) }}"
-                            alt="Sidu Digital Print Logo">
-                    @else
-                        {{-- Tampilkan logo default jika tidak ada logo di database --}}
-                        <img class="h-10 w-auto" src="{{ asset('path/to/default/logo.png') }}" alt="Default Logo">
-                    @endif
-=======
                 {{-- Perbaiki di sini: Cek jika $setting ada dan memiliki store_logo --}}
                 @if (isset($setting) && $setting->store_logo)
                     <img class="h-10 w-auto" src="{{ asset('storage/' . $setting->store_logo) }}"
@@ -23,7 +12,6 @@
                     {{-- Tampilkan logo default jika tidak ada logo di database --}}
                     <img class="h-10 w-auto" src="{{ asset('path/to/default/logo.png') }}" alt="Default Logo">
                 @endif
->>>>>>> sidu2
                 </a>
 
                 <div class="hidden md:block">

@@ -9,16 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('orders', function (Blueprint $table) {
-             $table->string('kecamatan')->nullable();
-            $table->integer('shipping_cost')->default(0)
-          /*   $table->string('shipping_city')->nullable();
-            $table->string('shipping_province')->nullable(); */
-            $table->string('payment_image')->nullable();
-        });
-    }
+  public function up(): void
+{
+    Schema::table('orders', function (Blueprint $table) {
+        $table->string('kecamatan')->nullable();
+        $table->integer('shipping_cost')->default(0);
+       /*  // Jika Anda ingin mengaktifkan kembali kolom ini, hapus komentarnya
+        $table->string('shipping_city')->nullable(); 
+        $table->string('shipping_province')->nullable(); */
+// Pastikan tidak ada karakter lain di dalam komentar
+        $table->string('payment_image')->nullable();
+    });
+}
 
     /**
      * Reverse the migrations.
