@@ -141,9 +141,9 @@ class CheckoutController extends Controller
                 return "- {$item->product->name} ({$item->quantity}x)";
             })->implode("\n");
 
-            $customerMessage = "Halo *{$order->user->name}* 👋\n\n"
-                . "Terima kasih telah memesan di *Sidu Digital Print* 🙏\n
-                Pesanan Anda akan segera kami proses\n\n"
+            $customerMessage = "Halo *{$order->user->name}* 👋\n"
+                . "Terima kasih telah memesan di *Sidu Digital Print* 🙏"
+                . "Pesanan Anda akan segera kami proses\n\n"
                 . "Nomor Pesanan: *({$order->order_number})*\n"
                 . "Tanggal: *{$order->created_at->format('d F Y, H:i')}*\n"
                 . "Metode Pembayaran: *{$order->payment_method}*\n\n" 
@@ -161,8 +161,8 @@ class CheckoutController extends Controller
                     return "- {$item->product->name} ({$item->quantity}x)";
                 })->implode("\n");
 
-                $ownerMessage = "Halo Sidu Digital Print, ada pesanan baru masuk! \n
-                Silakan segera proses pesanan\n\n"
+                $ownerMessage = "Halo Sidu Digital Print, ada pesanan baru masuk! \n"
+                    . "Silakan segera proses pesanan\n\n"
                     . "Nomor Pesanan: *#{$order->order_number}*\n"
                     . "Tanggal: *{$order->created_at->format('d F Y, H:i')}*\n"
                     . "Pelanggan: {$order->user->name}\n"

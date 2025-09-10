@@ -29,25 +29,25 @@
                         <label for="store_name" class="block text-sm font-medium text-gray-700">Nama Toko</label>
                         <input type="text" name="store_name" id="store_name"
                             value="{{ old('store_name', $setting->store_name) }}"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-600 focus:ring-amber-600 sm:text-sm">
                     </div>
                     <div>
                         <label for="store_email" class="block text-sm font-medium text-gray-700">Email Toko</label>
                         <input type="email" name="store_email" id="store_email"
                             value="{{ old('store_email', $setting->store_email) }}"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-600 focus:ring-amber-600 sm:text-sm">
                     </div>
                     <div>
                         <label for="store_contact" class="block text-sm font-medium text-gray-700">Kontak Toko (No.
                             WA)</label>
                         <input type="text" name="store_contact" id="store_contact"
                             value="{{ old('store_contact', $setting->store_contact) }}"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-600 focus:ring-amber-600 sm:text-sm">
                     </div>
                     <div class="md:col-span-2">
                         <label for="store_address" class="block text-sm font-medium text-gray-700">Alamat Toko</label>
                         <textarea name="store_address" id="store_address" rows="3"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">{{ old('store_address', $setting->store_address) }}</textarea>
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-amber-600 focus:ring-amber-600 sm:text-sm">{{ old('store_address', $setting->store_address) }}</textarea>
                     </div>
                     <div class="md:col-span-2">
                         <label for="store_logo" class="block text-sm font-medium text-gray-700">Logo Toko</label>
@@ -61,14 +61,14 @@
                                     Logo</span>
                             @endif
                             <input type="file" name="store_logo" id="store_logo"
-                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-amber-700 hover:file:bg-amber-100">
                         </div>
                     </div>
                 </div>
 
                 <div class="mt-6">
                     <button type="submit"
-                        class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        class="inline-flex justify-center rounded-md border border-transparent bg-amber-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                         Simpan Perubahan
                     </button>
                 </div>

@@ -70,45 +70,55 @@ class OrderController extends Controller
             WhatsAppHelper::sendNotification($customerNumber, $customerMessage);
         }
     }
-
-
         return redirect()->route('admin.orders.show', $order->id)->with('success', 'Status pesanan berhasil diperbarui.');
     }
     
-    
-    public function downloadDesign(OrderItem $item)
-{
-    
-if ($item->design_file_path) {
-    $path = $item->design_file_path; // contoh: 'designs/foo.pdf'
-
-    if (Storage::disk('public')->exists($path)) {
-        // Fallback universal:
-        return response()->download(storage_path('app/public/'.$path));
-        
-        // Kalau versi kamu mendukung:
-        // return Storage::disk('public')->download($path);
-    }
-}   
-    return back()->with('error', 'File desain tidak ditemukan.');
-}
-
-     public function verifyPayment(Order $order)
+        public function downloadDesign(OrderItem $item)
     {
+        
+    if ($item->design_file_path) {
+        $path = $item->design_file_path; // contoh: 'designs/foo.pdf'
+
+        if (Storage::disk('public')->exists($path)) {
+            // Fallback universal:
+            return response()->download(storage_path('app/public/'.$path));
+            
+            // Kalau versi kamu mendukung:
+            // return Storage::disk('public')->download($path);
+        }
+    }   
+        return back()->with('error', 'File desain tidak ditemukan.');
+    }
+
+
+        public function verifyPayment(Order $order)
+    {
+        // Cek dulu, kalau statusnya sudah lunas (paid), jangan lakukan apa-apa.
+        // Ini mencegah verifikasi berulang.
+        if ($order->payment_status === 'paid') {
+            return redirect()->back()->with('error', 'Pembayaran sudah diverifikasi.');
+        }
+
         // Perbarui status pembayaran menjadi 'paid'
         $order->payment_status = 'paid';
+
+        // Perbarui status pesanan utama menjadi 'processing' atau 'diproses'
+        // Ini menandakan pesanan sudah bisa dikerjakan.
+        $order->status = 'processing'; 
+
         $order->save();
 
-        return redirect()->back()->with('success', 'Pembayaran berhasil diverifikasi.');
+        // Berikan pesan sukses yang lebih informatif
+        return redirect()->back()->with('success', 'Pembayaran berhasil diverifikasi. Pesanan dilanjutkan ke tahap proses.');
     }
    
-    public function createForStaff()
+   /*  public function createForStaff()
     {
         $products = Product::all(); // Fetch all products for the dropdown
         return view('admin.orders.create', compact('products'));
-    }
+    } */
 
-    public function storeForStaff(Request $request)
+   /*  public function storeForStaff(Request $request)
     {
         // 1. Validation
         $request->validate([
@@ -140,5 +150,5 @@ if ($item->design_file_path) {
         ]);
 
         return redirect()->route('admin.orders.index')->with('success', 'Pesanan offline berhasil dibuat!');
-    }
+    } */
 }

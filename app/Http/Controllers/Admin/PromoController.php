@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Promo;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class PromoController extends Controller
 {
     public function index()
     {
-        $promos = Promo::latest()->get();
+        $promos = Promo::all();
         return view('admin.promo.index', compact('promos'));
     }
 
@@ -24,28 +24,25 @@ class PromoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required',
+            'title' => 'required|string|max:255|unique:promos,title',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'image' => 'required|image|max:2048',
         ]);
 
-        $imagePath = $request->file('image')->store('image', 'public');
+        $data = $request->except(['_token']);
+        
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('promos', 'public');
+        }
 
-        Promo::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'image' => $imagePath,
-            'is_active' => $request->has('is_active'),
-        ]);
+        Promo::create($data);
 
-        return redirect()->route('promo.index')->with('success', 'Promo berhasil ditambahkan');
+        return redirect()->route('admin.promo.index')->with('success', 'Promo berhasil ditambahkan.');
     }
 
-    public function edit(Promo $promo)
+   public function edit(Promo $promo)
     {
         return view('admin.promo.edit', compact('promo'));
     }
@@ -53,38 +50,42 @@ class PromoController extends Controller
     public function update(Request $request, Promo $promo)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required',
+            'title' => 'required|string|max:255|unique:promos,title,' . $promo->id,
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'image' => 'nullable|image|max:2048',
+            'is_active' => 'nullable|boolean',
         ]);
+
+        $data = $request->only(['title', 'description', 'start_date', 'end_date']);
+        $data['slug'] = Str::slug($request->title);
+        $data['is_active'] = $request->boolean('is_active'); // Tambahkan ini jika ada checkbox
 
         if ($request->hasFile('image')) {
             if ($promo->image) {
                 Storage::disk('public')->delete($promo->image);
             }
-            $promo->image = $request->file('image')->store('image', 'public');
+            $data['image'] = $request->file('image')->store('promos', 'public');
         }
 
-        $promo->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'image' => $promo->image,
-            'is_active' => $request->has('is_active'),
-        ]);
-
-        return redirect()->route('promo.index')->with('success', 'Promo berhasil diperbarui');
+        $promo->update($data);
+        $data['is_active'] = $request->has('is_active');
+        return redirect()->route('admin.promo.index')->with('success', 'Promo berhasil diperbarui.');
     }
-
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Promo $promo)
     {
+        // Hapus gambar terkait jika ada
         if ($promo->image) {
             Storage::disk('public')->delete($promo->image);
         }
+        
+        // Hapus promo dari database
         $promo->delete();
-        return redirect()->route('promo.index')->with('success', 'Promo berhasil dihapus');
+
+        return redirect()->route('admin.promo.index')->with('success', 'Promo berhasil dihapus.');
     }
 }

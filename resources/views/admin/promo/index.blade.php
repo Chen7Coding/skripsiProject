@@ -1,56 +1,52 @@
 @extends('layouts.admin')
 
 @section('admin-content')
-    <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-bold mb-4">Daftar Promo</h1>
+    <div class="container mx-auto py-6">
 
-        <a href="{{ route('promo.create') }}"
-            class="bg-blue-600 text-white px-4 py-2 rounded mb-4 inline-block hover:bg-blue-700 transition">
-            Tambah Promo
-        </a>
-
+        {{-- Tambahkan di sini untuk notifikasi --}}
         @if (session('success'))
-            <div class="bg-green-100 text-green-700 p-2 mb-4 rounded">
-                {{ session('success') }}
+            <div class="mb-4 p-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert">
+                <span class="font-medium">Berhasil!</span> {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+                <span class="font-medium">Gagal!</span> {{ session('error') }}
             </div>
         @endif
 
-        <table class="w-full table-auto border border-gray-300">
-            <thead class="bg-gray-200">
-                <tr>
-                    <th class="p-2 border">Judul</th>
-                    <th class="p-2 border">Tanggal</th>
-                    <th class="p-2 border">Status</th>
-                    <th class="p-2 border">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($promos as $promo)
-                    <tr>
-                        <td class="p-2 border">{{ $promo->title }}</td>
-                        <td class="p-2 border">{{ $promo->start_date }} - {{ $promo->end_date }}</td>
-                        <td class="p-2 border">
-                            <span class="{{ $promo->is_active ? 'text-green-600' : 'text-gray-500' }}">
-                                {{ $promo->is_active ? 'Aktif' : 'Tidak Aktif' }}
-                            </span>
-                        </td>
-                        <td class="p-2 border">
-                            <a href="{{ route('promo.edit', $promo->id) }}" class="text-blue-500 hover:underline">Edit</a>
-                            |
-                            <form action="{{ route('promo.destroy', $promo->id) }}" method="POST" class="inline"
-                                onsubmit="return confirm('Yakin hapus promo ini?')">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Kelola Promo</h1>
+            <a href="{{ route('admin.promo.create') }}"
+                class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+                Tambah Promo Baru
+            </a>
+        </div>
+
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <ul class="divide-y divide-gray-200">
+                @foreach ($promos as $promo)
+                    <li class="px-6 py-4 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">{{ $promo->title }}</h3>
+                            <p class="text-sm text-gray-500 mt-1">
+                                Berlaku: {{ \Carbon\Carbon::parse($promo->start_date)->format('d M Y') }} s/d
+                                {{ \Carbon\Carbon::parse($promo->end_date)->format('d M Y') }}
+                            </p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <a href="{{ route('admin.promo.edit', $promo) }}"
+                                class="text-sm text-amber-600 hover:text-amber-900 font-medium">Edit</a>
+                            <form action="{{ route('admin.promo.destroy', $promo) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:underline">Hapus</button>
+                                <button type="submit" class="text-sm text-red-600 hover:text-red-900 font-medium"
+                                    onclick="return confirm('Apakah Anda yakin ingin menghapus promo ini?')">Hapus</button>
                             </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="p-4 text-center text-gray-500">Belum ada promo.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
     </div>
 @endsection

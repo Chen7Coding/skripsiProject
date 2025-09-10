@@ -1,37 +1,10 @@
-@extends('layouts.admin')
+@extends('layouts.owner')
 
-@section('title', 'Data Pemesanan')
+@section('title', 'Daftar Pesanan')
 
-@section('admin-content')
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-8">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-800">Data Pemesanan</h1>
-                <p class="mt-1 text-gray-500">Kelola semua pesanan yang masuk dari pelanggan.</p>
-            </div>
-            {{--   <a href="{{ route('admin.order_create') }}"
-                class="inline-flex items-center w-full px-4 py-2 mt-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-200">
-                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                    <path fill-rule="evenodd"
-                        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13z"
-                        clip-rule="evenodd" />
-                </svg>
-                Input Pesanan Offline
-            </a> --}}
-
-            {{-- Kode yang sudah diperbaiki --}}
-            {{-- a href="{{ route('admin.order.create') }}"
-                class="inline-flex items-center w-full px-4 py-2 mt-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-200">
-                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                    <path fill-rule="evenodd"sz
-                        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h.01a1 1 0 100-2H10zm3 0a1 1 0 000 2h.01a1 1 0 100-2H13z"
-                        clip-rule="evenodd" />
-                </svg>
-                Input Pesanan Offline
-            </> --}}
-        </div>
+@section('owner-content')
+    <div class="container mx-auto py-6">
+        <h3 class="text-2xl font-bold mb-4">Daftar Pesanan</h3>
 
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <div class="overflow-x-auto">
@@ -98,7 +71,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ route('admin.orders.show', $order->id) }}"
+                                    <a href="{{ route('owner.orders.show', $order->id) }}"
                                         class="text-amber-600 hover:text-amber-900">Lihat Detail</a>
                                 </td>
                             </tr>
@@ -112,11 +85,9 @@
                     </tbody>
                 </table>
             </div>
-            @if ($orders->hasPages())
-                <div class="p-4 bg-gray-50 border-t border-gray-200">
-                    {{ $orders->links() }}
-                </div>
-            @endif
+
+            <div class="mt-4">
+                {{ $orders->links() }}
+            </div>
         </div>
-    </div>
-@endsection
+    @endsection

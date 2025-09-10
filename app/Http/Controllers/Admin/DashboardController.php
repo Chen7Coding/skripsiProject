@@ -2,39 +2,56 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Order;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
-  
     public function index()
     {
-        $orderCount = Order::where('created_at', '>=', now()->subDay())->count();
-        $revenue = Order::where('status', 'completed')->sum('total_price');
-        $customerCount = User::count();
-        $recentOrders = Order::with('user')->latest()->limit(5)->get();
-        $lastOrderTime = optional($recentOrders->first())->created_at ?? Carbon::create(2000, 1, 1)->toISOString();
+        $totalOrders     = Order::count();
+        $totalPending    = Order::where('status', 'pending')->count();
+        $totalProcessing = Order::where('status', 'processing')->count();
+        $totalShipping   = Order::where('status', 'shipping')->count();
+        $totalCompleted  = Order::where('status', 'completed')->count();
+        $totalCustomers  = User::where('role', 'pelanggan')->count();
 
-        return view('admin.dashboard', compact(
-            'orderCount', 'revenue', 'customerCount', 'recentOrders', 'lastOrderTime'
-        ));
-    }
-
-    public function checkNewOrders(Request $request)
-    {
-        $lastChecked = $request->get('last_checked');
-        $newOrders = Order::with('user')
-            ->where('created_at', '>', $lastChecked)
-            ->orderBy('created_at', 'desc')
+        $latestOrders = Order::with('pelanggan')
+            ->latest()
+            ->take(5)
             ->get();
 
-        return response()->json([
-            'count' => $newOrders->count(),
-            'orders' => $newOrders,
-        ]);
+        
+        // Perbaikan: Logika untuk notifikasi dinamis
+        $notifications = [];
+
+        // Notifikasi 1: Pesanan baru yang belum membayar (status 'pending' dan belum ada bukti)
+        $newPendingOrders = Order::where('status', 'pending')
+            ->whereNull('payment_proof_url')
+            ->count();
+        if ($newPendingOrders > 0) {
+            $notifications[] = "Ada {$newPendingOrders} pesanan baru menunggu pembayaran.";
+        }
+
+        // Notifikasi 2: Pembayaran baru yang perlu diverifikasi (sudah ada bukti, status bukan 'paid')
+        $unverifiedPaymentsCount = Order::whereNotNull('payment_proof_url')
+            ->where('payment_status', '!=', 'paid')
+            ->count();
+        if ($unverifiedPaymentsCount > 0) {
+            $notifications[] = "Ada {$unverifiedPaymentsCount} pesanan menunggu verifikasi pembayaran.";
+        }
+        
+
+        return view('admin.dashboard', compact(
+            'totalOrders',
+            'totalPending',
+            'totalProcessing',
+            'totalShipping',
+            'totalCompleted',
+            'totalCustomers',
+            'latestOrders',
+            'notifications'
+        ));
     }
 }

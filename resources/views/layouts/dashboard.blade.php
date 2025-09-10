@@ -62,10 +62,6 @@
                         <a class="block py-2 px-4 text-sm rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white {{ request()->routeIs('profile.orders') ? 'text-amber-400 font-semibold' : '' }}"
                             href="{{ route('profile.orders') }}">Riwayat Pesanan</a>
                     </div>
-                    <!--<div x-show="openOrders" class="mt-2 ml-4 pl-4 border-l-2 border-gray-700">
-                        <a class="block py-2 px-4 text-sm rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white
-                            href="">Riwayat Pesanan</a>
-                    </div>-->
                 </div>
 
                 {{-- Dropdown Pengaturan Profil --}}
@@ -111,8 +107,16 @@
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </button>
-                    <a href="{{ route('home') }}" class="ml-4 text-gray-600 hover:text-amber-600 font-semibold">Kembali
-                        ke Toko</a>
+                    <a href="{{ route('home') }}"
+                        class="ml-4 text-gray-600 hover:text-amber-600 font-semibold inline-flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5 mr-1">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75V21h15V9.75" />
+                        </svg>
+                        <span class="hidden sm:inline">Beranda</span>
+                    </a>
+
                 </div>
                 <div class="flex items-center">
                     <span class="font-semibold mr-4">Halo, {{ Auth::user()->name }}</span>
@@ -127,7 +131,7 @@
     </div>
 
     {{-- Link library Alpine.js dengan atribut 'defer' --}}
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+    {{-- <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script> --}}
 
     {{-- Link file JavaScript Anda dengan atribut 'defer' --}}
     {{-- <script src="{{ asset('js/dashboard_plg.js') }}" defer></script> --}}

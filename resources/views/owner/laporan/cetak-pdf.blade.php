@@ -72,18 +72,18 @@
 
 <body>
     <div class="header" style="display: flex; align-items: center;">
-        <div style="flex: 0 0 auto;">
-            {{-- @if ($settings && $settings->store_logo)
+        {{--  <div style="flex: 0 0 auto;">
+            @if ($settings && $settings->store_logo)
                 <img src="{{ asset('storage/' . $settings->store_logo) }}" alt="Sidu Digital Print Logo"
                     style="height:90px;">
             @endif --}}
-        </div>
-        <div style="flex: 1; text-align: center;">
-            <h2 style="margin: 0;">TOKO SIDU DIGITAL PRINT</h2>
-            <p style="margin: 0;">Jl. Pajagalan, Ruko Alsifa B2.</p>
-            <p style="margin: 0;"> Desa Majalaya, Kecamatan Majalaya, Kabupaten Bandung, Jawa Barat</p>
-            <p style="margin: 0;">Phone/WA: 0821-2666-3200 | Email: Nukibagja@gmail.com</p>
-        </div>
+    </div>
+    <div style="flex: 1; text-align: center;">
+        <h2 style="margin: 0;">TOKO SIDU DIGITAL PRINT</h2>
+        <p style="margin: 0;">Jl. Pajagalan, Ruko Alsifa B2.</p>
+        <p style="margin: 0;"> Desa Majalaya, Kecamatan Majalaya, Kabupaten Bandung, Jawa Barat</p>
+        <p style="margin: 0;">Phone/WA: 0821-2666-3200 | Email: Nukibagja@gmail.com</p>
+    </div>
     </div>
 
     <hr>
@@ -93,41 +93,34 @@
     <div style="text-align: right;">
         <p>Tanggal Cetak : {{ \Carbon\Carbon::now()->format('d/m/Y H:i:s') }}</p>
     </div>
-
-    <!-- KANAN -->
     <div style="text-align: left;">
-        <p>Periode : {{ \Carbon\Carbon::parse($startDate)->format('d/m/Y') }} s/d
-            {{ \Carbon\Carbon::parse($endDate)->format('d/m/Y') }}</p>
-        <p>Nama Karyawan : {{ Auth::user()->name ?? 'xx' }}</p>
+        <p>Periode: {{ $startDate }} s/d {{ $endDate }}</p>
     </div>
 
-
-    <table>
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Tanggal</th>
-                <th>No. Pesanan</th>
-                <th>Pelanggan</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Metode Pembayaran</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($orders as $key => $order)
+    <body>
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ $key + 1 }}</td>
-                    <td>{{ \Carbon\Carbon::parse($order->created_at)->format('d M Y') }}</td>
-                    <td>{{ $order->order_number ?? '-' }}</td>
-                    <td>{{ $order->user->name ?? '-' }}</td>
-                    <td>Rp{{ number_format($order->total_price, 0, ',', '.') }}</td>
-                    <td>{{ ucfirst($order->status) }}</td>
-                    <td>{{ $order->payment_method ?? '-' }}</td>
+                    <th>Tanggal</th>
+                    <th>No. Pesanan</th>
+                    <th>Pelanggan</th>
+                    <th>Total</th>
+                    <th>Status</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($orders as $order)
+                    <tr>
+                        <td>{{ $order->created_at->format('d-m-Y') }}</td>
+                        <td>{{ $order->order_number }}</td>
+                        <td>{{ $order->user->name ?? 'Pelanggan Dihapus' }}</td>
+                        <td>Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
+                        <td>{{ ucfirst($order->status) }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </body>
 
     <div class="footer">
         <p>Mengetahui,</p>
@@ -135,6 +128,5 @@
         <br><br><br>
         <p>Nuki Bagja</p>
     </div>
-</body>
 
 </html>

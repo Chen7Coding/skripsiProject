@@ -51,7 +51,7 @@
             <a class="block py-2 px-4 text-sm rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white {{ request()->routeIs('products.*') ? 'text-amber-400 font-semibold' : '' }}"
                 href="{{ route('products.index') }}">Data Produk</a>
             <a class="block py-2 px-4 text-sm rounded-lg text-gray-400 hover:bg-gray-800 hover:text-white {{ request()->routeIs('promo.*') ? 'text-amber-400 font-semibold' : '' }}"
-                href="{{ route('promo.index') }}">Data Promo</a>
+                href="{{ route('admin.promo.index') }}">Data Promo</a>
         </div>
     </div>
 

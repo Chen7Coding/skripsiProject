@@ -1,15 +1,20 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Dahboard Pelanngan')
+@section('title', 'Dashboard Pelanggan')
 
 @section('dashboard-content')
-    <div class="p-6 md:p-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Dashboard Pelanggan</h1>
-        <p class="text-gray-500 mb-8">Informasi pesanan Anda dalam satu tampilan yang ringkas.</p>
+    <div class="container mx-auto p-6 space-y-8">
+        <div>
+            <h1 class="text-3xl font-extrabold text-gray-900 leading-tight">
+                Dashboard Pelanggan
+            </h1>
+            <p class="mt-1 text-gray-600 text-base">
+                Selamat datang di panel Pelanggan Sidu Digital Print.
+            </p>
+        </div>
 
-        {{-- Bagian Atas: Status Pesanan Visual & Tombol Aksi --}}
-        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-            {{-- Status Pesanan Visual --}}
+        {{-- Bagian Atas: Status Pesanan Visual --}}
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="bg-white p-4 rounded-lg shadow-md flex items-center gap-4">
                     <svg class="w-8 h-8 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
@@ -45,7 +50,7 @@
         </div>
 
         {{-- Bagian Tengah: Filter & Tombol Aksi --}}
-        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
             {{-- Filter Status Pesanan --}}
             <div class="flex gap-2">
                 <button id="filter-semua"
@@ -102,7 +107,7 @@
                             ];
                             $statusTranslations = [
                                 'completed' => 'Selesai',
-                                'pending' => 'Menunggu Konfirmasi',
+                                'pending' => 'Menunggu Pembayaran',
                                 'cancelled' => 'Pesanan Batal',
                                 'processing' => 'Pesanan Diproses',
                                 'shipping' => 'Pesanan Dalam Pengiriman',
@@ -147,22 +152,18 @@
                         if (filterStatus === "semua") {
                             card.style.display = "flex";
                         } else if (filterStatus === "dikemas-pengiriman") {
-                            // Tampilkan pesanan yang sedang diproses atau dikirim
-                            if (status === "diproses" || status === "dikirim" || status ===
-                                "processing" || status === "shipping") {
+                            if (status === "processing" || status === "shipping") {
                                 card.style.display = "flex";
                             } else {
                                 card.style.display = "none";
                             }
                         } else if (filterStatus === "selesai") {
-                            // Tampilkan pesanan yang sudah selesai
-                            if (status === "completed" || status === "selesai") {
+                            if (status === "completed") {
                                 card.style.display = "flex";
                             } else {
                                 card.style.display = "none";
                             }
                         } else if (filterStatus === "menunggu-bayar") {
-                            // Tampilkan pesanan yang menunggu pembayaran
                             if (status === "pending") {
                                 card.style.display = "flex";
                             } else {

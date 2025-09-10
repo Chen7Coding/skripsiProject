@@ -4,36 +4,85 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Cart;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Models\ProductAttribute;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 
 class ProductController extends Controller
 {
     /**
      * Fungsi untuk menampilkan halaman detail produk.
-     * Sekarang juga menangani mode "Edit".
+     * Menggunakan Route Model Binding untuk Product.
      */
-    public function show(Request $request, Product $product)
+     public function show(Request $request, Product $product)
     {
-        // PERUBAHAN 2: Logika untuk menangani mode edit
-       $cartItem = null;
+        // Pastikan variabel $attributes selalu didefinisikan
+        $attributes = $product->attributes()->get();
+        $materials = $attributes->pluck('material')->unique();
+        $sizes = $attributes->pluck('size')->unique();
+        
+        $cartItem = null;
+        $itemIdToEdit = $request->input('edit_cart_item');
 
-    $itemIdToEdit = request('edit_cart_item'); // Ganti nama variabel agar lebih jelas
+        if (Auth::check() && $itemIdToEdit) {
+            $cartItem = Cart::where('user_id', Auth::id())
+                ->where('id', $itemIdToEdit)
+                ->first();
 
-    if (Auth::check() && $itemIdToEdit) {
-    
-        // PERBAIKAN DI SINI: Cari berdasarkan ID item keranjang, bukan ID produk.
-        $cartItem = Cart::where('user_id', Auth::id())
-                        ->where('id', $itemIdToEdit) // Perbaikan utama
-                        ->first();
-                        
-        if ($cartItem && $cartItem->product_id != $product->id) {
-            $cartItem = null;
+            if ($cartItem && $cartItem->product_id != $product->id) {
+                $cartItem = null;
+            }
         }
+        
+        return view('products.detail', compact('product', 'cartItem', 'materials', 'sizes', 'attributes'));
     }
 
-    return view('products.detail', compact('product', 'cartItem'));
+    /**
+     * Method untuk mendapatkan harga berdasarkan atribut produk.
+     */
+    public function getPrice(Product $product, Request $request)
+    {
+        $material = $request->get('material');
+        $size = $request->get('size');
+        $length = $request->get('length'); // cm
+        $width  = $request->get('width');  // cm
+        $quantity = $request->get('quantity', 1);
+        
+        $basePrice = $product->price;
+        $price = 0;
+
+        // Kalau custom size
+        if ($length && $width) {
+            // hitung luas dalam m2
+            $sqm = ($length / 100) * ($width / 100);
+
+            // cari modifier khusus material
+            $materialAttribute = ProductAttribute::where('product_id', $product->id)
+                ->where('material', $material)
+                ->first();
+
+            $modifier = $materialAttribute ? $materialAttribute->price_modifier : 0;
+
+            // harga = harga per sqm + tambahan material
+            $price = ($product->price_per_sqm * $sqm) + $modifier;
+
+        } else {
+            // Ukuran standar
+            $attribute = ProductAttribute::where('product_id', $product->id)
+                ->where('material', $material)
+                ->where('size', $size)
+                ->first();
+                                
+            $priceModifier = $attribute ? $attribute->price_modifier : 0;
+
+            // Perbaiki bug: tambahkan harga dasar
+            $price = $basePrice + $priceModifier;
+        }
+        
+        // Kalikan jumlah (quantity)
+        $price = $price * $quantity;
+
+        return response()->json(['price' => $price]);
     }
 }

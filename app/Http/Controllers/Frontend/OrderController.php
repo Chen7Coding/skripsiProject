@@ -118,25 +118,18 @@ class OrderController extends Controller
             return back()->with('error', 'Anda tidak memiliki hak akses untuk pesanan ini.');
         }
 
-        // 2. Pastikan status pembayaran masih 'unpaid'
-        if ($order->payment_status !== 'unpaid') {
-            return back()->with('error', 'Pembayaran sudah dikonfirmasi atau bukti sudah diunggah.');
-        }
-
-        // 3. Validasi file yang diunggah
+        // 2. Validasi file yang diunggah
         $request->validate([
-            'payment_proof_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Contoh validasi
+            'payment_proof_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+        
         DB::beginTransaction();
         try {
-            // 4. Simpan file bukti pembayaran ke storage
-            // $originalName = $request->file('payment_proof_url')->getClientOriginalName();
+            // 3. Simpan file bukti pembayaran ke storage
             $filePath = $request->file('payment_proof_url')->store('payment_proofs', 'public');
 
-            // 5. Update data di tabel `orders`
-            $order->payment_status = 'paid';
-            $order->payment_proof_url = $filePath; // Simpan path file
+            // 4. Update data di tabel `orders`
+            $order->payment_proof_url = $filePath;
             $order->save();
 
             DB::commit();
@@ -145,13 +138,13 @@ class OrderController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            // Hapus file yang sudah diupload jika terjadi error
             if (isset($filePath)) {
                 Storage::delete($filePath);
             }
             return back()->with('error', 'Terjadi kesalahan saat mengunggah bukti pembayaran. Silakan coba lagi.');
         }
     }
+
 
       public function confirmReceived(Order $order)
     {
