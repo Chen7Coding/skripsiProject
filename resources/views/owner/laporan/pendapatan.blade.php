@@ -34,33 +34,35 @@
                     </div>
                     <button type="submit"
                         class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 transition-colors">Cari</button>
-                </form>
 
-                {{-- Kolom Pencarian & Tombol Ekspor --}}
-                <div class="flex items-center space-x-4 md:ml-auto">
-                    <input type="text" placeholder="Cari data di tabel..."
-                        class="form-input rounded-md shadow-sm border-gray-300 w-full md:w-auto">
-                    <a href="{{ route('owner.laporan.pendapatan.export-pdf', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
-                        target="_blank"
-                        class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors">
-                        PDF
-                    </a>
-                    <a href="{{ route('owner.laporan.pendapatan.export-csv', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
-                        class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
-                        CSV
-                    </a>
-                </div>
+
+                    {{-- Kolom Pencarian & Tombol Ekspor --}}
+                    <div class="flex items-center space-x-4 md:ml-auto">
+                        {{-- Input Search --}}
+                        <input type="text" name="search" value="{{ $search }}" placeholder="Cari Pencarian..."
+                            class="form-input rounded-md shadow-sm border-gray-300 w-full md:w-auto"
+                            oninput="this.form.submit()">
+                        <a href="{{ route('owner.laporan.pendapatan.export-pdf', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
+                            target="_blank"
+                            class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors">
+                            PDF
+                        </a>
+                        <a href="{{ route('owner.laporan.pendapatan.export-csv', ['start_date' => $startDate, 'end_date' => $endDate]) }}"
+                            class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors">
+                            CSV
+                        </a>
+                    </div>
             </div>
-
+            </form>
             {{-- Tabel Rincian Pesanan --}}
             <div class="mt-8 overflow-x-auto rounded-lg shadow-md">
                 <table class="min-w-full bg-white">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nomor
-                                Pesanan</th>
                             <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Tanggal</th>
+                                tanggal</th>
+                            <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                No Pesanan</th>
                             <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Pelanggan</th>
                             <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -73,9 +75,9 @@
                         @forelse($orders as $order)
                             <tr>
                                 <td class="py-4 px-6 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {{ $order->order_number }}</td>
-                                <td class="py-4 px-6 whitespace-nowrap text-sm text-gray-500">
                                     {{ $order->created_at->format('d M Y H:i:s') }}</td>
+                                <td class="py-4 px-6 whitespace-nowrap text-sm text-gray-500">
+                                    {{ $order->order_number }}</td>
                                 <td class="py-4 px-6 whitespace-nowrap text-sm text-gray-500">
                                     {{ $order->user->name ?? 'Pelanggan Tidak Dikenal' }}</td>
                                 <td class="py-4 px-6 whitespace-nowrap text-sm">

@@ -57,5 +57,6 @@ class Order extends Model
     {
         // Asumsi: tabel 'order_items' memiliki kolom 'order_id'
         return $this->hasMany(OrderItem::class, 'order_id');
+        
     }
 }

@@ -72,18 +72,18 @@
 
 <body>
     <div class="header" style="display: flex; align-items: center;">
-        <div style="flex: 0 0 auto;">
+        {{--  <div style="flex: 0 0 auto;">
             @if ($settings && $settings->store_logo)
                 <img src="{{ asset('storage/' . $settings->store_logo) }}" alt="Sidu Digital Print Logo"
                     style="height:90px;">
-            @endif
-        </div>
-        <div style="flex: 1; text-align: center;">
-            <h2 style="margin: 0;">TOKO SIDU DIGITAL PRINT</h2>
-            <p style="margin: 0;">Jl. Pajagalan, Ruko Alsifa B2.</p>
-            <p style="margin: 0;"> Desa Majalaya, Kecamatan Majalaya, Kabupaten Bandung, Jawa Barat</p>
-            <p style="margin: 0;">Phone/WA: 0821-2666-3200 | Email: Nukibagja@gmail.com</p>
-        </div>
+            @endif --}}
+    </div>
+    <div style="flex: 1; text-align: center;">
+        <h2 style="margin: 0;">TOKO SIDU DIGITAL PRINT</h2>
+        <p style="margin: 0;">Jl. Pajagalan, Ruko Alsifa B2.</p>
+        <p style="margin: 0;"> Desa Majalaya, Kecamatan Majalaya, Kabupaten Bandung, Jawa Barat</p>
+        <p style="margin: 0;">Phone/WA: 0821-2666-3200 | Email: Nukibagja@gmail.com</p>
+    </div>
     </div>
 
     <hr>
