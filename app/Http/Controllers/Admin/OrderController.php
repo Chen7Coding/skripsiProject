@@ -90,27 +90,54 @@ class OrderController extends Controller
         return back()->with('error', 'File desain tidak ditemukan.');
     }
 
-
-        public function verifyPayment(Order $order)
+public function verifyPayment(Order $order)
     {
-        // Cek dulu, kalau statusnya sudah lunas (paid), jangan lakukan apa-apa.
-        // Ini mencegah verifikasi berulang.
+        // Cek jika statusnya sudah lunas (paid), jangan lakukan apa-apa.
         if ($order->payment_status === 'paid') {
             return redirect()->back()->with('error', 'Pembayaran sudah diverifikasi.');
         }
-
-        // Perbarui status pembayaran menjadi 'paid'
+        
+        $oldStatus = $order->status;
         $order->payment_status = 'paid';
-
-        // Perbarui status pesanan utama menjadi 'processing' atau 'diproses'
-        // Ini menandakan pesanan sudah bisa dikerjakan.
-        $order->status = 'processing'; 
-
+        $order->status = 'processing';
         $order->save();
+        $newStatus = $order->status;
 
-        // Berikan pesan sukses yang lebih informatif
+        // --- Tambahkan logika notifikasi di sini ---
+        if ($oldStatus != $newStatus) {
+            $order->load('user');
+            
+            $customerName = $order->user->name ?? 'Pelanggan';
+            $customerNumber = $order->user->whatsapp_number ?? $order->phone ?? null;
+            $ownerSettings = Setting::first();
+            $ownerNumber = $ownerSettings->owner_whatsapp_number ?? null;
+
+            // Pesan untuk pemilik (sesuai dengan format yang Anda inginkan)
+            $ownerMessage = "🔔 *Pembaruan Status Pesanan!* 🔔\n\n"
+             . "Nomor Pesanan: *#{$order->order_number}*\n"
+             . "Status Baru: *{$newStatus}*\n"
+             . "Pelanggan: {$customerName}\n"
+             . "Total: Rp " . number_format($order->total_price, 0, ',', '.') . "\n\n";
+             
+            if ($ownerNumber) {
+                WhatsAppHelper::sendNotification($ownerNumber, $ownerMessage);
+            }
+
+            // Pesan untuk pelanggan (sesuai dengan format yang Anda inginkan)
+            $customerMessage = "🛍️ *Sidu Digital Print*\n\n"
+             . "Halo, {$customerName}!\n\n"
+             . "Status pesanan Anda *#{$order->order_number}* telah diperbarui menjadi *{$newStatus}*.\n\n"
+             . "Terima kasih telah berbelanja bersama kami! 🙏";
+             
+            if ($customerNumber) {
+                WhatsAppHelper::sendNotification($customerNumber, $customerMessage);
+            }
+        }
+        
         return redirect()->back()->with('success', 'Pembayaran berhasil diverifikasi. Pesanan dilanjutkan ke tahap proses.');
     }
+    
+
    
    /*  public function createForStaff()
     {
