@@ -64,7 +64,7 @@
                     designOption: '{{ old('design_option', isset($cartItem) && $cartItem->design_file_path ? 'has_design' : 'no_design') }}',
                 
                     // Perbaikan di sini: Ambil harga awal dari atribut pertama
-                    finalPrice: {{ old('price', $cartItem->price ?? ($attributes->first()->price_modifier ?? 0)) }},
+                    finalPrice: {{ old('price', $cartItem->price ?? ($product->price ?? 0)) }},
                 
                     // --- Fungsi Alpine.js ---
                     updatePrice() {

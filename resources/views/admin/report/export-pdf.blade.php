@@ -73,10 +73,12 @@
 <body>
     <div class="header" style="display: flex; align-items: center;">
         <div style="flex: 0 0 auto;">
-            {{-- @if ($settings && $settings->store_logo)
-                <img src="{{ asset('storage/' . $settings->store_logo) }}" alt="Sidu Digital Print Logo"
-                    style="height:90px;">
-            @endif --}}
+
+            {{-- <img src="asset('storage/store_logos/WqZmqahkhLAzyKyJPyOZBCQcKDeuk5wQzMcl67db.png')"
+                alt="Sidu Digital Print Logo" style="height:90px;"> --}}
+            {{-- <img src="{{ asset('/image/logo.png') }}" alt="Logo Website"> --}}
+            {{--  <img src="{{ storage_path('app/public/logo.png') }}" alt="Logo Toko" style="width: 100px;"> --}}
+
         </div>
         <div style="flex: 1; text-align: center;">
             <h2 style="margin: 0;">TOKO SIDU DIGITAL PRINT</h2>

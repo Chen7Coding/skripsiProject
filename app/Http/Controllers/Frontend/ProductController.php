@@ -19,7 +19,8 @@ class ProductController extends Controller
     {
         // Pastikan variabel $attributes selalu didefinisikan
         $attributes = $product->attributes()->get();
-        $materials = $attributes->pluck('material')->unique();
+          //$materials = ProductAttribute::distinct()->pluck('material');
+       $materials = $attributes->pluck('material')->unique();
         $sizes = $attributes->pluck('size')->unique();
         
         $cartItem = null;
