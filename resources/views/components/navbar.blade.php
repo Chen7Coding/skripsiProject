@@ -243,11 +243,28 @@
                 </div>
 
                 <div class="mt-3 px-2 space-y-1">
-                    <a href="{{ route('profile.dashboard') }}"
-                        class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-200">Dashboard</a>
+                    {{-- PERBAIKAN UTAMA DI SINI --}}
+                    @if (Auth::user()->role == 'pemilik')
+                        <a href="{{ route('owner.dashboard') }}"
+                            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-200">
+                            Dashboard Pemilik
+                        </a>
+                    @elseif (Auth::user()->role == 'karyawan')
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-200">
+                            Dashboard Karyawan
+                        </a>
+                    @else
+                        {{-- Default untuk Pelanggan --}}
+                        <a href="{{ route('profile.dashboard') }}"
+                            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-200">
+                            Dashboard Pelanggan
+                        </a>
+                    @endif
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit"
+                        {{-- PERBAIKAN MOBILE: Mengubah type="submit" menjadi type="button" --}}
+                        <button type="button" onclick="confirmLogout()"
                             class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-200">Keluar</button>
                     </form>
                 </div>
