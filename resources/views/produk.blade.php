@@ -6,6 +6,12 @@
             <h2 class="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Produk Kami</h2>
             <p class="mt-4 text-center text-lg text-gray-600">Pilih produk berkualitas tinggi untuk semua kebutuhan cetak
                 Anda.</p>
+                
+            <div class="mt-8 text-center bg-amber-100 border-l-4 border-amber-500 text-amber-800 p-4 rounded-md shadow-sm" role="alert">
+                <p class="font-bold">Informasi Penting Pemesanan</p>
+                <p class="text-sm">Batas waktu pemesanan untuk pengerjaan adalah mulai dari pukul <strong>09:00 s/d 17:00 WIB (Senin-Sabtu)</strong>.</p>
+                <p class="text-sm">Pesanan setelah jam tersebut akan diproses di hari kerja berikutnya. Hari Minggu kami tutup.</p>
+            </div>
 
             <div class="mt-16 grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 @foreach ($products as $product)

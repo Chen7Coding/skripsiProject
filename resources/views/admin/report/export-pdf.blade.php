@@ -74,10 +74,7 @@
     <div class="header" style="display: flex; align-items: center;">
         <div style="flex: 0 0 auto;">
 
-            {{-- <img src="asset('storage/store_logos/WqZmqahkhLAzyKyJPyOZBCQcKDeuk5wQzMcl67db.png')"
-                alt="Sidu Digital Print Logo" style="height:90px;"> --}}
-            {{-- <img src="{{ asset('/image/logo.png') }}" alt="Logo Website"> --}}
-            {{--  <img src="{{ storage_path('app/public/logo.png') }}" alt="Logo Toko" style="width: 100px;"> --}}
+            <img src="{{ public_path('image/logo.png') }}" alt="Sidu Digital Print Logo">
 
         </div>
         <div style="flex: 1; text-align: center;">

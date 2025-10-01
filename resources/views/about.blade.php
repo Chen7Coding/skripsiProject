@@ -31,6 +31,21 @@
                         Kami percaya bahwa setiap cetakan memiliki cerita, dan kami bangga menjadi bagian dari cerita sukses
                         para pelanggan kami, mulai dari pelaku usaha kecil hingga perusahaan besar.
                     </p>
+                     <div class="mt-8 pt-6 border-t border-gray-200">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <!-- Ikon Jam -->
+                                <svg class="h-6 w-6 text-amber-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-800">Jam Operasional</h3>
+                                <p class="mt-1 text-gray-600">Senin - Sabtu: 09:00 - 20:00 WIB</p>
+                                <p class="text-gray-600">Minggu: Tutup</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

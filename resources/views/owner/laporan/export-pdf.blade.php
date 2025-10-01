@@ -96,7 +96,7 @@
 <body>
     <!-- Kop Toko -->
     <div class="kop">
-        <img src="logo.png" alt="Logo Toko">
+        <img src="{{ public_path('image/logo.png') }}" alt="Sidu Digital Print Logo">
         <div class="kop-text">
             <div class="nama-toko">TOKO SIDU DIGITAL PRINT</div>
             <div class="alamat">Jl. Pajagalan, Ruko Alsifa B2.<br>

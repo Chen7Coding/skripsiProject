@@ -1,0 +1,23 @@
+    # Proteksi file sensitif
+    <FilesMatch "^\.env">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+    
+    <FilesMatch "^(artisan|composer\.json|composer\.lock|package\.json|webpack\.mix\.js|vite\.config\.js|phpunit\.xml|server\.php|.gitignore|.gitattributes)$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+    
+    # Proteksi semua file tersembunyi (misal .git, .htaccess, dll.)
+    ErrorDocument 404 /index.php
+    ErrorDocument 403 /index.php
+    ErrorDocument 500 /index.php
+    
+    <IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Jika akses root domain langsung (tanpa /public)
+    RewriteCond %{REQUEST_URI} !^/public
+    RewriteRule ^(.*)$ /public/$1 [L,R=301]
+    </IfModule>
