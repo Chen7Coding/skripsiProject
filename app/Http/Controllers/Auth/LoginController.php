@@ -37,7 +37,9 @@ class LoginController extends Controller
             return redirect()->route('home');
         }
 
+        if (Auth::user()->role == 'pelanggan') {
         return redirect()->route('home');
+        }
     }
 
    // 4. Jika autentikasi gagal
